@@ -1,0 +1,17 @@
+# IntelliJ related
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# VS Code
+project/
+.project/
+.vscode/
+.cursor/
+.kiro/
+.agent/
+.claude/
+.cursorrules
+.cursorrules.md
+CLAUDE.md
