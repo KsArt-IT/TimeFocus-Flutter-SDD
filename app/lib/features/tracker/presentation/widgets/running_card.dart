@@ -3,7 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:timefocus/features/tracker/domain/entities/running_with_name_entity.dart';
 import 'package:timefocus/features/tracker/presentation/bloc/action_bloc.dart';
+import 'package:timefocus/features/tracker/presentation/widgets/pomodoro_indicator.dart';
 import 'package:timefocus/gen/app_localizations.dart';
+import 'package:timefocus/shared/enums/action_mode.dart';
 import 'package:timefocus/shared/widgets/action_localization.dart';
 import 'package:timefocus/shared/widgets/fa_icon_helper.dart';
 import 'package:timefocus/shared/widgets/ticking_timer.dart';
@@ -62,6 +64,9 @@ class RunningCard extends StatelessWidget {
                       ),
                     ],
                   ),
+                  if (running.action.mode == ActionMode.pomodoro ||
+                      running.action.mode == ActionMode.breakFor)
+                    PomodoroIndicator(actionNameId: running.action.id),
                 ],
               ),
             ),

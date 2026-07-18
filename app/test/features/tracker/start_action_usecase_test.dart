@@ -211,7 +211,7 @@ void main() {
         effects.first,
         const TransitionEffect.pomodoroShouldStop(reason: PomodoroStopReason.manualBreak),
       );
-      expect(effects.last, const TransitionEffect.breakStarted(breakActionId: 2));
+      expect(effects.last, const TransitionEffect.breakStarted(breakActionId: 2, historyId: 0));
       verify(() => runnings.pause(workRun.runningId, now, bySystem: true)).called(1);
     });
 
@@ -221,7 +221,7 @@ void main() {
       final result = await usecase(breakAction.id, source: ActionStartSource.system, now: now);
       final effects = effectsOf(result);
       expect(effects.whereType<PomodoroShouldStop>(), isEmpty);
-      expect(effects.single, const TransitionEffect.breakStarted(breakActionId: 2));
+      expect(effects.single, const TransitionEffect.breakStarted(breakActionId: 2, historyId: 0));
       verify(() => runnings.pause(workRun.runningId, now, bySystem: true)).called(1);
     });
   });

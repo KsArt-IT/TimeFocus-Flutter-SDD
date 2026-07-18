@@ -83,14 +83,14 @@ bloc_test, UseCase-ы с ветвлением — unit-тестами).
 **Independent Test**: quickstart.md сценарий 2 — полный цикл с уведомлением, прерывание
 туалетом, пауза → interrupted, счётчик цикла сохраняется
 
-- [ ] T030 [P] [US2] Сущности PomodoroSessionEntity, PomodoroSettingsEntity + мапперы в app/lib/features/pomodoro/{domain/entities,data/mappers}/
-- [ ] T031 [US2] PomodoroRepository + PomodoroSettingsRepository (версионируемые настройки: saveNewVersion всегда insert) в app/lib/features/pomodoro/{domain/repositories,data/repositories}/
-- [ ] T032 [US2] FinishPomodoroIntervalUseCase: completed только системно, выбор short/long перерыва по циклу (FR-014: interrupted не засчитывается, сброс только по «Стоп»), ветки afterAction (FR-018, отложенное авто-действие при закрытом приложении) в app/lib/features/pomodoro/domain/usecases/finish_pomodoro_interval_usecase.dart
-- [ ] T033 [US2] PomodoroBloc (состояния idle/workRunning/breakRunning/readyToResumeWork по contracts/blocs.md; планирование pomodoroFinished/breakFinished через NotificationScheduler; отмена при interrupted; звук и вибрация при срабатывании по soundEnabled/vibrationEnabled из настроек — пакет vibration) в app/lib/features/pomodoro/presentation/bloc/pomodoro_bloc.dart
-- [ ] T034 [US2] Координация в app/lib/app/root_bloc_listener.dart: таблица из contracts/blocs.md (pomodoroShouldStart/Stop, readyToResumeWork → ActionStarted(source: system), тост toastification «Помодоро прерван …» FR-012); регистрация PomodoroBloc в AppRoot
-- [ ] T035 [US2] Индикатор Помодоро на карточке (тип, номер цикла «2/4», обратный отсчёт) + кнопка «Пропустить» в app/lib/features/tracker/presentation/widgets/pomodoro_indicator.dart
-- [ ] T036 [P] [US2] Unit-тесты FinishPomodoroIntervalUseCase (циклы 3–5, длинный перерыв, afterAction все 5 веток, сохранение счётчика после interrupted) в app/test/features/pomodoro/finish_pomodoro_usecase_test.dart
-- [ ] T037 [P] [US2] bloc_test PomodoroBloc (старт→finish→break→resume; interrupted при pauseOthers/паузе; skipped) в app/test/features/pomodoro/pomodoro_bloc_test.dart
+- [X] T030 [P] [US2] Сущности PomodoroSessionEntity, PomodoroSettingsEntity + мапперы в app/lib/features/pomodoro/{domain/entities,data/mappers}/
+- [X] T031 [US2] PomodoroRepository + PomodoroSettingsRepository (версионируемые настройки: saveNewVersion всегда insert) в app/lib/features/pomodoro/{domain/repositories,data/repositories}/
+- [X] T032 [US2] FinishPomodoroIntervalUseCase: completed только системно, выбор short/long перерыва по циклу (FR-014: interrupted не засчитывается, сброс только по «Стоп»), ветки afterAction (FR-018, отложенное авто-действие при закрытом приложении) в app/lib/features/pomodoro/domain/usecases/finish_pomodoro_interval_usecase.dart
+- [X] T033 [US2] PomodoroBloc (состояния idle/workRunning/breakRunning/readyToResumeWork по contracts/blocs.md; планирование pomodoroFinished/breakFinished через NotificationScheduler; отмена при interrupted; звук и вибрация при срабатывании по soundEnabled/vibrationEnabled из настроек — пакет vibration) в app/lib/features/pomodoro/presentation/bloc/pomodoro_bloc.dart
+- [X] T034 [US2] Координация в app/lib/app/root_bloc_listener.dart: таблица из contracts/blocs.md (pomodoroShouldStart/Stop, readyToResumeWork → ActionStarted(source: system), тост toastification «Помодоро прерван …» FR-012); регистрация PomodoroBloc в AppRoot
+- [X] T035 [US2] Индикатор Помодоро на карточке (тип, номер цикла «2/4», обратный отсчёт) + кнопка «Пропустить» в app/lib/features/tracker/presentation/widgets/pomodoro_indicator.dart
+- [X] T036 [P] [US2] Unit-тесты FinishPomodoroIntervalUseCase (циклы 3–5, длинный перерыв, afterAction все 5 веток, сохранение счётчика после interrupted) в app/test/features/pomodoro/finish_pomodoro_usecase_test.dart
+- [X] T037 [P] [US2] bloc_test PomodoroBloc (старт→finish→break→resume; interrupted при pauseOthers/паузе; skipped) в app/test/features/pomodoro/pomodoro_bloc_test.dart
 
 **Checkpoint**: US1+US2 работают вместе; матрица переходов полностью активна
 

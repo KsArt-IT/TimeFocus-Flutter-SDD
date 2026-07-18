@@ -33,5 +33,8 @@ sealed class TransitionEffect with _$TransitionEffect {
     required ActionNameEntity interruptedAction,
   }) = PomodoroInterrupted;
 
-  const factory TransitionEffect.breakStarted({required int breakActionId}) = BreakStarted;
+  const factory TransitionEffect.breakStarted({
+    required int breakActionId,
+    required int historyId,
+  }) = BreakStarted;
 }

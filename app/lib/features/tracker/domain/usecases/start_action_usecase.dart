@@ -168,7 +168,7 @@ class StartActionUseCase {
       );
     }
     if (action.mode == ActionMode.breakFor) {
-      effects.add(TransitionEffect.breakStarted(breakActionId: action.id));
+      effects.add(TransitionEffect.breakStarted(breakActionId: action.id, historyId: historyId));
     }
 
     return Result.success(StartActionOutcome.started(runningId: runningId, effects: effects));

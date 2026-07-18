@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:timefocus/app/app_material_router.dart';
 import 'package:timefocus/app/root_bloc_listener.dart';
 import 'package:timefocus/core/di/injection.dart';
+import 'package:timefocus/features/pomodoro/presentation/bloc/pomodoro_bloc.dart';
 import 'package:timefocus/features/settings/presentation/cubit/app_settings_cubit.dart';
 import 'package:timefocus/features/tracker/presentation/bloc/action_bloc.dart';
 
@@ -20,8 +21,11 @@ class AppRoot extends StatelessWidget {
         BlocProvider<ActionBloc>.value(
           value: getIt<ActionBloc>()..add(const ActionEvent.subscribed()),
         ),
-        // PomodoroBloc (US2), HudCubit (US3), NotificationBloc (US5) are
-        // registered as they are implemented.
+        BlocProvider<PomodoroBloc>.value(
+          value: getIt<PomodoroBloc>(),
+        ),
+        // HudCubit (US3), NotificationBloc (US5) are registered as they are
+        // implemented.
       ],
       child: const RootBlocListener(child: AppMaterialRouter()),
     );
