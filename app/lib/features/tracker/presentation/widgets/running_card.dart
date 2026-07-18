@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
 import 'package:timefocus/features/tracker/domain/entities/running_with_name_entity.dart';
 import 'package:timefocus/features/tracker/presentation/bloc/action_bloc.dart';
 import 'package:timefocus/gen/app_localizations.dart';
@@ -58,7 +57,7 @@ class RunningCard extends StatelessWidget {
                       ),
                       const SizedBox(width: 8),
                       Text(
-                        '${l10n.totalTime}: ${formatDuration(todayTotalSec)}',
+                        formatDuration(todayTotalSec),
                         style: theme.textTheme.bodySmall,
                       ),
                     ],

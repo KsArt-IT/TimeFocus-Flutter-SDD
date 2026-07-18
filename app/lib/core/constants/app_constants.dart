@@ -17,6 +17,9 @@ abstract final class AppConstants {
   static const int minGridSize = 1;
   static const int maxGridSize = 5;
 
+  /// Height of one action grid tile (icon + label), dp.
+  static const double actionItemHeight = 88;
+
   /// Daily water goal per body weight, ml per kg.
   static const int waterMlPerKg = 30;
 

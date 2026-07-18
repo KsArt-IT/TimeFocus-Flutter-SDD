@@ -15,13 +15,18 @@ class ActionGrid extends StatelessWidget {
   const ActionGrid({
     required this.actions,
     required this.columns,
+    required this.rowCount,
     this.currentGroupId,
     super.key,
   });
 
   final List<ActionNameEntity> actions;
   final int columns;
+  final int rowCount;
   final int? currentGroupId;
+
+  static const double _spacing = 8;
+  static const EdgeInsets _gridPadding = EdgeInsets.all(12);
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +41,15 @@ class ActionGrid extends StatelessWidget {
       );
     }
 
+    final totalRows = (actions.length / columns).ceil();
+    final visibleRows = totalRows > rowCount ? rowCount : totalRows;
+    final gridHeight =
+        (AppConstants.actionItemHeight * visibleRows) +
+        (_spacing * (visibleRows - 1)) +
+        _gridPadding.vertical;
+
     return Column(
+      mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (currentGroupId != null)
@@ -48,13 +61,17 @@ class ActionGrid extends StatelessWidget {
               label: Text(l10n.back),
             ),
           ),
-        Expanded(
+        SizedBox(
+          height: gridHeight,
           child: GridView.builder(
-            padding: const EdgeInsets.all(12),
+            padding: _gridPadding,
+            physics: totalRows <= rowCount
+                ? const NeverScrollableScrollPhysics()
+                : const AlwaysScrollableScrollPhysics(),
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: columns,
-              mainAxisSpacing: 8,
-              crossAxisSpacing: 8,
+              mainAxisSpacing: _spacing,
+              crossAxisSpacing: _spacing,
             ),
             itemCount: actions.length,
             itemBuilder: (context, index) => _ActionGridTile(action: actions[index]),

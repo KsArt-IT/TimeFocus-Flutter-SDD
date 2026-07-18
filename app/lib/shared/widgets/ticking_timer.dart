@@ -68,5 +68,5 @@ String formatDuration(int totalSec) {
   final m = (totalSec % 3600) ~/ 60;
   final s = totalSec % 60;
   String two(int v) => v.toString().padLeft(2, '0');
-  return h > 0 ? '$h:${two(m)}:${two(s)}' : '$m:${two(s)}';
+  return '$h:${two(m)}:${two(s)}';
 }
