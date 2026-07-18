@@ -21,12 +21,12 @@ bloc_test, UseCase-ы с ветвлением — unit-тестами).
 
 **Purpose**: зависимости и каркас каталогов поверх существующего проекта `app/`
 
-- [ ] T001 Добавить в app/pubspec.yaml dev-зависимости `bloc_test`, `mocktail` и зависимости `logger`, `vibration`, `url_launcher`, `app_settings`; `flutter pub get`
-- [ ] T002 Создать каркас каталогов: app/lib/core/{di,router,theme,constants,utils}, app/lib/shared/{database,enums,widgets}, app/lib/app/shell/widgets, app/lib/features/{tracker,pomodoro,water,schedule,history,settings,notifications,onboarding}/{data/{datasources,mappers,repositories},domain/{entities,repositories,usecases},presentation}
-- [ ] T003 [P] Константы приложения (порция 200 мл, окно еды ±15 мин, сон-напоминание 30 мин, дефолты сетки 4×5, мл/кг для цели по весу) в app/lib/core/constants/app_constants.dart
-- [ ] T004 [P] Обёртка logger (запрет print) в app/lib/core/utils/app_logger.dart
-- [ ] T005 Конфигурация DI get_it+injectable в app/lib/core/di/injection.dart (+ аннотации, `dart run build_runner build` проходит)
-- [ ] T006 [P] Светлая/тёмная темы в app/lib/core/theme/app_theme.dart
+- [X] T001 Добавить в app/pubspec.yaml dev-зависимости `bloc_test`, `mocktail` и зависимости `logger`, `vibration`, `url_launcher`, `app_settings`; `flutter pub get`
+- [X] T002 Создать каркас каталогов: app/lib/core/{di,router,theme,constants,utils}, app/lib/shared/{database,enums,widgets}, app/lib/app/shell/widgets, app/lib/features/{tracker,pomodoro,water,schedule,history,settings,notifications,onboarding}/{data/{datasources,mappers,repositories},domain/{entities,repositories,usecases},presentation}
+- [X] T003 [P] Константы приложения (порция 200 мл, окно еды ±15 мин, сон-напоминание 30 мин, дефолты сетки 4×5, мл/кг для цели по весу) в app/lib/core/constants/app_constants.dart
+- [X] T004 [P] Обёртка logger (запрет print) в app/lib/core/utils/app_logger.dart
+- [X] T005 Конфигурация DI get_it+injectable в app/lib/core/di/injection.dart (+ аннотации, `dart run build_runner build` проходит)
+- [X] T006 [P] Светлая/тёмная темы в app/lib/core/theme/app_theme.dart
 
 ---
 
