@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
+import 'package:timefocus/core/theme/app_colors.dart';
+
 /// Light and dark application themes.
 abstract final class AppTheme {
-  static const Color _seed = Color(0xFF2E7D6B);
+  static const Color _seed = AppColors.seed;
 
   static ThemeData get light => _build(Brightness.light);
 

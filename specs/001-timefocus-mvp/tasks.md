@@ -36,16 +36,16 @@ bloc_test, UseCase-ы с ветвлением — unit-тестами).
 
 **⚠️ CRITICAL**: без этой фазы ни одна история не стартует
 
-- [ ] T007 [P] 15 энумов с фабрикой fromIndex(int) в app/lib/shared/enums/ (action_mode.dart, action_status.dart, pomodoro_type.dart, pomodoro_status.dart, pomodoro_after_action.dart, water_reminder_mode.dart, drink_type.dart, notification_type.dart, schedule_event_type.dart, meal_slot.dart, hud_context_type.dart, history_mode.dart, history_period.dart, app_theme_mode.dart, water_goal_mode.dart) по data-model.md
-- [ ] T008 14 Drift-таблиц по data-model.md (+ поле dayType в ScheduleEvents, + поле pausedBySystem в ActionRunnings) в app/lib/shared/database/tables/
-- [ ] T009 AppDatabase + MigrationStrategy.onCreate с seed: 12 системных активностей (hudPriority: туалет=4, еда=3, спорт=2, сон=1), 5 напитков, singleton user_settings/water_settings, типовое расписание будни/выходные — в app/lib/shared/database/app_database.dart
-- [ ] T010 DAO: action_dao, running_dao, history_dao, pomodoro_dao, water_dao, schedule_dao, notification_dao, settings_dao (включая SQL-агрегаты периодов) в app/lib/shared/database/daos/
-- [ ] T011 go_router: StatefulShellRoute.indexedStack (/tracker, /schedule, /history) + маршруты вне shell (/settings/*, /onboarding, /action/edit/:id, /interval/edit/:id, /more/*) в app/lib/core/router/app_router.dart
-- [ ] T012 UserSettingsRepository (интерфейс + impl + маппер) в app/lib/features/settings/{domain/repositories,data} и AppSettingsCubit (watch Drift Stream → тема/локаль/формат времени) в app/lib/features/settings/presentation/cubit/app_settings_cubit.dart
-- [ ] T013 Оболочка: app/lib/app/app_root.dart (MultiBlocProvider-заглушки), app/lib/app/app_material_router.dart (BlocBuilder<AppSettingsCubit> → MaterialApp.router), app/lib/app/root_bloc_listener.dart (каркас), app/lib/app/shell/shell_page.dart (Scaffold + BottomNavBar + место HUD)
-- [ ] T014 Ядро уведомлений: инициализация flutter_local_notifications + timezone в app/lib/main.dart, NotificationScheduler (интерфейс по contracts/notifications.md: schedule/cancel/cancelByType/rescheduleAll, exact с fallback на inexact — FR-036) в app/lib/features/notifications/{domain,data}, запрос разрешений (SDK 33+/31+) через permission_handler
-- [ ] T015 [P] Юнит-тесты энумов (fromIndex круговой) в app/test/shared/enums_test.dart
-- [ ] T016 [P] Тест БД: onCreate seed (12 активностей, напитки, singleton-строки) на NativeDatabase.memory() в app/test/shared/database_seed_test.dart
+- [X] T007 [P] 15 энумов с фабрикой fromIndex(int) в app/lib/shared/enums/ (action_mode.dart, action_status.dart, pomodoro_type.dart, pomodoro_status.dart, pomodoro_after_action.dart, water_reminder_mode.dart, drink_type.dart, notification_type.dart, schedule_event_type.dart, meal_slot.dart, hud_context_type.dart, history_mode.dart, history_period.dart, app_theme_mode.dart, water_goal_mode.dart) по data-model.md
+- [X] T008 14 Drift-таблиц по data-model.md (+ поле dayType в ScheduleEvents, + поле pausedBySystem в ActionRunnings) в app/lib/shared/database/tables/
+- [X] T009 AppDatabase + MigrationStrategy.onCreate с seed: 12 системных активностей (hudPriority: туалет=4, еда=3, спорт=2, сон=1), 5 напитков, singleton user_settings/water_settings, типовое расписание будни/выходные — в app/lib/shared/database/app_database.dart
+- [X] T010 DAO: action_dao, running_dao, history_dao, pomodoro_dao, water_dao, schedule_dao, notification_dao, settings_dao (включая SQL-агрегаты периодов) в app/lib/shared/database/daos/
+- [X] T011 go_router: StatefulShellRoute.indexedStack (/tracker, /schedule, /history) + маршруты вне shell (/settings/*, /onboarding, /action/edit/:id, /interval/edit/:id, /more/*) в app/lib/core/router/app_router.dart
+- [X] T012 UserSettingsRepository (интерфейс + impl + маппер) в app/lib/features/settings/{domain/repositories,data} и AppSettingsCubit (watch Drift Stream → тема/локаль/формат времени) в app/lib/features/settings/presentation/cubit/app_settings_cubit.dart
+- [X] T013 Оболочка: app/lib/app/app_root.dart (MultiBlocProvider-заглушки), app/lib/app/app_material_router.dart (BlocBuilder<AppSettingsCubit> → MaterialApp.router), app/lib/app/root_bloc_listener.dart (каркас), app/lib/app/shell/shell_page.dart (Scaffold + BottomNavBar + место HUD)
+- [X] T014 Ядро уведомлений: инициализация flutter_local_notifications + timezone в app/lib/main.dart, NotificationScheduler (интерфейс по contracts/notifications.md: schedule/cancel/cancelByType/rescheduleAll, exact с fallback на inexact — FR-036) в app/lib/features/notifications/{domain,data}, запрос разрешений (SDK 33+/31+) через permission_handler
+- [X] T015 [P] Юнит-тесты энумов (fromIndex круговой) в app/test/shared/enums_test.dart
+- [X] T016 [P] Тест БД: onCreate seed (12 активностей, напитки, singleton-строки) на NativeDatabase.memory() в app/test/shared/database_seed_test.dart
 
 **Checkpoint**: `flutter analyze` чисто, приложение запускается с пустой оболочкой и вкладками
 

@@ -4,5 +4,5 @@ import 'package:timefocus/core/di/injection.config.dart';
 
 final GetIt getIt = GetIt.instance;
 
-@InjectableInit(preferRelativeImports: false)
+@InjectableInit()
 Future<void> configureDependencies() async => getIt.init();
