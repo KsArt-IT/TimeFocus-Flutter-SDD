@@ -1,0 +1,446 @@
+{
+  "@@locale": "en",
+  "lang": "English",
+  "appTitle": "Time Focus",
+  "@appTitle": {
+    "description": "Time Focus - Monitor and analyze your time spent on tasks."
+  },
+  "copyright": "StudyWay.life",
+  "@copyright": {
+    "description": "Copyright text"
+  },
+
+  "settingsSections": "---",
+  "appSettings": "App Settings",
+  "@appSettings": {"description": "App Settings"},
+  "theme": "Theme",
+  "@theme": {"description": "Theme"},
+  "themeSystem": "System",
+  "@themeSystem": {"description": "System"},
+  "themeLight": "Light",
+  "@themeLight": {"description": "Light"},
+  "themeDark": "Dark",
+  "@themeDark": {"description": "Dark"},
+  "language": "Language",
+  "@language": {"description": "Language"},
+  "languageSystem": "System",
+  "@languageSystem": {"description": "System"},
+  "timeFormat": "Time format",
+  "@timeFormat": {"description": "Time format"},
+  "timeFormatDisplay": "12/24 hours",
+  "@timeFormatDisplay": {"description": "12/24 hours"},
+  "shortTime": "Display seconds",
+  "@shortTime": {"description": "Display seconds"},
+  "actionView": "Action view",
+  "@actionView": {"description": "Action view"},
+  "rowCount": "Row count",
+  "@rowCount": {"description": "Row count"},
+  "columnCount": "Column count",
+  "@columnCount": {"description": "Column count"},
+
+  "buttonsSections": "---",
+  "ok": "OK",
+  "cancel": "Cancel",
+  "save": "Save",
+  "delete": "Delete",
+  "edit": "Edit",
+  "add": "Add",
+  "back": "Back",
+  "skip": "Skip",
+  "done": "Done",
+  "confirm": "Confirm",
+  "close": "Close",
+  "next": "Next",
+  "reset": "Reset",
+  "enabled": "Enabled",
+  "disabled": "Disabled",
+
+  "nawBarSections": "---",
+  "navTracker": "Tracker",
+  "navSchedule": "Schedule",
+  "navHistory": "History",
+  "navMore": "More",
+
+  "notificationSections": "---",
+  "notification": "Notifications",
+  "requestNotificationPermission": "Request notification permission",
+  "openNotificationSettings": "Open notification settings",
+  "showTestNotification": "Show test notification",
+  "notificationTestTitle": "Test notification",
+  "notificationTestBody": "This is a test notification",
+  "notificationNotFound": "Notification not found in the database",
+  "notificationFailure": "Notification failure:\n{message}",
+  "@notificationFailure": {
+    "placeholders": {
+      "message": {
+        "type": "String"
+      }
+    }
+  },
+
+  "errorSections": "---",
+  "appErrorInit": "Initialization error",
+  "appError": "Something went wrong,\nplease try to restart the application\n\nError: {message}",
+  "@appError": {
+    "placeholders": {
+      "message": {
+        "type": "String"
+      }
+    }
+  },
+  "uniqueViolation": "Unique violation",
+  "entityNotFound": "Entity not found in the database",
+  "error": "Error:\n{message}",
+  "@error": {
+    "placeholders": {
+      "message": {
+        "type": "String"
+      }
+    }
+  },
+  "errorCreatingActivity": "Error creating activity:\n{message}",
+  "@errorCreatingActivity": {
+    "placeholders": {
+      "message": {
+        "type": "String"
+      }
+    }
+  },
+
+  "actionModeNothing": "Regular",
+  "actionModePomodoro": "Pomodoro",
+  "actionModeBreakFor": "Break",
+
+  "actionStatusActive": "Active",
+  "actionStatusPause": "Paused",
+  "actionStatusStop": "Stopped",
+
+  "startAction": "Start",
+  "pauseAction": "Pause",
+  "resumeAction": "Resume",
+  "stopAction": "Stop",
+  "archiveAction": "Archive",
+
+  "runningActions": "Running",
+  "noRunningActions": "No active activities",
+  "allActions": "Activities",
+  "actionGroup": "Group",
+  "createAction": "New Activity",
+  "editAction": "Edit Activity",
+  "createGroup": "New Group",
+  "actionName": "Name",
+  "actionDescription": "Description (optional)",
+  "actionIcon": "Icon",
+  "actionColor": "Color",
+  "actionMode": "Mode",
+  "actionPomodoro": "Pomodoro",
+  "actionBreakFor": "Break for",
+  "actionPauseOthers": "Stop others on start",
+  "chooseBreakAction": "Choose break activity",
+  "noBreakAction": "No switch",
+  "actionArchived": "Activity archived",
+  "actionDeleted": "Activity deleted",
+
+  "totalTime": "Total time",
+  "currentSession": "Current session",
+  "pomodoroCount": "{count, plural, one{{count} pomodoro} other{{count} pomodoros}}",
+  "@pomodoroCount": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "cycleNumber": "{current} / {total}",
+  "@cycleNumber": {
+    "placeholders": {
+      "current": { "type": "int" },
+      "total": { "type": "int" }
+    }
+  },
+
+  "pomodoroTypeShort": "Short",
+  "pomodoroTypeNormal": "Normal",
+  "pomodoroTypeLong": "Long",
+
+  "pomodoroStatusActive": "Running",
+  "pomodoroStatusCompleted": "Completed",
+  "pomodoroStatusInterrupted": "Interrupted",
+  "pomodoroStatusSkipped": "Skipped",
+
+  "pomodoroAfterDoNothing": "Do nothing",
+  "pomodoroAfterAutoStartBreak": "Auto-start break",
+  "pomodoroAfterSuggestBreak": "Suggest break",
+  "pomodoroAfterRepeatSame": "Repeat",
+  "pomodoroAfterAutoStartWork": "Auto-resume work",
+
+  "pomodoroFinishedTitle": "Pomodoro complete",
+  "pomodoroFinishedBody": "Great work! Time for a {breakMin}-min break.",
+  "@pomodoroFinishedBody": {
+    "placeholders": { "breakMin": { "type": "int" } }
+  },
+  "breakFinishedTitle": "Break finished",
+  "breakFinishedBody": "Back to work. Start \"{actionName}\"?",
+  "@breakFinishedBody": {
+    "placeholders": { "actionName": { "type": "String" } }
+  },
+  "pomodoroInterrupted": "Pomodoro interrupted",
+  "startBreak": "Start break",
+  "skipBreak": "Skip",
+  "extendBreak": "+ {minutes} min",
+  "@extendBreak": {
+    "placeholders": { "minutes": { "type": "int" } }
+  },
+  "continueWork": "Continue working",
+  "skipPomodoro": "Skip",
+  "stopPomodoro": "Stop",
+  "longBreak": "Long break",
+  "shortBreak": "Short break",
+
+  "pomodoroSettings": "Pomodoro Settings",
+  "pomodoroSettingsShortWork": "Short — work interval",
+  "pomodoroSettingsNormalWork": "Normal — work interval",
+  "pomodoroSettingsLongWork": "Long — work interval",
+  "pomodoroSettingsShortBreak": "Short break",
+  "pomodoroSettingsLongBreak": "Long break",
+  "pomodoroSettingsCycles": "Cycles before long break",
+  "pomodoroSettingsEscalate": "Auto-escalate type",
+  "pomodoroSettingsEscalateHint": "short → normal → long as you fatigue",
+  "pomodoroSettingsAfterAction": "After interval ends",
+  "pomodoroSettingsSound": "Sound",
+  "pomodoroSettingsVibration": "Vibration",
+  "pomodoroSettingsNotifications": "Notifications",
+  "minutes": "{count} min",
+  "@minutes": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+
+  "waterGoal": "Daily goal",
+  "waterGoalMl": "{ml} ml",
+  "@waterGoalMl": {
+    "placeholders": { "ml": { "type": "int" } }
+  },
+  "waterConsumed": "Consumed",
+  "waterRemaining": "{ml} ml remaining",
+  "@waterRemaining": {
+    "placeholders": { "ml": { "type": "int" } }
+  },
+  "waterDeficit": "{ml} ml behind schedule",
+  "@waterDeficit": {
+    "placeholders": { "ml": { "type": "int" } }
+  },
+  "waterAhead": "+{ml} ml ahead",
+  "@waterAhead": {
+    "placeholders": { "ml": { "type": "int" } }
+  },
+  "waterGoalReached": "Goal reached! 🎉",
+  "waterRecommendGlasses": "Try drinking {count} glasses",
+  "@waterRecommendGlasses": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+
+  "drinkTypeWater": "Water",
+  "drinkTypeTea": "Tea",
+  "drinkTypeCoffee": "Coffee",
+  "drinkTypeMilk": "Milk",
+  "drinkTypeBottle": "Bottle",
+  "drinkVolumeMl": "{ml} ml",
+  "@drinkVolumeMl": {
+    "placeholders": { "ml": { "type": "int" } }
+  },
+  "addDrink": "Add drink",
+  "holdForMore": "Hold for drink options",
+
+  "waterReminderModeInterval": "Interval",
+  "waterReminderModeScheduled": "Scheduled",
+  "waterReminderInterval": "Remind every {minutes} min",
+  "@waterReminderInterval": {
+    "placeholders": { "minutes": { "type": "int" } }
+  },
+  "waterReminderTimes": "Reminder times",
+  "waterReminderAddTime": "Add time",
+  "waterReminderTimeActive": "Active",
+  "waterReminderRemindersEnabled": "Reminders enabled",
+
+  "waterGoalModeByWeight": "By weight",
+  "waterGoalModeManual": "Manual",
+  "waterWeightKg": "Weight (kg)",
+  "waterExtraLoad": "Extra load (ml)",
+  "waterExtraLoadHint": "Added on top of base goal during workouts",
+  "waterQuickButtons": "Quick-add buttons",
+
+  "showToiletOnWater": "Remind toilet after drinking",
+  "showToiletOnBreak": "Remind toilet on break",
+
+  "waterReminderTitle": "Time to drink water",
+  "waterReminderBody": "{current} of {goal} ml consumed. {recommendation}",
+  "@waterReminderBody": {
+    "placeholders": {
+      "current": { "type": "int" },
+      "goal": { "type": "int" },
+      "recommendation": { "type": "String" }
+    }
+  },
+  "toiletReminderTitle": "Don't forget a bathroom break",
+  "toiletReminderBody": "Better now during the break — don't interrupt your work later",
+
+  "scheduleEventWakeUp": "Wake up",
+  "scheduleEventMeal": "Meal",
+  "scheduleEventWork": "Work",
+  "scheduleEventSport": "Sport",
+  "scheduleEventSleep": "Sleep",
+  "scheduleEventCustom": "Event",
+
+  "mealSlotBreakfast": "Breakfast",
+  "mealSlotLunch": "Lunch",
+  "mealSlotDinner": "Dinner",
+  "mealSlotSnack": "Snack",
+
+  "scheduleTitle": "Daily Schedule",
+  "scheduleToday": "Today",
+  "scheduleNoEvents": "No events",
+  "scheduleAddEvent": "Add event",
+  "scheduleEventTime": "Time",
+  "scheduleEventDuration": "Duration",
+  "scheduleEventStrict": "Strict time",
+  "scheduleEventStrictHint": "Will interrupt Pomodoro at exact time",
+  "scheduleEventFlexibleHint": "Will wait for Pomodoro to finish",
+  "scheduleEventWarningMinutes": "Warn ahead (min)",
+  "scheduleEventAction": "Launch activity",
+  "scheduleEventEnabled": "Event enabled",
+
+  "mealReminderFlexibleTitle": "Time to eat",
+  "mealReminderFlexibleBody": "Pomodoro done. Time for {mealType}!",
+  "@mealReminderFlexibleBody": {
+    "placeholders": { "mealType": { "type": "String" } }
+  },
+  "mealReminderStrictTitle": "Time for {mealType}",
+  "@mealReminderStrictTitle": {
+    "placeholders": { "mealType": { "type": "String" } }
+  },
+  "mealReminderStrictBody": "Pomodoro interrupted. Time to eat!",
+  "mealStrictWarningTitle": "{eventName} coming up",
+  "@mealStrictWarningTitle": {
+    "placeholders": { "eventName": { "type": "String" } }
+  },
+  "mealStrictWarningBody": "{eventName} in {minutes} min. Pomodoro won't finish in time.",
+  "@mealStrictWarningBody": {
+    "placeholders": {
+      "eventName": { "type": "String" },
+      "minutes": { "type": "int" }
+    }
+  },
+  "stopNow": "Stop now",
+  "continueAnyway": "Continue, I'll be late",
+  "goToMeal": "Going to {mealType}",
+  "@goToMeal": {
+    "placeholders": { "mealType": { "type": "String" } }
+  },
+  "skipMeal": "Skip",
+
+  "sleepReminderTitle": "Time to wind down",
+  "sleepReminderBody": "{minutes} min until sleep. Wrap up your tasks.",
+  "@sleepReminderBody": {
+    "placeholders": { "minutes": { "type": "int" } }
+  },
+
+  "historyModeIntervals": "Intervals",
+  "historyModeTotalByAction": "Summary",
+  "historyModeStatistics": "Statistics",
+  "historyModeStatisticsComingSoon": "Statistics coming in the next version",
+
+  "periodDay": "Day",
+  "periodWeek": "Week",
+  "periodMonth": "Month",
+  "periodYear": "Year",
+
+  "historyTitle": "History",
+  "historyEmpty": "No records for this period",
+  "historyWaterTotal": "Water for {period}",
+  "@historyWaterTotal": {
+    "placeholders": { "period": { "type": "String" } }
+  },
+  "historyPomodoroTotal": "Pomodoros for {period}",
+  "@historyPomodoroTotal": {
+    "placeholders": { "period": { "type": "String" } }
+  },
+  "historyWorkTotal": "Work time",
+  "editInterval": "Edit interval",
+  "intervalStart": "Start",
+  "intervalEnd": "End",
+  "intervalDelete": "Delete interval",
+  "intervalAdded": "Interval added",
+  "intervalDeleted": "Interval deleted",
+  "intervalUpdated": "Interval updated",
+  "addInterval": "Add interval",
+  "changeActivity": "Change activity",
+  "deleteHistory": "Delete from history",
+  "deleteHistoryConfirm": "Delete all intervals for this activity in the selected period?",
+
+  "settingsTitle": "Settings",
+  "settingsProfile": "Profile",
+  "settingsName": "Name",
+  "settingsPomodoro": "Pomodoro",
+  "settingsSchedule": "Daily Schedule",
+  "settingsWater": "Water",
+  "settingsTheme": "Theme",
+  "settingsLanguage": "Language",
+  "settingsNotifications": "Notifications",
+  "settingsNotificationsEnabled": "Notifications enabled",
+  "settingsNotificationsGlobalMute": "All notifications",
+  "settingsDisplay": "Display",
+  "settingsAbout": "About",
+  "settingsVersion": "Version {version}",
+  "@settingsVersion": {
+    "placeholders": { "version": { "type": "String" } }
+  },
+
+  "onboardingWelcomeTitle": "Welcome to TimeFocus",
+  "onboardingWelcomeSubtitle": "A couple of questions and we're ready",
+  "onboardingNameTitle": "What's your name?",
+  "onboardingNameHint": "Name",
+  "onboardingScheduleTitle": "Set up your daily schedule",
+  "onboardingScheduleSubtitle": "We'll place reminders at the right time",
+  "onboardingWakeUp": "Wake up time",
+  "onboardingWorkStart": "Work start",
+  "onboardingLunch": "Lunch",
+  "onboardingSport": "Sport",
+  "onboardingDinner": "Dinner",
+  "onboardingSleep": "Bedtime",
+  "onboardingSkip": "Set up later",
+  "onboardingStart": "Get started",
+
+  "systemActionWork": "Work",
+  "systemActionBreak": "Break",
+  "systemActionRest": "Rest",
+  "systemActionSleep": "Sleep",
+  "systemActionToilet": "Toilet",
+  "systemActionMeal": "Meal",
+  "systemActionSport": "Sport",
+  "systemActionWarmup": "Warm-up",
+  "systemActionWalk": "Walk",
+  "systemActionMeditation": "Meditation",
+  "systemActionMedicine": "Medicine",
+
+  "permissionNotificationTitle": "Allow notifications",
+  "permissionNotificationBody": "TimeFocus uses notifications for Pomodoro and water reminders",
+  "permissionDeniedMessage": "Permission denied. Open settings?",
+  "permissionOpenSettings": "Settings",
+
+  "errorGeneral": "Something went wrong",
+  "errorDatabase": "Database error",
+  "errorNotFound": "Record not found",
+  "errorValidation": "Please check your input",
+  "errorNotification": "Failed to schedule notification",
+  "tryAgain": "Try again",
+
+  "confirmDeleteTitle": "Delete?",
+  "confirmDeleteMessage": "This action cannot be undone",
+  "shareStats": "Share statistics",
+  "shareStatsText": "Today in TimeFocus:\n⏱ {workTime} of focused work\n🍅 {pomodoros} pomodoros\n💧 {waterMl} ml of water",
+  "@shareStatsText": {
+    "placeholders": {
+      "workTime": { "type": "String" },
+      "pomodoros": { "type": "int" },
+      "waterMl": { "type": "int" }
+    }
+  },
+
+  "end": "---"
+}

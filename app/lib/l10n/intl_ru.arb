@@ -1,0 +1,452 @@
+{
+  "@@locale": "ru",
+  "lang": "Русский",
+  "appTitle": "Записывай время",
+  "@appTitle": {
+    "description": "Time Focus - отслеживайте и анализируйте время, потраченное на выполнение задач."
+  },
+  "copyright": "StudyWay.life",
+  "@copyright": {
+    "description": "Copyright text"
+  },
+
+  "settingsSections": "---",
+  "appSettings": "Настройки приложения",
+  "theme": "Тема",
+  "themeSystem": "Системная",
+  "themeLight": "Светлая",
+  "themeDark": "Темная",
+  "language": "Язык",
+  "languageSystem": "Системный",
+  "timeFormat": "Формат времени",
+  "timeFormatDisplay": "12/24 часа",
+  "shortTime": "Отображение секунд",
+  "actionView": "Отображение активностей",
+  "rowCount": "Количество строк",
+  "columnCount": "Количество столбцов",
+
+  "buttonsSections": "---",
+  "ok": "Ок",
+  "cancel": "Отмена",
+  "save": "Сохранить",
+  "delete": "Удалить",
+  "edit": "Редактировать",
+  "add": "Добавить",
+  "back": "Назад",
+  "skip": "Пропустить",
+  "done": "Готово",
+  "confirm": "Подтвердить",
+  "close": "Закрыть",
+  "next": "Далее",
+  "reset": "Сбросить",
+  "enabled": "Включено",
+  "disabled": "Выключено",
+
+  "nawBarSections": "---",
+  "navTracker": "Трекер",
+  "@navTracker": { "description": "Нижняя навигация — вкладка активностей" },
+  "navSchedule": "Распорядок",
+  "navHistory": "История",
+  "navMore": "Больше",
+
+  "notificationSections": "---",
+  "notification": "Уведомления",
+  "requestNotificationPermission": "Запросить разрешение",
+  "openNotificationSettings": "Открыть настройки уведомлений",
+  "showTestNotification": "Показать тестовое уведомление",
+  "notificationTestTitle": "Тестовое уведомление",
+  "notificationTestBody": "Это тестовое уведомление",
+  "notificationNotFound": "Уведомление не найдено в базе данных",
+  "notificationFailure": "Ошибка уведомления:\n{message}",
+  "@notificationFailure": {
+    "placeholders": {
+      "message": {
+        "type": "String"
+      }
+    }
+  },
+
+  "errorSections": "---",
+  "appErrorInit": "Ошибка инициализации",
+  "appError": "Что-то пошло не так,\nпопробуйте перезапустить приложение\n\nОшибка: {message}",
+  "@appError": {
+    "placeholders": {
+      "message": {
+        "type": "String"
+      }
+    }
+  },
+  "uniqueViolation": "Нарушение уникальности записи",
+  "entityNotFound": "Сущность не найдена в базе данных",
+  "error": "Ошибка:\n{message}",
+  "@error": {
+    "placeholders": {
+      "message": {
+        "type": "String"
+      }
+    }
+  },
+  "errorCreatingActivity": "Ошибка создания активности:\n{message}",
+  "@errorCreatingActivity": {
+    "placeholders": {
+      "message": {
+        "type": "String"
+      }
+    }
+  },
+
+  "actionModeNothing": "Обычная",
+  "@actionModeNothing": { "description": "ActionMode.nothing" },
+  "actionModePomodoro": "Помодоро",
+  "actionModeBreakFor": "Перерыв",
+
+  "actionStatusActive": "Активна",
+  "actionStatusPause": "Пауза",
+  "actionStatusStop": "Остановлена",
+
+  "startAction": "Запустить",
+  "pauseAction": "Пауза",
+  "resumeAction": "Продолжить",
+  "stopAction": "Остановить",
+  "archiveAction": "Архивировать",
+
+  "runningActions": "Запущенные",
+  "@runningActions": { "description": "Заголовок секции запущенных активностей" },
+  "noRunningActions": "Нет запущенных активностей",
+  "allActions": "Активности",
+  "actionGroup": "Группа",
+  "createAction": "Новая активность",
+  "editAction": "Редактировать активность",
+  "createGroup": "Новая группа",
+  "actionName": "Название",
+  "actionDescription": "Описание (необязательно)",
+  "actionIcon": "Иконка",
+  "actionColor": "Цвет",
+  "actionMode": "Режим",
+  "actionPomodoro": "Помодоро",
+  "actionBreakFor": "Перерыв для",
+  "actionPauseOthers": "Останавливать другие при запуске",
+  "chooseBreakAction": "Выбрать активность-перерыв",
+  "noBreakAction": "Без переключения",
+  "actionArchived": "Активность архивирована",
+  "actionDeleted": "Активность удалена",
+
+  "totalTime": "Всего времени",
+  "@totalTime": { "description": "Суммарное накопленное время активности" },
+  "currentSession": "Текущая сессия",
+  "pomodoroCount": "{count, plural, one{{count} помодоро} few{{count} помодоро} many{{count} помодоро} other{{count} помодоро}}",
+  "@pomodoroCount": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "cycleNumber": "{current} / {total}",
+  "@cycleNumber": {
+    "description": "Номер цикла помодоро",
+    "placeholders": {
+      "current": { "type": "int" },
+      "total": { "type": "int" }
+    }
+  },
+
+  "pomodoroTypeShort": "Короткий",
+  "@pomodoroTypeShort": { "description": "PomodoroType.short — 15 мин" },
+  "pomodoroTypeNormal": "Обычный",
+  "pomodoroTypeLong": "Длинный",
+
+  "pomodoroStatusActive": "Идёт",
+  "pomodoroStatusCompleted": "Завершён",
+  "pomodoroStatusInterrupted": "Прерван",
+  "pomodoroStatusSkipped": "Пропущен",
+
+  "pomodoroAfterDoNothing": "Ничего",
+  "@pomodoroAfterDoNothing": { "description": "PomodoroAfterAction" },
+  "pomodoroAfterAutoStartBreak": "Авто-перерыв",
+  "pomodoroAfterSuggestBreak": "Предложить перерыв",
+  "pomodoroAfterRepeatSame": "Повторить",
+  "pomodoroAfterAutoStartWork": "Авто-возврат к работе",
+
+  "pomodoroFinishedTitle": "Помодоро завершён",
+  "@pomodoroFinishedTitle": { "description": "Заголовок уведомления" },
+  "pomodoroFinishedBody": "Отличная работа! Время сделать перерыв — {breakMin} мин.",
+  "@pomodoroFinishedBody": {
+    "placeholders": { "breakMin": { "type": "int" } }
+  },
+  "breakFinishedTitle": "Перерыв завершён",
+  "breakFinishedBody": "Возвращайся к работе. Запустить «{actionName}»?",
+  "@breakFinishedBody": {
+    "placeholders": { "actionName": { "type": "String" } }
+  },
+  "pomodoroInterrupted": "Помодоро прерван",
+  "startBreak": "Начать перерыв",
+  "skipBreak": "Пропустить",
+  "extendBreak": "+ {minutes} мин",
+  "@extendBreak": {
+    "placeholders": { "minutes": { "type": "int" } }
+  },
+  "continueWork": "Продолжить работу",
+  "skipPomodoro": "Пропустить",
+  "stopPomodoro": "Остановить",
+  "longBreak": "Длинный перерыв",
+  "shortBreak": "Короткий перерыв",
+
+  "pomodoroSettings": "Настройки Помодоро",
+  "pomodoroSettingsShortWork": "Короткий — рабочий интервал",
+  "pomodoroSettingsNormalWork": "Обычный — рабочий интервал",
+  "pomodoroSettingsLongWork": "Длинный — рабочий интервал",
+  "pomodoroSettingsShortBreak": "Короткий перерыв",
+  "pomodoroSettingsLongBreak": "Длинный перерыв",
+  "pomodoroSettingsCycles": "Циклов до длинного перерыва",
+  "pomodoroSettingsEscalate": "Повышать тип автоматически",
+  "pomodoroSettingsEscalateHint": "short → normal → long по мере усталости",
+  "pomodoroSettingsAfterAction": "После завершения интервала",
+  "pomodoroSettingsSound": "Звук",
+  "pomodoroSettingsVibration": "Вибрация",
+  "pomodoroSettingsNotifications": "Уведомления",
+  "minutes": "{count} мин",
+  "@minutes": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+
+  "waterGoal": "Дневная цель",
+  "@waterGoal": { "description": "Цель по воде" },
+  "waterGoalMl": "{ml} мл",
+  "@waterGoalMl": {
+    "placeholders": { "ml": { "type": "int" } }
+  },
+  "waterConsumed": "Выпито",
+  "waterRemaining": "Осталось {ml} мл",
+  "@waterRemaining": {
+    "placeholders": { "ml": { "type": "int" } }
+  },
+  "waterDeficit": "Отстаёшь на {ml} мл",
+  "@waterDeficit": {
+    "placeholders": { "ml": { "type": "int" } }
+  },
+  "waterAhead": "+{ml} мл от нормы",
+  "@waterAhead": {
+    "placeholders": { "ml": { "type": "int" } }
+  },
+  "waterGoalReached": "Цель достигнута! 🎉",
+  "waterRecommendGlasses": "Рекомендуем выпить {count} стакана",
+  "@waterRecommendGlasses": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+
+  "drinkTypeWater": "Вода",
+  "@drinkTypeWater": { "description": "DrinkType.water" },
+  "drinkTypeTea": "Чай",
+  "drinkTypeCoffee": "Кофе",
+  "drinkTypeMilk": "Молоко",
+  "drinkTypeBottle": "Бутылка",
+  "drinkVolumeMl": "{ml} мл",
+  "@drinkVolumeMl": {
+    "placeholders": { "ml": { "type": "int" } }
+  },
+  "addDrink": "Добавить напиток",
+  "holdForMore": "Удержите для выбора напитка",
+
+  "waterReminderModeInterval": "Интервал",
+  "@waterReminderModeInterval": { "description": "WaterReminderMode.interval" },
+  "waterReminderModeScheduled": "По расписанию",
+  "waterReminderInterval": "Напоминать каждые {minutes} мин",
+  "@waterReminderInterval": {
+    "placeholders": { "minutes": { "type": "int" } }
+  },
+  "waterReminderTimes": "Времена напоминаний",
+  "waterReminderAddTime": "Добавить время",
+  "waterReminderTimeActive": "Активно",
+  "waterReminderRemindersEnabled": "Напоминания включены",
+
+  "waterGoalModeByWeight": "По весу",
+  "@waterGoalModeByWeight": { "description": "WaterGoalMode.byWeight" },
+  "waterGoalModeManual": "Вручную",
+  "waterWeightKg": "Вес (кг)",
+  "waterExtraLoad": "Доп. нагрузка (мл)",
+  "waterExtraLoadHint": "Добавляется к базовой цели при занятиях спортом",
+  "waterQuickButtons": "Кнопки быстрого добавления",
+
+  "showToiletOnWater": "Напоминать туалет после воды",
+  "@showToiletOnWater": { "description": "Настройка виджета туалета" },
+  "showToiletOnBreak": "Напоминать туалет на перерыве",
+
+  "waterReminderTitle": "Выпей воды",
+  "@waterReminderTitle": { "description": "Заголовок уведомления о воде" },
+  "waterReminderBody": "Выпито {current} из {goal} мл. {recommendation}",
+  "@waterReminderBody": {
+    "placeholders": {
+      "current": { "type": "int" },
+      "goal": { "type": "int" },
+      "recommendation": { "type": "String" }
+    }
+  },
+  "toiletReminderTitle": "Не забудь сходить в туалет",
+  "toiletReminderBody": "Лучше сейчас, пока перерыв — не прерывай работу потом",
+
+  "scheduleEventWakeUp": "Подъём",
+  "@scheduleEventWakeUp": { "description": "ScheduleEventType.wakeUp" },
+  "scheduleEventMeal": "Еда",
+  "scheduleEventWork": "Работа",
+  "scheduleEventSport": "Спорт",
+  "scheduleEventSleep": "Сон",
+  "scheduleEventCustom": "Событие",
+
+  "mealSlotBreakfast": "Завтрак",
+  "@mealSlotBreakfast": { "description": "MealSlot.breakfast" },
+  "mealSlotLunch": "Обед",
+  "mealSlotDinner": "Ужин",
+  "mealSlotSnack": "Перекус",
+
+  "scheduleTitle": "Распорядок дня",
+  "scheduleToday": "Сегодня",
+  "scheduleNoEvents": "Нет событий",
+  "scheduleAddEvent": "Добавить событие",
+  "scheduleEventTime": "Время",
+  "scheduleEventDuration": "Длительность",
+  "scheduleEventStrict": "Строгое время",
+  "scheduleEventStrictHint": "Прервёт Помодоро в точное время",
+  "scheduleEventFlexibleHint": "Подождёт конца Помодоро",
+  "scheduleEventWarningMinutes": "Предупредить за (мин)",
+  "scheduleEventAction": "Запускать активность",
+  "scheduleEventEnabled": "Событие включено",
+
+  "mealReminderFlexibleTitle": "Пора перекусить",
+  "mealReminderFlexibleBody": "Помодоро завершён. Время {mealType}!",
+  "@mealReminderFlexibleBody": {
+    "placeholders": { "mealType": { "type": "String" } }
+  },
+  "mealReminderStrictTitle": "Время {mealType}",
+  "@mealReminderStrictTitle": {
+    "placeholders": { "mealType": { "type": "String" } }
+  },
+  "mealReminderStrictBody": "Помодоро прерван. Время поесть!",
+  "mealStrictWarningTitle": "Скоро {eventName}",
+  "@mealStrictWarningTitle": {
+    "placeholders": { "eventName": { "type": "String" } }
+  },
+  "mealStrictWarningBody": "До {eventName} {minutes} мин. Помодоро не успеет завершиться.",
+  "@mealStrictWarningBody": {
+    "placeholders": {
+      "eventName": { "type": "String" },
+      "minutes": { "type": "int" }
+    }
+  },
+  "stopNow": "Остановить сейчас",
+  "continueAnyway": "Продолжить, опоздаю",
+  "goToMeal": "Иду на {mealType}",
+  "@goToMeal": {
+    "placeholders": { "mealType": { "type": "String" } }
+  },
+  "skipMeal": "Пропустить",
+
+  "sleepReminderTitle": "Пора готовиться ко сну",
+  "sleepReminderBody": "До сна {minutes} мин. Заверши текущие дела.",
+  "@sleepReminderBody": {
+    "placeholders": { "minutes": { "type": "int" } }
+  },
+
+  "historyModeIntervals": "Интервалы",
+  "@historyModeIntervals": { "description": "HistoryMode.intervals" },
+  "historyModeTotalByAction": "Итого",
+  "historyModeStatistics": "Статистика",
+  "historyModeStatisticsComingSoon": "Статистика появится в следующей версии",
+
+  "periodDay": "День",
+  "@periodDay": { "description": "HistoryPeriod.day" },
+  "periodWeek": "Неделя",
+  "periodMonth": "Месяц",
+  "periodYear": "Год",
+
+  "historyTitle": "История",
+  "historyEmpty": "Нет записей за этот период",
+  "historyWaterTotal": "Вода за {period}",
+  "@historyWaterTotal": {
+    "placeholders": { "period": { "type": "String" } }
+  },
+  "historyPomodoroTotal": "Помодоро за {period}",
+  "@historyPomodoroTotal": {
+    "placeholders": { "period": { "type": "String" } }
+  },
+  "historyWorkTotal": "Рабочее время",
+  "editInterval": "Редактировать интервал",
+  "intervalStart": "Начало",
+  "intervalEnd": "Конец",
+  "intervalDelete": "Удалить интервал",
+  "intervalAdded": "Интервал добавлен",
+  "intervalDeleted": "Интервал удалён",
+  "intervalUpdated": "Интервал обновлён",
+  "addInterval": "Добавить интервал",
+  "changeActivity": "Изменить активность",
+  "deleteHistory": "Удалить из истории",
+  "deleteHistoryConfirm": "Удалить все интервалы этой активности за выбранный период?",
+
+  "settingsTitle": "Настройки",
+  "settingsProfile": "Профиль",
+  "settingsName": "Имя",
+  "settingsPomodoro": "Помодоро",
+  "settingsSchedule": "Расписание дня",
+  "settingsWater": "Вода",
+  "settingsTheme": "Тема",
+  "settingsLanguage": "Язык",
+  "settingsNotifications": "Уведомления",
+  "settingsNotificationsEnabled": "Уведомления включены",
+  "settingsNotificationsGlobalMute": "Все уведомления",
+  "settingsDisplay": "Отображение",
+  "settingsAbout": "О приложении",
+  "settingsVersion": "Версия {version}",
+  "@settingsVersion": {
+    "placeholders": { "version": { "type": "String" } }
+  },
+
+  "onboardingWelcomeTitle": "Добро пожаловать в TimeFocus",
+  "onboardingWelcomeSubtitle": "Пара вопросов — и начнём",
+  "onboardingNameTitle": "Как тебя зовут?",
+  "onboardingNameHint": "Имя",
+  "onboardingScheduleTitle": "Настрой распорядок дня",
+  "onboardingScheduleSubtitle": "Поможем расставить напоминания правильно",
+  "onboardingWakeUp": "Время подъёма",
+  "onboardingWorkStart": "Начало работы",
+  "onboardingLunch": "Обед",
+  "onboardingSport": "Спорт",
+  "onboardingDinner": "Ужин",
+  "onboardingSleep": "Время сна",
+  "onboardingSkip": "Настрою позже",
+  "onboardingStart": "Начать",
+
+  "systemActionWork": "Работа",
+  "@systemActionWork": { "description": "Системная активность" },
+  "systemActionBreak": "Перерыв",
+  "systemActionRest": "Отдых",
+  "systemActionSleep": "Сон",
+  "systemActionToilet": "Туалет",
+  "systemActionMeal": "Приём пищи",
+  "systemActionSport": "Спорт",
+  "systemActionWarmup": "Разминка",
+  "systemActionWalk": "Прогулка",
+  "systemActionMeditation": "Медитация",
+  "systemActionMedicine": "Лекарства",
+
+  "permissionNotificationTitle": "Разрешить уведомления",
+  "permissionNotificationBody": "TimeFocus использует уведомления для Помодоро и напоминаний о воде",
+  "permissionDeniedMessage": "Разрешение отклонено. Открыть настройки?",
+  "permissionOpenSettings": "Настройки",
+
+  "errorGeneral": "Что-то пошло не так",
+  "errorDatabase": "Ошибка базы данных",
+  "errorNotFound": "Запись не найдена",
+  "errorValidation": "Проверь введённые данные",
+  "errorNotification": "Не удалось запланировать уведомление",
+  "tryAgain": "Повторить",
+
+  "confirmDeleteTitle": "Удалить?",
+  "confirmDeleteMessage": "Это действие нельзя отменить",
+  "shareStats": "Поделиться статистикой",
+  "shareStatsText": "Сегодня в TimeFocus:\n⏱ {workTime} рабочего времени\n🍅 {pomodoros} помодоро\n💧 {waterMl} мл воды",
+  "@shareStatsText": {
+    "placeholders": {
+      "workTime": { "type": "String" },
+      "pomodoros": { "type": "int" },
+      "waterMl": { "type": "int" }
+    }
+  },
+
+  "end": "---"
+}
