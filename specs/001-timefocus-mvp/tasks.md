@@ -58,19 +58,19 @@ bloc_test, UseCase-ы с ветвлением — unit-тестами).
 **Independent Test**: quickstart.md сценарий 1 — старт из сетки, пауза/возобновление/стоп,
 корректный таймер после перезапуска приложения, группы in-place
 
-- [ ] T017 [P] [US1] Freezed-сущности ActionNameEntity, RunningWithNameEntity в app/lib/features/tracker/domain/entities/
-- [ ] T018 [P] [US1] Мапперы Model↔Entity в app/lib/features/tracker/data/mappers/action_mappers.dart
-- [ ] T019 [US1] ActionNameRepository + ActionRunningRepository (интерфейсы по contracts/repositories.md) в app/lib/features/tracker/domain/repositories/, реализации поверх DAO (start создаёт/находит ActionHistory на дату старта; pause/stop закрывают интервал; поддержка pausedBySystem-флага) в app/lib/features/tracker/data/repositories/
-- [ ] T020 [US1] StartActionUseCase — вся матрица переходов FR-010/010a/010b (shouldInterruptPomodoro, pauseOthers → пауза остальных с pausedBySystem, исключение перерыва, pendingConfirmation для второго pomodoro) в app/lib/features/tracker/domain/usecases/start_action_usecase.dart
-- [ ] T021 [US1] Pause/Resume/StopActionUseCase (пауза pomodoro-активности → эффект interrupted FR-018a; автовозобновление pausedBySystem после стопа pauseOthers; стоп → сброс цикла) в app/lib/features/tracker/domain/usecases/
-- [ ] T022 [US1] ActionBloc (события/состояния/TransitionEffect по contracts/blocs.md; droppable/restartable; isClosed-guard) в app/lib/features/tracker/presentation/bloc/action_bloc.dart
-- [ ] T023 [P] [US1] Виджет тикающего таймера (Timer.periodic 1 c, перерисовка now−startedAt+accumulated) в app/lib/shared/widgets/ticking_timer.dart
-- [ ] T024 [US1] TrackerPage: список карточек (иконка, название, таймер, время за день, индикатор цикла, Пауза/Старт/Стоп; на паузе — замороженное время FR-006; сортировка FR-005) в app/lib/features/tracker/presentation/pages/tracker_page.dart + widgets/running_card.dart
-- [ ] T025 [US1] Сетка активностей: настраиваемый размер, прокрутка при переполнении (FR-009), группы in-place с кнопкой «Назад» (FR-007), пустое состояние в app/lib/features/tracker/presentation/widgets/action_grid.dart
-- [ ] T026 [US1] Диалог подтверждения прерывания второго Помодоро (отказ — без изменений, FR-011) в app/lib/features/tracker/presentation/widgets/confirm_interrupt_dialog.dart; регистрация ActionBloc в AppRoot
-- [ ] T027 [P] [US1] Unit-тесты StartActionUseCase: полная матрица (nothing±pauseOthers × pomodoro active/break/idle, системный/ручной breakFor, подтверждение/отказ) в app/test/features/tracker/start_action_usecase_test.dart
-- [ ] T028 [P] [US1] bloc_test ActionBloc (старт/пауза/стоп/сортировка/pendingConfirmation) в app/test/features/tracker/action_bloc_test.dart
-- [ ] T029 [P] [US1] DAO-тест running/history: старт→пауза→возобновление→стоп, интервалы и accumulatedSec на in-memory БД в app/test/shared/running_dao_test.dart
+- [X] T017 [P] [US1] Freezed-сущности ActionNameEntity, RunningWithNameEntity в app/lib/features/tracker/domain/entities/
+- [X] T018 [P] [US1] Мапперы Model↔Entity в app/lib/features/tracker/data/mappers/action_mappers.dart
+- [X] T019 [US1] ActionNameRepository + ActionRunningRepository (интерфейсы по contracts/repositories.md) в app/lib/features/tracker/domain/repositories/, реализации поверх DAO (start создаёт/находит ActionHistory на дату старта; pause/stop закрывают интервал; поддержка pausedBySystem-флага) в app/lib/features/tracker/data/repositories/
+- [X] T020 [US1] StartActionUseCase — вся матрица переходов FR-010/010a/010b (shouldInterruptPomodoro, pauseOthers → пауза остальных с pausedBySystem, исключение перерыва, pendingConfirmation для второго pomodoro) в app/lib/features/tracker/domain/usecases/start_action_usecase.dart
+- [X] T021 [US1] Pause/Resume/StopActionUseCase (пауза pomodoro-активности → эффект interrupted FR-018a; автовозобновление pausedBySystem после стопа pauseOthers; стоп → сброс цикла) в app/lib/features/tracker/domain/usecases/
+- [X] T022 [US1] ActionBloc (события/состояния/TransitionEffect по contracts/blocs.md; droppable/restartable; isClosed-guard) в app/lib/features/tracker/presentation/bloc/action_bloc.dart
+- [X] T023 [P] [US1] Виджет тикающего таймера (Timer.periodic 1 c, перерисовка now−startedAt+accumulated) в app/lib/shared/widgets/ticking_timer.dart
+- [X] T024 [US1] TrackerPage: список карточек (иконка, название, таймер, время за день, индикатор цикла, Пауза/Старт/Стоп; на паузе — замороженное время FR-006; сортировка FR-005) в app/lib/features/tracker/presentation/pages/tracker_page.dart + widgets/running_card.dart
+- [X] T025 [US1] Сетка активностей: настраиваемый размер, прокрутка при переполнении (FR-009), группы in-place с кнопкой «Назад» (FR-007), пустое состояние в app/lib/features/tracker/presentation/widgets/action_grid.dart
+- [X] T026 [US1] Диалог подтверждения прерывания второго Помодоро (отказ — без изменений, FR-011) в app/lib/features/tracker/presentation/widgets/confirm_interrupt_dialog.dart; регистрация ActionBloc в AppRoot
+- [X] T027 [P] [US1] Unit-тесты StartActionUseCase: полная матрица (nothing±pauseOthers × pomodoro active/break/idle, системный/ручной breakFor, подтверждение/отказ) в app/test/features/tracker/start_action_usecase_test.dart
+- [X] T028 [P] [US1] bloc_test ActionBloc (старт/пауза/стоп/сортировка/pendingConfirmation) в app/test/features/tracker/action_bloc_test.dart
+- [X] T029 [P] [US1] DAO-тест running/history: старт→пауза→возобновление→стоп, интервалы и accumulatedSec на in-memory БД в app/test/shared/running_dao_test.dart
 
 **Checkpoint**: US1 работает автономно — MVP готов к демо
 

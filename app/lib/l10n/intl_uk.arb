@@ -9,7 +9,6 @@
   "@copyright": {
     "description": "Copyright text"
   },
-
   "settingsSections": "---",
   "appSettings": "Налаштування додатку",
   "theme": "Тема",
@@ -24,7 +23,6 @@
   "actionView": "Отображение активностей",
   "rowCount": "Кількість рядків",
   "columnCount": "Кількість стовпців",
-
   "buttonsSections": "---",
   "ok": "Гаразд",
   "cancel": "Скасувати",
@@ -41,14 +39,14 @@
   "reset": "Скинути",
   "enabled": "Увімкнено",
   "disabled": "Вимкнено",
-
   "nawBarSections": "---",
   "navTracker": "Трекер",
-  "@navTracker": { "description": "Нижняя навигация — вкладка активностей" },
+  "@navTracker": {
+    "description": "Нижняя навигация — вкладка активностей"
+  },
   "navSchedule": "Розклад",
   "navHistory": "Історія",
   "navMore": "Більше",
-
   "notificationSections": "---",
   "notification": "Сповіщення",
   "requestNotificationPermission": "Запросити дозвіл на сповіщення",
@@ -65,7 +63,6 @@
       }
     }
   },
-
   "errorSections": "---",
   "appErrorInit": "Помилка ініціалізації",
   "appError": "Щось пішло не так,\nспробуйте перезапустити застосунок\n\nПомилка: {message}",
@@ -94,21 +91,17 @@
       }
     }
   },
-
   "actionModeNothing": "Звичайна",
   "actionModePomodoro": "Помодоро",
   "actionModeBreakFor": "Перерва",
-
   "actionStatusActive": "Активна",
   "actionStatusPause": "Пауза",
   "actionStatusStop": "Зупинено",
-
   "startAction": "Запустити",
   "pauseAction": "Пауза",
   "resumeAction": "Продовжити",
   "stopAction": "Зупинити",
   "archiveAction": "Архівувати",
-
   "runningActions": "Запущені",
   "noRunningActions": "Немає активних активностей",
   "allActions": "Активності",
@@ -128,59 +121,73 @@
   "noBreakAction": "Без перемикання",
   "actionArchived": "Активність архівовано",
   "actionDeleted": "Активність видалено",
-
   "totalTime": "Загальний час",
   "currentSession": "Поточна сесія",
   "pomodoroCount": "{count, plural, one{{count} помодоро} few{{count} помодоро} many{{count} помодоро} other{{count} помодоро}}",
   "@pomodoroCount": {
-    "placeholders": { "count": { "type": "int" } }
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
   },
   "cycleNumber": "{current} / {total}",
   "@cycleNumber": {
     "placeholders": {
-      "current": { "type": "int" },
-      "total": { "type": "int" }
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
     }
   },
-
   "pomodoroTypeShort": "Короткий",
   "pomodoroTypeNormal": "Звичайний",
   "pomodoroTypeLong": "Довгий",
-
   "pomodoroStatusActive": "Іде",
   "pomodoroStatusCompleted": "Завершено",
   "pomodoroStatusInterrupted": "Перервано",
   "pomodoroStatusSkipped": "Пропущено",
-
   "pomodoroAfterDoNothing": "Нічого",
   "pomodoroAfterAutoStartBreak": "Авто-перерва",
   "pomodoroAfterSuggestBreak": "Запропонувати перерву",
   "pomodoroAfterRepeatSame": "Повторити",
   "pomodoroAfterAutoStartWork": "Авто-повернення до роботи",
-
   "pomodoroFinishedTitle": "Помодоро завершено",
   "pomodoroFinishedBody": "Чудова робота! Час на перерву — {breakMin} хв.",
   "@pomodoroFinishedBody": {
-    "placeholders": { "breakMin": { "type": "int" } }
+    "placeholders": {
+      "breakMin": {
+        "type": "int"
+      }
+    }
   },
   "breakFinishedTitle": "Перерва завершена",
   "breakFinishedBody": "Повертайся до роботи. Запустити «{actionName}»?",
   "@breakFinishedBody": {
-    "placeholders": { "actionName": { "type": "String" } }
+    "placeholders": {
+      "actionName": {
+        "type": "String"
+      }
+    }
   },
   "pomodoroInterrupted": "Помодоро перервано",
   "startBreak": "Почати перерву",
   "skipBreak": "Пропустити",
   "extendBreak": "+ {minutes} хв",
   "@extendBreak": {
-    "placeholders": { "minutes": { "type": "int" } }
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
   },
   "continueWork": "Продовжити роботу",
   "skipPomodoro": "Пропустити",
   "stopPomodoro": "Зупинити",
   "longBreak": "Довга перерва",
   "shortBreak": "Коротка перерва",
-
   "pomodoroSettings": "Налаштування Помодоро",
   "pomodoroSettingsShortWork": "Короткий — робочий інтервал",
   "pomodoroSettingsNormalWork": "Звичайний — робочий інтервал",
@@ -196,33 +203,55 @@
   "pomodoroSettingsNotifications": "Сповіщення",
   "minutes": "{count} хв",
   "@minutes": {
-    "placeholders": { "count": { "type": "int" } }
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
   },
-
   "waterGoal": "Денна ціль",
   "waterGoalMl": "{ml} мл",
   "@waterGoalMl": {
-    "placeholders": { "ml": { "type": "int" } }
+    "placeholders": {
+      "ml": {
+        "type": "int"
+      }
+    }
   },
   "waterConsumed": "Випито",
   "waterRemaining": "Залишилось {ml} мл",
   "@waterRemaining": {
-    "placeholders": { "ml": { "type": "int" } }
+    "placeholders": {
+      "ml": {
+        "type": "int"
+      }
+    }
   },
   "waterDeficit": "Відстаєш на {ml} мл",
   "@waterDeficit": {
-    "placeholders": { "ml": { "type": "int" } }
+    "placeholders": {
+      "ml": {
+        "type": "int"
+      }
+    }
   },
   "waterAhead": "+{ml} мл від норми",
   "@waterAhead": {
-    "placeholders": { "ml": { "type": "int" } }
+    "placeholders": {
+      "ml": {
+        "type": "int"
+      }
+    }
   },
   "waterGoalReached": "Ціль досягнута! 🎉",
   "waterRecommendGlasses": "Рекомендуємо випити {count} склянки",
   "@waterRecommendGlasses": {
-    "placeholders": { "count": { "type": "int" } }
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
   },
-
   "drinkTypeWater": "Вода",
   "drinkTypeTea": "Чай",
   "drinkTypeCoffee": "Кава",
@@ -230,56 +259,63 @@
   "drinkTypeBottle": "Пляшка",
   "drinkVolumeMl": "{ml} мл",
   "@drinkVolumeMl": {
-    "placeholders": { "ml": { "type": "int" } }
+    "placeholders": {
+      "ml": {
+        "type": "int"
+      }
+    }
   },
   "addDrink": "Додати напій",
   "holdForMore": "Утримайте для вибору напою",
-
   "waterReminderModeInterval": "Інтервал",
   "waterReminderModeScheduled": "За розкладом",
   "waterReminderInterval": "Нагадувати кожні {minutes} хв",
   "@waterReminderInterval": {
-    "placeholders": { "minutes": { "type": "int" } }
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
   },
   "waterReminderTimes": "Час нагадувань",
   "waterReminderAddTime": "Додати час",
   "waterReminderTimeActive": "Активне",
   "waterReminderRemindersEnabled": "Нагадування увімкнено",
-
   "waterGoalModeByWeight": "За вагою",
   "waterGoalModeManual": "Вручну",
   "waterWeightKg": "Вага (кг)",
   "waterExtraLoad": "Додаткове навантаження (мл)",
   "waterExtraLoadHint": "Додається до базової цілі під час занять спортом",
   "waterQuickButtons": "Кнопки швидкого додавання",
-
   "showToiletOnWater": "Нагадувати туалет після води",
   "showToiletOnBreak": "Нагадувати туалет на перерві",
-
   "waterReminderTitle": "Час випити води",
   "waterReminderBody": "Випито {current} з {goal} мл. {recommendation}",
   "@waterReminderBody": {
     "placeholders": {
-      "current": { "type": "int" },
-      "goal": { "type": "int" },
-      "recommendation": { "type": "String" }
+      "current": {
+        "type": "int"
+      },
+      "goal": {
+        "type": "int"
+      },
+      "recommendation": {
+        "type": "String"
+      }
     }
   },
   "toiletReminderTitle": "Не забудь зайти до туалету",
   "toiletReminderBody": "Краще зараз під час перерви — не переривай роботу потім",
-
   "scheduleEventWakeUp": "Підйом",
   "scheduleEventMeal": "Їжа",
   "scheduleEventWork": "Робота",
   "scheduleEventSport": "Спорт",
   "scheduleEventSleep": "Сон",
   "scheduleEventCustom": "Подія",
-
   "mealSlotBreakfast": "Сніданок",
   "mealSlotLunch": "Обід",
   "mealSlotDinner": "Вечеря",
   "mealSlotSnack": "Перекус",
-
   "scheduleTitle": "Розклад дня",
   "scheduleToday": "Сьогодні",
   "scheduleNoEvents": "Немає подій",
@@ -292,61 +328,88 @@
   "scheduleEventWarningMinutes": "Попередити за (хв)",
   "scheduleEventAction": "Запускати активність",
   "scheduleEventEnabled": "Подія увімкнена",
-
   "mealReminderFlexibleTitle": "Час поїсти",
   "mealReminderFlexibleBody": "Помодоро завершено. Час на {mealType}!",
   "@mealReminderFlexibleBody": {
-    "placeholders": { "mealType": { "type": "String" } }
+    "placeholders": {
+      "mealType": {
+        "type": "String"
+      }
+    }
   },
   "mealReminderStrictTitle": "Час {mealType}",
   "@mealReminderStrictTitle": {
-    "placeholders": { "mealType": { "type": "String" } }
+    "placeholders": {
+      "mealType": {
+        "type": "String"
+      }
+    }
   },
   "mealReminderStrictBody": "Помодоро перервано. Час поїсти!",
   "mealStrictWarningTitle": "Скоро {eventName}",
   "@mealStrictWarningTitle": {
-    "placeholders": { "eventName": { "type": "String" } }
+    "placeholders": {
+      "eventName": {
+        "type": "String"
+      }
+    }
   },
   "mealStrictWarningBody": "До {eventName} {minutes} хв. Помодоро не встигне завершитися.",
   "@mealStrictWarningBody": {
     "placeholders": {
-      "eventName": { "type": "String" },
-      "minutes": { "type": "int" }
+      "eventName": {
+        "type": "String"
+      },
+      "minutes": {
+        "type": "int"
+      }
     }
   },
   "stopNow": "Зупинити зараз",
   "continueAnyway": "Продовжити, запізнюся",
   "goToMeal": "Іду на {mealType}",
   "@goToMeal": {
-    "placeholders": { "mealType": { "type": "String" } }
+    "placeholders": {
+      "mealType": {
+        "type": "String"
+      }
+    }
   },
   "skipMeal": "Пропустити",
-
   "sleepReminderTitle": "Час готуватися до сну",
   "sleepReminderBody": "До сну {minutes} хв. Завершуй поточні справи.",
   "@sleepReminderBody": {
-    "placeholders": { "minutes": { "type": "int" } }
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
   },
-
   "historyModeIntervals": "Інтервали",
   "historyModeTotalByAction": "Підсумок",
   "historyModeStatistics": "Статистика",
   "historyModeStatisticsComingSoon": "Статистика з'явиться в наступній версії",
-
   "periodDay": "День",
   "periodWeek": "Тиждень",
   "periodMonth": "Місяць",
   "periodYear": "Рік",
-
   "historyTitle": "Історія",
   "historyEmpty": "Немає записів за цей період",
   "historyWaterTotal": "Вода за {period}",
   "@historyWaterTotal": {
-    "placeholders": { "period": { "type": "String" } }
+    "placeholders": {
+      "period": {
+        "type": "String"
+      }
+    }
   },
   "historyPomodoroTotal": "Помодоро за {period}",
   "@historyPomodoroTotal": {
-    "placeholders": { "period": { "type": "String" } }
+    "placeholders": {
+      "period": {
+        "type": "String"
+      }
+    }
   },
   "historyWorkTotal": "Робочий час",
   "editInterval": "Редагувати інтервал",
@@ -360,7 +423,6 @@
   "changeActivity": "Змінити активність",
   "deleteHistory": "Видалити з історії",
   "deleteHistoryConfirm": "Видалити всі інтервали цієї активності за вибраний період?",
-
   "settingsTitle": "Налаштування",
   "settingsProfile": "Профіль",
   "settingsName": "Ім'я",
@@ -376,9 +438,12 @@
   "settingsAbout": "Про застосунок",
   "settingsVersion": "Версія {version}",
   "@settingsVersion": {
-    "placeholders": { "version": { "type": "String" } }
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
   },
-
   "onboardingWelcomeTitle": "Ласкаво просимо до TimeFocus",
   "onboardingWelcomeSubtitle": "Кілька запитань — і починаємо",
   "onboardingNameTitle": "Як тебе звати?",
@@ -393,7 +458,6 @@
   "onboardingSleep": "Час сну",
   "onboardingSkip": "Налаштую пізніше",
   "onboardingStart": "Почати",
-
   "systemActionWork": "Робота",
   "systemActionBreak": "Перерва",
   "systemActionRest": "Відпочинок",
@@ -404,31 +468,34 @@
   "systemActionWarmup": "Розминка",
   "systemActionWalk": "Прогулянка",
   "systemActionMeditation": "Медитація",
+  "systemActionPrayer": "Молитва",
   "systemActionMedicine": "Ліки",
-
   "permissionNotificationTitle": "Дозволити сповіщення",
   "permissionNotificationBody": "TimeFocus використовує сповіщення для Помодоро та нагадувань про воду",
   "permissionDeniedMessage": "Дозвіл відхилено. Відкрити налаштування?",
   "permissionOpenSettings": "Налаштування",
-
   "errorGeneral": "Щось пішло не так",
   "errorDatabase": "Помилка бази даних",
   "errorNotFound": "Запис не знайдено",
   "errorValidation": "Перевір введені дані",
   "errorNotification": "Не вдалося запланувати сповіщення",
   "tryAgain": "Повторити",
-
   "confirmDeleteTitle": "Видалити?",
   "confirmDeleteMessage": "Цю дію не можна скасувати",
   "shareStats": "Поділитися статистикою",
   "shareStatsText": "Сьогодні в TimeFocus:\n⏱ {workTime} робочого часу\n🍅 {pomodoros} помодоро\n💧 {waterMl} мл води",
   "@shareStatsText": {
     "placeholders": {
-      "workTime": { "type": "String" },
-      "pomodoros": { "type": "int" },
-      "waterMl": { "type": "int" }
+      "workTime": {
+        "type": "String"
+      },
+      "pomodoros": {
+        "type": "int"
+      },
+      "waterMl": {
+        "type": "int"
+      }
     }
   },
-
   "end": "---"
 }

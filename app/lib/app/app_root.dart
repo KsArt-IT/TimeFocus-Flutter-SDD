@@ -5,6 +5,7 @@ import 'package:timefocus/app/app_material_router.dart';
 import 'package:timefocus/app/root_bloc_listener.dart';
 import 'package:timefocus/core/di/injection.dart';
 import 'package:timefocus/features/settings/presentation/cubit/app_settings_cubit.dart';
+import 'package:timefocus/features/tracker/presentation/bloc/action_bloc.dart';
 
 /// Application root: provides all global Bloc/Cubit singletons.
 /// Coordination between them happens only in [RootBlocListener].
@@ -16,8 +17,11 @@ class AppRoot extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider<AppSettingsCubit>.value(value: getIt<AppSettingsCubit>()),
-        // ActionBloc (US1), PomodoroBloc (US2), HudCubit (US3),
-        // NotificationBloc (US5) are registered as they are implemented.
+        BlocProvider<ActionBloc>.value(
+          value: getIt<ActionBloc>()..add(const ActionEvent.subscribed()),
+        ),
+        // PomodoroBloc (US2), HudCubit (US3), NotificationBloc (US5) are
+        // registered as they are implemented.
       ],
       child: const RootBlocListener(child: AppMaterialRouter()),
     );
