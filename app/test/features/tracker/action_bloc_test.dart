@@ -111,7 +111,6 @@ void main() {
         () => start(
           work.id,
           source: any(named: 'source'),
-          confirmed: false,
         ),
       ).thenAnswer((_) async => const Result.success(StartActionOutcome.needsConfirmation(work)));
     },
@@ -132,7 +131,7 @@ void main() {
     build: build,
     setUp: () {
       when(
-        () => start(work.id, source: ActionStartSource.user, confirmed: true),
+        () => start(work.id, confirmed: true),
       ).thenAnswer(
         (_) async => const Result.success(
           StartActionOutcome.started(
