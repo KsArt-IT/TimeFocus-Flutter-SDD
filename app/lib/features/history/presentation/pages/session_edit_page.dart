@@ -116,8 +116,7 @@ class _SessionEditContentState extends State<_SessionEditContent> {
           appBar: AppBar(
             title: state is SessionEditLoaded
                 ? Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: .min,
                     children: [
                       Text(l10n.sessionEditTitle),
                       Text(
@@ -149,6 +148,7 @@ class _SessionEditContentState extends State<_SessionEditContent> {
             SessionEditDeleted() => const SizedBox.shrink(),
             SessionEditError(:final failure) => Center(child: Text(failure.localizedMessage(l10n))),
             SessionEditLoaded(:final session, :final availableActions, :final running) => ListView(
+              padding: const EdgeInsets.only(bottom: 88),
               children: [
                 _ActivityRow(
                   currentActionId: _draftActionId ?? session.actionNameId,
@@ -192,26 +192,32 @@ class _SessionEditContentState extends State<_SessionEditContent> {
                       ),
                     ),
                   ),
-                ListTile(
-                  leading: const Icon(Icons.add),
-                  title: Text(l10n.addInterval),
-                  onTap: () => Navigator.of(context).push<void>(
-                    MaterialPageRoute(
-                      builder: (_) => BlocProvider.value(
-                        value: context.read<SessionEditCubit>(),
-                        child: IntervalEditPage(
-                          historyId: session.historyId,
-                          activityName: currentActionName,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
               ],
             ),
           },
+          floatingActionButton: state is SessionEditLoaded
+              ? FloatingActionButton(
+                  tooltip: l10n.addInterval,
+                  onPressed: () =>
+                      _addInterval(context, state.session.historyId, currentActionName),
+                  child: const Icon(Icons.add),
+                )
+              : null,
         );
       },
+    );
+  }
+
+  void _addInterval(BuildContext context, int historyId, String? activityName) {
+    unawaited(
+      Navigator.of(context).push<void>(
+        MaterialPageRoute(
+          builder: (_) => BlocProvider.value(
+            value: context.read<SessionEditCubit>(),
+            child: IntervalEditPage(historyId: historyId, activityName: activityName),
+          ),
+        ),
+      ),
     );
   }
 
