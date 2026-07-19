@@ -29,6 +29,15 @@ class ActionNameRepositoryImpl with SafeCallMixin implements ActionNameRepositor
   });
 
   @override
+  Future<Result<ActionNameEntity>> getBySystemName(String name) => safeCall(() async {
+    final row = await _db.actionDao.getBySystemName(name);
+    if (row == null) {
+      throw const DatabaseFailure('system action not found', code: DatabaseFailure.entityNotFound);
+    }
+    return row.toEntity();
+  });
+
+  @override
   Future<Result<int>> create(ActionNameEntity e) => safeCall(
     () => _db.actionDao.insertAction(e.toCompanion(includeId: false)),
   );

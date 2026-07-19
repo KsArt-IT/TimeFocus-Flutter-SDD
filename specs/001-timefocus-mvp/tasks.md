@@ -103,17 +103,17 @@ bloc_test, UseCase-ы с ветвлением — unit-тестами).
 **Independent Test**: quickstart.md сценарий 3 — +200 мл по тапу, список по удержанию,
 interval-перенос, мигание при Помодоро, приоритет контекстной иконки
 
-- [ ] T038 [P] [US3] Сущности WaterHudEntity, WaterSettingsEntity, WaterQuickButtonEntity + мапперы в app/lib/features/water/{domain/entities,data/mappers}/
-- [ ] T039 [US3] WaterRepository (watchToday с целью дня и нормой к моменту; log с DailyWaterGoal-фиксацией и lastDrankAt) в app/lib/features/water/{domain/repositories,data/repositories}/
-- [ ] T040 [US3] LogWaterUseCase (лог + interval-перепланирование через NotificationScheduler + туалет-триггер showToiletOnWater) в app/lib/features/water/domain/usecases/log_water_usecase.dart
-- [ ] T041 [P] [US3] HudContextResolver — чистая функция приоритета Туалет>Еда>Спорт>Сон>пусто, еда по времени суток (MealSlot), флаги туалета в app/lib/features/water/domain/usecases/resolve_hud_context_usecase.dart
-- [ ] T042 [US3] WaterReminderPlanner: interval-режим (одно уведомление, lastDrankAt+N) и scheduled-режим (все на день, автопропуск ±15 мин от еды, отброс после окна сна — FR-024/025) в app/lib/features/water/domain/usecases/plan_water_reminders_usecase.dart
-- [ ] T043 [US3] HudCubit (подписки: вода, настройки, контекст; методы по contracts/blocs.md; мигание стакана при активном Помодоро) в app/lib/features/water/presentation/cubit/hud_cubit.dart; регистрация в AppRoot
-- [ ] T044 [US3] HUD-панель в shell: полоска с делениями/меткой нормы/красной зоной (различимы не только цветом — FR-047), кнопка стакана (тап +порция, long-press список напитков), контекстная иконка с пульсацией (отключаемой) в app/lib/app/shell/widgets/hud_panel.dart
-- [ ] T045 [US3] Виджет туалета: состояния скрыт/рекомендован/активен, тап → старт «Туалет» (во время перерыва — без прерывания, FR-010b) в app/lib/app/shell/widgets/toilet_context_icon.dart
-- [ ] T046 [P] [US3] Unit-тесты HudContextResolver (все приоритеты, флаги, слоты еды) в app/test/features/water/hud_context_resolver_test.dart
-- [ ] T047 [P] [US3] Unit-тесты LogWaterUseCase + WaterReminderPlanner (interval/scheduled, ±15 мин, рекомендация стаканов ceil/max4 — FR-026) в app/test/features/water/water_usecases_test.dart
-- [ ] T048 [P] [US3] bloc_test HudCubit в app/test/features/water/hud_cubit_test.dart
+- [X] T038 [P] [US3] Сущности WaterHudEntity, WaterSettingsEntity, WaterQuickButtonEntity + мапперы в app/lib/features/water/{domain/entities,data/mappers}/
+- [X] T039 [US3] WaterRepository (watchToday с целью дня и нормой к моменту; log с DailyWaterGoal-фиксацией и lastDrankAt) в app/lib/features/water/{domain/repositories,data/repositories}/
+- [X] T040 [US3] LogWaterUseCase (лог + interval-перепланирование через NotificationScheduler + туалет-триггер showToiletOnWater) в app/lib/features/water/domain/usecases/log_water_usecase.dart
+- [X] T041 [P] [US3] HudContextResolver — чистая функция приоритета Туалет>Еда>Спорт>Сон>пусто, еда по времени суток (MealSlot), флаги туалета в app/lib/features/water/domain/usecases/resolve_hud_context_usecase.dart
+- [X] T042 [US3] WaterReminderPlanner: interval-режим (одно уведомление, lastDrankAt+N) и scheduled-режим (все на день, автопропуск ±15 мин от еды, отброс после окна сна — FR-024/025) в app/lib/features/water/domain/usecases/plan_water_reminders_usecase.dart
+- [X] T043 [US3] HudCubit (подписки: вода, настройки, контекст; методы по contracts/blocs.md; мигание стакана при активном Помодоро) в app/lib/features/water/presentation/cubit/hud_cubit.dart; регистрация в AppRoot
+- [X] T044 [US3] HUD-панель в shell: полоска с делениями/меткой нормы/красной зоной (различимы не только цветом — FR-047), кнопка стакана (тап +порция, long-press список напитков), контекстная иконка с пульсацией (отключаемой) в app/lib/app/shell/widgets/hud_panel.dart
+- [X] T045 [US3] Виджет туалета: состояния скрыт/рекомендован/активен, тап → старт «Туалет» (во время перерыва — без прерывания, FR-010b) в app/lib/app/shell/widgets/toilet_context_icon.dart
+- [X] T046 [P] [US3] Unit-тесты HudContextResolver (все приоритеты, флаги, слоты еды) в app/test/features/water/hud_context_resolver_test.dart
+- [X] T047 [P] [US3] Unit-тесты LogWaterUseCase + WaterReminderPlanner (interval/scheduled, ±15 мин, рекомендация стаканов ceil/max4 — FR-026) в app/test/features/water/water_usecases_test.dart
+- [X] T048 [P] [US3] bloc_test HudCubit в app/test/features/water/hud_cubit_test.dart
 
 **Checkpoint**: HUD жив на всех вкладках shell, вода и туалет работают
 

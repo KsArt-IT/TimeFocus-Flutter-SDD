@@ -35,6 +35,10 @@ abstract final class AppConstants {
   /// Maximum glasses recommended in a water reminder (FR-026).
   static const int maxRecommendedGlasses = 4;
 
+  /// HUD toilet icon stays suggested for this long after a triggering drink
+  /// (showToiletOnWater), minutes.
+  static const int toiletSuggestWindowMinutes = 10;
+
   /// Pomodoro defaults, seconds.
   static const int pomodoroShortWorkSec = 900;
   static const int pomodoroNormalWorkSec = 1500;

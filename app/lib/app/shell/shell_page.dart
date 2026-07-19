@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:timefocus/app/shell/widgets/hud_panel.dart';
 import 'package:timefocus/gen/app_localizations.dart';
 
-/// Shell scaffold: HUD panel slot on top, tab content, bottom navigation.
+/// Shell scaffold: HUD panel on top, tab content, bottom navigation.
 class ShellPage extends StatelessWidget {
   const ShellPage({required this.navigationShell, super.key});
 
@@ -16,7 +17,7 @@ class ShellPage extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            const _HudSlot(),
+            const HudPanel(),
             Expanded(child: navigationShell),
           ],
         ),
@@ -38,12 +39,4 @@ class ShellPage extends StatelessWidget {
       ),
     );
   }
-}
-
-/// HUD panel placeholder — replaced by HudPanel in US3 (T044).
-class _HudSlot extends StatelessWidget {
-  const _HudSlot();
-
-  @override
-  Widget build(BuildContext context) => const SizedBox.shrink();
 }

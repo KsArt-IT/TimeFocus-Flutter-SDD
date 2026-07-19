@@ -6,6 +6,7 @@ import 'package:timefocus/features/tracker/domain/entities/transition_effect.dar
 import 'package:timefocus/features/tracker/domain/usecases/start_action_usecase.dart'
     show ActionStartSource;
 import 'package:timefocus/features/tracker/presentation/bloc/action_bloc.dart';
+import 'package:timefocus/features/water/presentation/cubit/hud_cubit.dart';
 import 'package:timefocus/gen/app_localizations.dart';
 import 'package:toastification/toastification.dart';
 
@@ -69,7 +70,6 @@ class RootBlocListener extends StatelessWidget {
         );
 
       case tracker_effect.BreakStarted(:final historyId):
-        // HudCubit.onPomodoroBreakStarted() wired in US3 (T043).
         context.read<PomodoroBloc>().add(PomodoroEvent.breakActivityStarted(historyId));
     }
 
@@ -98,11 +98,13 @@ class RootBlocListener extends StatelessWidget {
           ActionEvent.started(breakActionId, source: ActionStartSource.system),
         );
       case PomodoroWorkRunning():
+        context.read<HudCubit>().onPomodoroStateChanged(isActive: true);
       case PomodoroIdle():
+        context.read<HudCubit>().onPomodoroStateChanged(isActive: false);
       case PomodoroBreakRunning():
+        context.read<HudCubit>().onPomodoroBreakStarted();
       case PomodoroError():
-        // HudCubit.onPomodoroStateChanged / NotificationBloc.ScheduleRecalculated
-        // wired in US3 (T043) / US5 (T060).
+        // NotificationBloc.ScheduleRecalculated wired in US5 (T060).
         break;
     }
   }

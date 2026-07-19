@@ -7,6 +7,8 @@ abstract interface class ActionNameRepository {
 
   Future<Result<ActionNameEntity>> getById(int id);
 
+  Future<Result<ActionNameEntity>> getBySystemName(String name);
+
   Future<Result<int>> create(ActionNameEntity e);
 
   Future<Result<void>> update(ActionNameEntity e);
