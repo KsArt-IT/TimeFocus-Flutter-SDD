@@ -444,6 +444,8 @@
   "sessionEditTitle": "Сесія",
   "sessionComment": "Коментар",
   "sessionDeleteConfirm": "Видалити цю сесію та всі її інтервали?",
+  "sessionMergeTitle": "Об'єднати сесії?",
+  "sessionMergeConfirm": "У цей день вже є сесія для цієї активності. Об'єднати інтервали цієї сесії з нею?",
   "now": "Зараз",
   "intervalOverlapWarning": "Перетинається з іншим інтервалом — все одно збережено",
   "intervalEndBeforeStart": "Кінець не може бути раніше початку",

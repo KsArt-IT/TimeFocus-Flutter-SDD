@@ -21,6 +21,20 @@ abstract interface class HistoryRepository {
     String? comment,
   });
 
+  /// The other session already recorded for [actionNameId] on [date] (if
+  /// any), excluding [excludingHistoryId] — ActionHistories has a unique
+  /// (actionNameId, date) key, so the caller must merge instead of updating
+  /// in place when this returns non-null.
+  Future<Result<int?>> findConflictingSession({
+    required int actionNameId,
+    required DateTime date,
+    required int excludingHistoryId,
+  });
+
+  /// Moves every interval of [fromHistoryId] under [intoHistoryId] and
+  /// removes the now-empty source session.
+  Future<Result<void>> mergeSessions({required int fromHistoryId, required int intoHistoryId});
+
   /// finishedAt < startedAt -> ValidationFailure; overlapping another
   /// interval of the same activity -> OverlapCheck.warning, saved anyway.
   Future<Result<OverlapCheck>> saveInterval(HistoryIntervalEdit e);

@@ -480,6 +480,8 @@
   "sessionEditTitle": "Session",
   "sessionComment": "Comment",
   "sessionDeleteConfirm": "Delete this session and all its intervals?",
+  "sessionMergeTitle": "Merge sessions?",
+  "sessionMergeConfirm": "This activity already has a session on this day. Merge this session's intervals into it?",
   "now": "Now",
   "intervalOverlapWarning": "Overlaps with another interval — saved anyway",
   "intervalEndBeforeStart": "End can't be before start",

@@ -1,5 +1,4 @@
 import 'package:injectable/injectable.dart';
-
 import 'package:timefocus/core/constants/system_actions.dart';
 import 'package:timefocus/core/errors/app_failure.dart';
 import 'package:timefocus/core/errors/safe_call_mixin.dart';
@@ -75,6 +74,19 @@ class HistoryRepositoryImpl with SafeCallMixin implements HistoryRepository {
       comment: comment,
     ),
   );
+
+  @override
+  Future<Result<int?>> findConflictingSession({
+    required int actionNameId,
+    required DateTime date,
+    required int excludingHistoryId,
+  }) => safeCall(
+    () => _db.historyDao.findHistoryId(actionNameId, date, excludingId: excludingHistoryId),
+  );
+
+  @override
+  Future<Result<void>> mergeSessions({required int fromHistoryId, required int intoHistoryId}) =>
+      voidSafeCall(() => _db.historyDao.mergeSessions(fromHistoryId, intoHistoryId));
 
   @override
   Future<Result<OverlapCheck>> saveInterval(HistoryIntervalEdit e) => safeCall(() async {

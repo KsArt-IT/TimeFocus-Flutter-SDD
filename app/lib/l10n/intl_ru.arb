@@ -493,6 +493,8 @@
   "sessionEditTitle": "Сессия",
   "sessionComment": "Комментарий",
   "sessionDeleteConfirm": "Удалить эту сессию и все её интервалы?",
+  "sessionMergeTitle": "Объединить сессии?",
+  "sessionMergeConfirm": "В этот день уже есть сессия для этой активности. Объединить интервалы этой сессии с ней?",
   "now": "Сейчас",
   "intervalOverlapWarning": "Пересекается с другим интервалом — всё равно сохранено",
   "intervalEndBeforeStart": "Конец не может быть раньше начала",

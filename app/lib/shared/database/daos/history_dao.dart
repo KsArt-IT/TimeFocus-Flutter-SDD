@@ -1,5 +1,4 @@
 import 'package:drift/drift.dart';
-
 import 'package:timefocus/core/constants/system_actions.dart';
 import 'package:timefocus/shared/database/app_database.dart';
 import 'package:timefocus/shared/database/tables/action_tables.dart';
@@ -63,8 +62,7 @@ class HistoryDao extends DatabaseAccessor<AppDatabase> with _$HistoryDaoMixin {
     final diff =
         actionHistoryIntervals.finishedAt.unixepoch - actionHistoryIntervals.startedAt.unixepoch;
     final total = diff.sum();
-    final isAction =
-        actionNames.isSystem.equals(true) & actionNames.name.equals(systemActionName);
+    final isAction = actionNames.isSystem.equals(true) & actionNames.name.equals(systemActionName);
     final query =
         selectOnly(actionHistoryIntervals).join([
             innerJoin(
@@ -195,6 +193,33 @@ class HistoryDao extends DatabaseAccessor<AppDatabase> with _$HistoryDaoMixin {
           comment: comment == null ? const Value.absent() : Value(comment),
         ),
       );
+
+  /// The other session already recorded for [actionNameId] on [date], if
+  /// any — ActionHistories has a unique (actionNameId, date) key, so
+  /// reassigning a session to an activity that already has one that day
+  /// must merge into it instead of updating in place.
+  Future<int?> findHistoryId(int actionNameId, DateTime date, {required int excludingId}) async {
+    final row =
+        await (select(actionHistories)..where(
+              (t) =>
+                  t.actionNameId.equals(actionNameId) &
+                  t.date.equals(date) &
+                  t.id.equals(excludingId).not(),
+            ))
+            .getSingleOrNull();
+    return row?.id;
+  }
+
+  /// Moves every interval of [fromHistoryId] under [intoHistoryId] and
+  /// removes the now-empty source session.
+  Future<void> mergeSessions(int fromHistoryId, int intoHistoryId) => transaction(() async {
+    await (update(
+      actionHistoryIntervals,
+    )..where((t) => t.actionHistoryId.equals(fromHistoryId))).write(
+      ActionHistoryIntervalsCompanion(actionHistoryId: Value(intoHistoryId)),
+    );
+    await (delete(actionHistories)..where((t) => t.id.equals(fromHistoryId))).go();
+  });
 
   Future<ActionHistoryIntervalModel?> getInterval(int intervalId) =>
       (select(actionHistoryIntervals)..where((t) => t.id.equals(intervalId))).getSingleOrNull();
