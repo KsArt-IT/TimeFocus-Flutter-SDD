@@ -20,6 +20,11 @@ abstract interface class ActionNameRepository {
   /// deleting it — the only way to "remove" a system activity.
   Future<Result<void>> setArchived(int id, {required bool archived});
 
+  /// Rewrites sortOrder for [orderedIds] to their list index (FR-009's drag
+  /// reorder) — [orderedIds] must all share one scope (root, or one
+  /// group's members), matching how [watchGrid] orders within a groupId.
+  Future<Result<void>> reorder(List<int> orderedIds);
+
   /// isSystem → ValidationFailure; clears breakActionId references (FR-043).
   Future<Result<void>> delete(int id);
 }

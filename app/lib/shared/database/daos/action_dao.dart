@@ -40,6 +40,16 @@ class ActionDao extends DatabaseAccessor<AppDatabase> with _$ActionDaoMixin {
     actionNames,
   )..where((t) => t.id.equals(id))).write(ActionNamesCompanion(archived: Value(archived)));
 
+  /// Rewrites sortOrder for [orderedIds] to their list index — used after a
+  /// drag reorder within one scope (root, or one group's members).
+  Future<void> reorder(List<int> orderedIds) => transaction(() async {
+    for (final (index, id) in orderedIds.indexed) {
+      await (update(
+        actionNames,
+      )..where((t) => t.id.equals(id))).write(ActionNamesCompanion(sortOrder: Value(index)));
+    }
+  });
+
   /// Deletes a user activity; clears breakActionId references pointing at it.
   /// ScheduleEvents.actionId is cleared by FK setNull.
   Future<void> deleteAction(int id) => transaction(() async {

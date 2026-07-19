@@ -40,6 +40,15 @@ class SettingsCubit extends Cubit<SettingsState> {
     }
   }
 
+  /// [orderedIds] must all share one scope (root, or one group's members) —
+  /// see [ActionNameRepository.reorder].
+  Future<void> reorder(List<int> orderedIds) async {
+    final result = await _actions.reorder(orderedIds);
+    if (result.isFailure) {
+      logger.e('failed to reorder activities', error: result.errorOrNull);
+    }
+  }
+
   @override
   Future<void> close() async {
     await _subscription?.cancel();

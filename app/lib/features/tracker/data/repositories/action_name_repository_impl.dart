@@ -58,6 +58,11 @@ class ActionNameRepositoryImpl with SafeCallMixin implements ActionNameRepositor
   );
 
   @override
+  Future<Result<void>> reorder(List<int> orderedIds) => voidSafeCall(
+    () => _db.actionDao.reorder(orderedIds),
+  );
+
+  @override
   Future<Result<void>> delete(int id) => voidSafeCall(() async {
     final row = await _db.actionDao.getById(id);
     if (row == null) {
