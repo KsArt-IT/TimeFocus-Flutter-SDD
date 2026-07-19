@@ -13,4 +13,8 @@ abstract interface class NotificationScheduler {
 
   /// Cold start / settings change: re-plans everything from the DB mirror.
   Future<Result<void>> rescheduleAll();
+
+  /// Delivers everything [schedule] deferred while muted/Pomodoro-active, in
+  /// order, once that condition ends (FR-034a).
+  Future<Result<void>> flushDeferred();
 }

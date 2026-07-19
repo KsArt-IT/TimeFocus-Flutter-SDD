@@ -43,4 +43,10 @@ sealed class PomodoroEvent with _$PomodoroEvent {
   const factory PomodoroEvent.breakFinished(int sessionId) = PomodoroBreakFinished;
 
   const factory PomodoroEvent.breakExtended(int minutes) = PomodoroBreakExtended;
+
+  /// App (re)start: there is no background process, so a work interval
+  /// running when the app was killed must be resumed (or, if its natural
+  /// end already passed, completed) from the DB alone — same recovery path
+  /// as tapping a pomodoroFinished notification from a cold start (FR-035).
+  const factory PomodoroEvent.recovered() = PomodoroRecovered;
 }

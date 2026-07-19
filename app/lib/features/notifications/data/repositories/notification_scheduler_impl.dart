@@ -3,24 +3,51 @@ import 'dart:convert';
 import 'package:drift/drift.dart';
 import 'package:injectable/injectable.dart';
 
+import 'package:timefocus/core/constants/system_actions.dart';
 import 'package:timefocus/core/errors/safe_call_mixin.dart';
 import 'package:timefocus/core/result/result.dart';
 import 'package:timefocus/features/notifications/data/datasources/local_notifications_datasource.dart';
 import 'package:timefocus/features/notifications/domain/entities/notification_draft.dart';
 import 'package:timefocus/features/notifications/domain/repositories/notification_scheduler.dart';
+import 'package:timefocus/features/notifications/domain/usecases/deferred_queue_usecase.dart';
 import 'package:timefocus/features/notifications/domain/usecases/notification_context_key.dart';
+import 'package:timefocus/features/pomodoro/domain/repositories/pomodoro_repository.dart';
+import 'package:timefocus/features/settings/domain/repositories/user_settings_repository.dart';
+import 'package:timefocus/features/tracker/domain/repositories/action_running_repository.dart';
 import 'package:timefocus/shared/database/app_database.dart';
+import 'package:timefocus/shared/enums/action_status.dart';
 import 'package:timefocus/shared/enums/notification_type.dart';
 
 @LazySingleton(as: NotificationScheduler)
 class NotificationSchedulerImpl with SafeCallMixin implements NotificationScheduler {
-  NotificationSchedulerImpl(this._db, this._local);
+  NotificationSchedulerImpl(
+    this._db,
+    this._local,
+    this._deferred,
+    this._runnings,
+    this._pomodoro,
+    this._userSettings,
+  );
 
   final AppDatabase _db;
   final LocalNotificationsDataSource _local;
+  final DeferredQueueUseCase _deferred;
+  final ActionRunningRepository _runnings;
+  final PomodoroRepository _pomodoro;
+  final UserSettingsRepository _userSettings;
 
   @override
   Future<Result<void>> schedule(NotificationDraft draft) => voidSafeCall(() async {
+    final muted = await _isMuted();
+    final pomodoroActive = await _isPomodoroActive();
+    if (_deferred.shouldDefer(draft.type, pomodoroActive: pomodoroActive, muted: muted)) {
+      _deferred.enqueue(draft);
+      return;
+    }
+    await _doSchedule(draft);
+  });
+
+  Future<void> _doSchedule(NotificationDraft draft) async {
     // FR-034a dedupe: replace an undelivered notification of the same
     // (type, context key).
     final key = notificationContextKey(draft.type, draft.payload);
@@ -40,6 +67,7 @@ class NotificationSchedulerImpl with SafeCallMixin implements NotificationSchedu
       'type': draft.type.index,
       'title': draft.title,
       'body': draft.body,
+      if (draft.extendBreakLabel != null) 'extendBreakLabel': draft.extendBreakLabel,
       ...draft.payload,
     });
     await _db.notificationDao.insertNotification(
@@ -56,8 +84,24 @@ class NotificationSchedulerImpl with SafeCallMixin implements NotificationSchedu
       body: draft.body,
       scheduledAt: draft.scheduledAt,
       payload: payloadJson,
+      extendBreakLabel: draft.extendBreakLabel,
     );
-  });
+  }
+
+  Future<bool> _isMuted() async {
+    final settingsResult = await _userSettings.get();
+    if (settingsResult.valueOrNull?.notificationsEnabled == false) return true;
+    final runningResult = await _runnings.currentRunning();
+    final running = runningResult.valueOrNull ?? const [];
+    return running.any(
+      (r) => r.status == ActionStatus.active && SystemActionKeys.muting.contains(r.action.name),
+    );
+  }
+
+  Future<bool> _isPomodoroActive() async {
+    final result = await _pomodoro.activeSession();
+    return result.valueOrNull != null;
+  }
 
   @override
   Future<Result<void>> cancel(int id) => voidSafeCall(() async {
@@ -87,6 +131,17 @@ class NotificationSchedulerImpl with SafeCallMixin implements NotificationSchedu
         body: payload['body'] as String? ?? '',
         scheduledAt: n.scheduledAt,
         payload: n.payload,
+        extendBreakLabel: payload['extendBreakLabel'] as String?,
+      );
+    }
+  });
+
+  @override
+  Future<Result<void>> flushDeferred() => voidSafeCall(() async {
+    final drafts = _deferred.drain();
+    for (final (index, draft) in drafts.indexed) {
+      await _doSchedule(
+        draft.copyWith(scheduledAt: DateTime.now().add(Duration(seconds: 3 * index))),
       );
     }
   });

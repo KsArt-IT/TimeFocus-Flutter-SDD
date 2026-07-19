@@ -14,5 +14,9 @@ abstract class NotificationDraft with _$NotificationDraft {
     required String title,
     required String body,
     @Default(<String, Object?>{}) Map<String, Object?> payload,
+
+    /// Localized label for the extendBreak action button (breakFinished
+    /// only, T061) — built by the caller, which has l10n access.
+    String? extendBreakLabel,
   }) = _NotificationDraft;
 }

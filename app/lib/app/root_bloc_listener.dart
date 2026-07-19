@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+import 'package:timefocus/core/constants/system_actions.dart';
+import 'package:timefocus/core/router/app_router.dart';
+import 'package:timefocus/features/notifications/domain/entities/notification_intent.dart';
+import 'package:timefocus/features/notifications/presentation/bloc/notification_bloc.dart';
 import 'package:timefocus/features/pomodoro/presentation/bloc/pomodoro_bloc.dart';
 import 'package:timefocus/features/tracker/domain/entities/transition_effect.dart'
     as tracker_effect;
@@ -8,6 +13,7 @@ import 'package:timefocus/features/tracker/domain/usecases/start_action_usecase.
 import 'package:timefocus/features/tracker/presentation/bloc/action_bloc.dart';
 import 'package:timefocus/features/water/presentation/cubit/hud_cubit.dart';
 import 'package:timefocus/gen/app_localizations.dart';
+import 'package:timefocus/shared/enums/action_status.dart';
 import 'package:toastification/toastification.dart';
 
 /// Single coordination point between global Blocs (contracts/blocs.md).
@@ -28,14 +34,31 @@ class RootBlocListener extends StatelessWidget {
           ),
           listener: _onActionTransition,
         ),
+        BlocListener<ActionBloc, ActionState>(
+          listenWhen: (previous, current) => _isMuted(previous) && !_isMuted(current),
+          listener: (context, state) => context.read<NotificationBloc>().add(
+            const NotificationEvent.scheduleRecalculated(ScheduleRecalcTrigger.muteEnded),
+          ),
+        ),
         BlocListener<PomodoroBloc, PomodoroState>(
           listenWhen: (previous, current) => previous.runtimeType != current.runtimeType,
           listener: _onPomodoroStateEntered,
+        ),
+        BlocListener<NotificationBloc, NotificationState>(
+          listenWhen: (previous, current) => current.pendingIntent != null,
+          listener: _onNotificationIntent,
         ),
       ],
       child: child,
     );
   }
+
+  static bool _isMuted(ActionState state) => state.maybeMap(
+    loaded: (s) => s.running.any(
+      (r) => r.status == ActionStatus.active && SystemActionKeys.muting.contains(r.action.name),
+    ),
+    orElse: () => false,
+  );
 
   void _onActionTransition(BuildContext context, ActionState state) {
     final loaded = state as ActionLoaded;
@@ -99,11 +122,34 @@ class RootBlocListener extends StatelessWidget {
         context.read<HudCubit>().onPomodoroStateChanged(isActive: true);
       case PomodoroIdle():
         context.read<HudCubit>().onPomodoroStateChanged(isActive: false);
+        context.read<NotificationBloc>().add(
+          const NotificationEvent.scheduleRecalculated(ScheduleRecalcTrigger.pomodoroEnded),
+        );
       case PomodoroBreakRunning():
         context.read<HudCubit>().onPomodoroBreakStarted();
       case PomodoroError():
-        // NotificationBloc.ScheduleRecalculated wired in US5 (T060).
         break;
     }
+  }
+
+  void _onNotificationIntent(BuildContext context, NotificationState state) {
+    final intent = state.pendingIntent;
+    if (intent == null) return;
+
+    switch (intent) {
+      case OpenTrackerIntent():
+        break;
+      case ResumeWorkIntent(:final actionNameId):
+        context.read<ActionBloc>().add(
+          ActionEvent.started(actionNameId, source: ActionStartSource.system),
+        );
+      case StartActionIntent(:final actionNameId):
+        context.read<ActionBloc>().add(ActionEvent.started(actionNameId));
+      case ExtendBreakIntent(:final minutes):
+        context.read<PomodoroBloc>().add(PomodoroEvent.breakExtended(minutes));
+    }
+
+    rootNavigatorKey.currentContext?.go(AppRoutes.tracker);
+    context.read<NotificationBloc>().add(const NotificationEvent.intentHandled());
   }
 }

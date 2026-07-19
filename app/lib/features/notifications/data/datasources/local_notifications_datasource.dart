@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:injectable/injectable.dart';
 import 'package:timefocus/core/utils/app_logger.dart';
+import 'package:timefocus/features/notifications/domain/usecases/handle_notification_tap_usecase.dart';
 import 'package:timezone/timezone.dart' as tz;
 
 /// Thin wrapper around flutter_local_notifications: init, exact scheduling
@@ -16,30 +17,49 @@ class LocalNotificationsDataSource {
   /// Warm-start notification taps and action buttons.
   Stream<NotificationResponse> get taps => _taps.stream;
 
-  static const AndroidNotificationDetails _androidDetails = AndroidNotificationDetails(
-    'timefocus_main',
-    'TimeFocus',
-    importance: Importance.high,
-    priority: Priority.high,
-  );
-
-  static const DarwinNotificationDetails _darwinDetails = DarwinNotificationDetails();
-
-  static const NotificationDetails details = NotificationDetails(
-    android: _androidDetails,
-    iOS: _darwinDetails,
-  );
+  /// iOS category for breakFinished, carrying the extendBreak action button.
+  static const String breakFinishedCategoryId = 'breakFinished';
 
   Future<void> init() async {
-    const initSettings = InitializationSettings(
-      android: AndroidInitializationSettings('@mipmap/ic_launcher'),
-      iOS: DarwinInitializationSettings(),
+    final initSettings = InitializationSettings(
+      android: const AndroidInitializationSettings('@mipmap/ic_launcher'),
+      iOS: DarwinInitializationSettings(
+        notificationCategories: [
+          DarwinNotificationCategory(
+            breakFinishedCategoryId,
+            actions: [
+              // iOS categories are registered once at init and can't carry a
+              // per-notification localized/minute-count label like Android's
+              // AndroidNotificationAction does; kept static.
+              DarwinNotificationAction.plain(
+                extendBreakActionId,
+                'Extend break',
+                options: {DarwinNotificationActionOption.foreground},
+              ),
+            ],
+          ),
+        ],
+      ),
     );
     await _plugin.initialize(
       settings: initSettings,
       onDidReceiveNotificationResponse: _taps.add,
     );
   }
+
+  NotificationDetails _detailsFor({
+    List<AndroidNotificationAction> actions = const [],
+    String? darwinCategoryId,
+  }) => NotificationDetails(
+    android: AndroidNotificationDetails(
+      'timefocus_main',
+      'TimeFocus',
+      importance: Importance.high,
+      priority: Priority.high,
+      actions: actions,
+    ),
+    iOS: DarwinNotificationDetails(categoryIdentifier: darwinCategoryId),
+  );
 
   /// Payload that launched the app from terminated state, if any.
   Future<NotificationResponse?> launchDetails() async {
@@ -51,15 +71,23 @@ class LocalNotificationsDataSource {
   }
 
   /// Schedules exact with fallback to inexact when exact alarms are not
-  /// permitted (FR-036).
+  /// permitted (FR-036). [extendBreakLabel] adds the localized extendBreak
+  /// button (breakFinished only, T061).
   Future<void> zonedSchedule({
     required int id,
     required String title,
     required String body,
     required DateTime scheduledAt,
     required String payload,
+    String? extendBreakLabel,
   }) async {
     final when = tz.TZDateTime.from(scheduledAt, tz.local);
+    final details = _detailsFor(
+      actions: extendBreakLabel == null
+          ? const []
+          : [AndroidNotificationAction(extendBreakActionId, extendBreakLabel)],
+      darwinCategoryId: extendBreakLabel == null ? null : breakFinishedCategoryId,
+    );
     try {
       await _plugin.zonedSchedule(
         id: id,
@@ -93,7 +121,7 @@ class LocalNotificationsDataSource {
     id: id,
     title: title,
     body: body,
-    notificationDetails: details,
+    notificationDetails: _detailsFor(),
     payload: payload,
   );
 

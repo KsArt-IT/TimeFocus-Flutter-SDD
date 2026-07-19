@@ -4,6 +4,7 @@ import 'dart:ui' show Locale;
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
+import 'package:timefocus/core/constants/app_constants.dart';
 import 'package:timefocus/core/errors/app_failure.dart';
 import 'package:timefocus/core/result/result.dart';
 import 'package:timefocus/core/utils/app_logger.dart';
@@ -20,6 +21,7 @@ import 'package:timefocus/features/schedule/domain/entities/schedule_event_entit
 import 'package:timefocus/features/schedule/domain/usecases/check_strict_events_usecase.dart';
 import 'package:timefocus/features/tracker/domain/repositories/action_name_repository.dart';
 import 'package:timefocus/gen/app_localizations.dart';
+import 'package:timefocus/shared/enums/action_mode.dart';
 import 'package:timefocus/shared/enums/notification_type.dart';
 import 'package:timefocus/shared/enums/pomodoro_status.dart';
 import 'package:timefocus/shared/enums/pomodoro_type.dart';
@@ -48,6 +50,7 @@ class PomodoroBloc extends Bloc<PomodoroEvent, PomodoroState> {
     on<PomodoroSkipped>(_onSkipped, transformer: droppable());
     on<PomodoroBreakFinished>(_onBreakFinished, transformer: sequential());
     on<PomodoroBreakExtended>(_onBreakExtended, transformer: droppable());
+    on<PomodoroRecovered>(_onRecovered, transformer: droppable());
   }
 
   final PomodoroRepository _sessions;
@@ -160,6 +163,55 @@ class PomodoroBloc extends Bloc<PomodoroEvent, PomodoroState> {
     if (pending != null) return pending;
     final last = await _sessions.lastSessionForAction(actionNameId);
     return last.valueOrNull?.cycleNumber ?? 1;
+  }
+
+  /// Called once at app start (and, redundantly but harmlessly, from a
+  /// pomodoroFinished notification tap): recovers a work interval that was
+  /// still active when the app was last killed. Break sessions can't be
+  /// recovered the same way — the DB has no column linking a break session
+  /// back to the work activity it should resume (PomodoroBreakRunning's
+  /// parentActionId only ever lived in memory) — so an overdue break is
+  /// simply marked completed and the app returns to idle.
+  Future<void> _onRecovered(PomodoroRecovered event, Emitter<PomodoroState> emit) async {
+    if (state is! PomodoroIdle) return;
+    final sessionResult = await _sessions.activeSession();
+    if (isClosed) return;
+    final session = sessionResult.valueOrNull;
+    final actionId = session?.actionNameId;
+    if (session == null || actionId == null) return;
+
+    final actionResult = await _actions.getById(actionId);
+    if (isClosed) return;
+    final action = actionResult.valueOrNull;
+    if (action == null) return;
+
+    final endsAt = session.startTime.add(Duration(seconds: session.plannedTime));
+    final now = DateTime.now();
+
+    if (action.mode == ActionMode.breakFor) {
+      if (!now.isBefore(endsAt)) {
+        await _sessions.finish(session.id, PomodoroStatus.completed, endsAt);
+      }
+      return;
+    }
+
+    final settingsResult = await _settings.current();
+    if (isClosed) return;
+    final cyclesBeforeLongBreak =
+        settingsResult.valueOrNull?.cyclesBeforeLongBreak ?? session.cycleNumber;
+    emit(
+      PomodoroState.workRunning(
+        session: session,
+        endsAt: endsAt,
+        cyclesBeforeLongBreak: cyclesBeforeLongBreak,
+      ),
+    );
+    if (now.isBefore(endsAt)) {
+      _armTimer(endsAt, () => add(PomodoroEvent.workIntervalFinished(session.id)));
+      await _checkStrictEvents(now, endsAt);
+    } else {
+      add(PomodoroEvent.workIntervalFinished(session.id));
+    }
   }
 
   Future<void> _onWorkFinished(
@@ -402,6 +454,7 @@ class PomodoroBloc extends Bloc<PomodoroEvent, PomodoroState> {
         title: l10n.breakFinishedTitle,
         body: l10n.breakFinishedBody(name),
         payload: {'parentActionId': parentActionId, 'pomodoroCount': pomodoroCount},
+        extendBreakLabel: l10n.extendBreak(AppConstants.extendBreakMinutes),
       ),
     );
   }
