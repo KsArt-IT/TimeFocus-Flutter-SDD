@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:timefocus/core/utils/app_logger.dart';
@@ -5,17 +6,22 @@ import 'package:timefocus/features/history/domain/entities/history_interval_edit
 import 'package:timefocus/features/history/domain/repositories/history_repository.dart';
 import 'package:timefocus/features/history/presentation/cubit/session_edit_state.dart';
 import 'package:timefocus/features/tracker/domain/repositories/action_name_repository.dart';
+import 'package:timefocus/features/tracker/domain/repositories/action_running_repository.dart';
+import 'package:timefocus/shared/enums/action_status.dart';
 
 export 'package:timefocus/features/history/presentation/cubit/session_edit_state.dart';
 
 /// Screen-scoped cubit for SessionEditPage/IntervalEditPage (FR-040):
-/// change activity/comment, add/edit/delete intervals, delete the session.
+/// change activity/comment, add/edit/delete intervals, delete the session,
+/// and — for today's session — toggle its live running status.
 @injectable
 class SessionEditCubit extends Cubit<SessionEditState> {
-  SessionEditCubit(this._history, this._actions) : super(const SessionEditState.loading());
+  SessionEditCubit(this._history, this._actions, this._runnings)
+    : super(const SessionEditState.loading());
 
   final HistoryRepository _history;
   final ActionNameRepository _actions;
+  final ActionRunningRepository _runnings;
 
   Future<void> load(int historyId) async {
     final sessionResult = await _history.session(historyId);
@@ -27,7 +33,58 @@ class SessionEditCubit extends Cubit<SessionEditState> {
     }
     final actions = await _actions.watchGrid().first;
     if (isClosed) return;
-    emit(SessionEditState.loaded(session: session, availableActions: actions));
+    final runningResult = await _runnings.currentRunning();
+    if (isClosed) return;
+    final running = runningResult.valueOrNull?.firstWhereOrNull(
+      (r) => r.historyId == session.historyId,
+    );
+    emit(SessionEditState.loaded(session: session, availableActions: actions, running: running));
+  }
+
+  /// Applies a *staged* running-status change (SessionEditPage keeps it in
+  /// the widget's draft state, exactly like the activity/comment fields, and
+  /// only calls this from Save). That's the point: toggling the segmented
+  /// control back and forth before Save never touches the database, so it
+  /// can never leave behind an interval nobody asked to keep — a plain
+  /// setState covers "stopped → active → stopped, never saved" for free.
+  /// Applied once, [target] maps to exactly the one start/startPaused/
+  /// pause/resume/stop call that transition implies, timestamped at [at]
+  /// (the moment the user picked it, not whenever Save happens to run) —
+  /// never a pair of calls that would double up an interval.
+  Future<void> commitRunningStatus({required ActionStatus target, required DateTime at}) async {
+    final current = state;
+    if (current is! SessionEditLoaded) return;
+    final running = current.running;
+    final originalStatus = running?.status ?? ActionStatus.stop;
+    if (originalStatus == target) return;
+
+    final failure = switch ((originalStatus, target)) {
+      (ActionStatus.stop, ActionStatus.active) => (await _runnings.start(
+        actionNameId: current.session.actionNameId,
+        now: at,
+      )).errorOrNull,
+      (ActionStatus.stop, ActionStatus.pause) => (await _runnings.startPaused(
+        actionNameId: current.session.actionNameId,
+        now: at,
+      )).errorOrNull,
+      (ActionStatus.active, ActionStatus.pause) => (await _runnings.pause(
+        running!.runningId,
+        at,
+      )).errorOrNull,
+      (ActionStatus.pause, ActionStatus.active) => (await _runnings.resume(
+        running!.runningId,
+        at,
+      )).errorOrNull,
+      (ActionStatus.active, ActionStatus.stop) || (ActionStatus.pause, ActionStatus.stop) =>
+        (await _runnings.stop(running!.runningId, at)).errorOrNull,
+      _ => null,
+    };
+    if (isClosed) return;
+    if (failure != null) {
+      logger.e('failed to change running status', error: failure);
+      return;
+    }
+    await load(current.session.historyId);
   }
 
   /// Applies the activity change and reloads, unless the session's day

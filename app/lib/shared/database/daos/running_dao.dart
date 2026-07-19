@@ -70,6 +70,23 @@ class RunningDao extends DatabaseAccessor<AppDatabase> with _$RunningDaoMixin {
     );
   });
 
+  /// Same as [start], but inserts the running row already paused — no open
+  /// interval, nothing to close later on stop.
+  Future<int> startPaused({required int actionNameId, required DateTime now}) =>
+      transaction(() async {
+        final day = DateTime.utc(now.year, now.month, now.day);
+        final historyId = await _findOrCreateHistory(actionNameId, day);
+        return into(actionRunnings).insert(
+          ActionRunningsCompanion.insert(
+            actionNameId: actionNameId,
+            actionHistoryId: historyId,
+            status: Value(ActionStatus.pause.index),
+            startedAt: now,
+            pausedAt: Value(now),
+          ),
+        );
+      });
+
   Future<int> _findOrCreateHistory(int actionNameId, DateTime day) async {
     final existing = await (select(
       actionHistories,

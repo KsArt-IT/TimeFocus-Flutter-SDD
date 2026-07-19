@@ -37,6 +37,11 @@ class ActionRunningRepositoryImpl with SafeCallMixin implements ActionRunningRep
   );
 
   @override
+  Future<Result<int>> startPaused({required int actionNameId, required DateTime now}) => safeCall(
+    () => _db.runningDao.startPaused(actionNameId: actionNameId, now: now),
+  );
+
+  @override
   Future<Result<void>> pause(int runningId, DateTime now, {bool bySystem = false}) => voidSafeCall(
     () => _db.runningDao.pause(runningId, now, bySystem: bySystem),
   );

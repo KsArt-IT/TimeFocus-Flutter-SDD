@@ -99,4 +99,24 @@ void main() {
     final intervals = await db.historyDao.intervalsOfSession(running!.actionHistoryId);
     expect(intervals.length, 1);
   });
+
+  test(
+    'startPaused creates a paused row with no interval; stopping it right away adds none either',
+    () async {
+      final now = DateTime(2026, 7, 18, 10);
+      final runningId = await db.runningDao.startPaused(actionNameId: workId, now: now);
+
+      final running = await db.runningDao.getById(runningId);
+      expect(running!.status, ActionStatus.pause.index);
+      expect(running.pausedAt, now);
+      expect(running.accumulatedSec, 0);
+
+      var intervals = await db.historyDao.intervalsOfSession(running.actionHistoryId);
+      expect(intervals, isEmpty);
+
+      await db.runningDao.stop(runningId, now.add(const Duration(minutes: 5)));
+      intervals = await db.historyDao.intervalsOfSession(running.actionHistoryId);
+      expect(intervals, isEmpty);
+    },
+  );
 }

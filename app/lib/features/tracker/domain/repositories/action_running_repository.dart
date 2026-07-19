@@ -8,6 +8,12 @@ abstract interface class ActionRunningRepository {
   /// Finds/creates the ActionHistory for the start date, creates a running row.
   Future<Result<int>> start({required int actionNameId, required DateTime now});
 
+  /// Finds/creates the ActionHistory for [now]'s date and creates a running
+  /// row that starts out paused (no open interval) — used when editing a
+  /// stopped session's status directly to "paused" without going through an
+  /// active interval first.
+  Future<Result<int>> startPaused({required int actionNameId, required DateTime now});
+
   /// Closes the current interval. [bySystem] marks pauseOthers-driven pauses
   /// for later auto-resume (FR-010a).
   Future<Result<void>> pause(int runningId, DateTime now, {bool bySystem = false});
