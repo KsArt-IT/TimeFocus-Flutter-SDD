@@ -559,6 +559,9 @@
   "categorySportsFitness": "Спорт и фитнес",
   "categoryTime": "Время",
   "categoryTransportation": "Транспорт",
+  "selectColor": "Выберите цвет",
+  "other": "Другие",
+  "presets": "Готовые",
   "settingsVersion": "Версия {version}",
   "@settingsVersion": {
     "placeholders": {

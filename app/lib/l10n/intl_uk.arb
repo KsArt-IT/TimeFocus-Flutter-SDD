@@ -510,6 +510,9 @@
   "categorySportsFitness": "Спорт і фітнес",
   "categoryTime": "Час",
   "categoryTransportation": "Транспорт",
+  "selectColor": "Виберіть колір",
+  "other": "Інші",
+  "presets": "Готові",
   "settingsVersion": "Версія {version}",
   "@settingsVersion": {
     "placeholders": {

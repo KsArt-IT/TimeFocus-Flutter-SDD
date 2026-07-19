@@ -546,6 +546,9 @@
   "categorySportsFitness": "Sports & Fitness",
   "categoryTime": "Time",
   "categoryTransportation": "Transportation",
+  "selectColor": "Select color",
+  "other": "Other",
+  "presets": "Presets",
   "settingsVersion": "Version {version}",
   "@settingsVersion": {
     "placeholders": {

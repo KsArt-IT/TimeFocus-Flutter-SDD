@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 
@@ -13,6 +12,7 @@ import 'package:timefocus/gen/app_localizations.dart';
 import 'package:timefocus/shared/enums/action_mode.dart';
 import 'package:timefocus/shared/enums/pomodoro_type.dart';
 import 'package:timefocus/shared/widgets/action_localization.dart';
+import 'package:timefocus/shared/widgets/color_picker/color_picker_dialog.dart';
 import 'package:timefocus/shared/widgets/fa_icon_helper.dart';
 import 'package:timefocus/shared/widgets/icon_picker/icon_picker_dialog.dart';
 
@@ -244,33 +244,8 @@ class _ActionEditPageState extends State<ActionEditPage> {
   }
 
   Future<void> _pickColor(BuildContext context) async {
-    var picked = Color(_color);
-    final confirmed = await showDialog<bool>(
-      context: context,
-      builder: (dialogContext) {
-        final l10n = AppLocalizations.of(dialogContext);
-        return AlertDialog(
-          title: Text(l10n.actionColor),
-          content: SingleChildScrollView(
-            child: ColorPicker(
-              pickerColor: picked,
-              onColorChanged: (c) => picked = c,
-            ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(dialogContext).pop(false),
-              child: Text(l10n.cancel),
-            ),
-            TextButton(
-              onPressed: () => Navigator.of(dialogContext).pop(true),
-              child: Text(l10n.save),
-            ),
-          ],
-        );
-      },
-    );
-    if ((confirmed ?? false) && mounted) {
+    final picked = await ColorPickerDialog.show(context, initialColor: Color(_color));
+    if (picked != null && mounted) {
       setState(() => _color = picked.toARGB32());
     }
   }

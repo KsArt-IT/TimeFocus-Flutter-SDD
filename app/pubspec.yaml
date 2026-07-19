@@ -39,7 +39,6 @@ dependencies:
   timezone: ^0.11.1
   # UI
   font_awesome_flutter: ^11.0.0 # для расширенных иконок активностей
-  flutter_colorpicker: ^1.1.0  # Выбор цветов для активностей
   fl_chart: ^1.2.0
   # Permission
   permission_handler: ^12.0.3
