@@ -60,10 +60,30 @@ class _ActionTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    final subtitleParts = [
+      if (action.isGroup) l10n.actionGroup,
+      if (action.archived) l10n.actionArchived,
+    ];
+
     return ListTile(
-      leading: FaIcon(faIconFromCode(action.icon), color: Color(action.color)),
+      leading: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          FaIcon(faIconFromCode(action.icon), color: Color(action.color)),
+          if (action.isGroup)
+            Positioned(
+              right: -6,
+              top: -4,
+              child: Icon(
+                Icons.folder,
+                size: 14,
+                color: Theme.of(context).colorScheme.outline,
+              ),
+            ),
+        ],
+      ),
       title: Text(action.localizedName(l10n)),
-      subtitle: action.archived ? Text(l10n.actionArchived) : null,
+      subtitle: subtitleParts.isEmpty ? null : Text(subtitleParts.join(' · ')),
       trailing: const Icon(Icons.chevron_right),
       onTap: () => context.push('${AppRoutes.actionEdit}/${action.id}'),
     );
