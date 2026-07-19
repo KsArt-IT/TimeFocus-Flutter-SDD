@@ -108,6 +108,9 @@ class _SessionEditContentState extends State<_SessionEditContent> {
       builder: (context, state) {
         if (state is SessionEditLoaded) _syncDraft(state.session);
         final hasChanges = state is SessionEditLoaded && _hasChanges(state.session);
+        final currentActionName = state is SessionEditLoaded
+            ? _currentActionName(state, l10n)
+            : null;
 
         return Scaffold(
           appBar: AppBar(
@@ -180,7 +183,11 @@ class _SessionEditContentState extends State<_SessionEditContent> {
                       MaterialPageRoute(
                         builder: (_) => BlocProvider.value(
                           value: context.read<SessionEditCubit>(),
-                          child: IntervalEditPage(historyId: session.historyId, existing: interval),
+                          child: IntervalEditPage(
+                            historyId: session.historyId,
+                            existing: interval,
+                            activityName: currentActionName,
+                          ),
                         ),
                       ),
                     ),
@@ -192,7 +199,10 @@ class _SessionEditContentState extends State<_SessionEditContent> {
                     MaterialPageRoute(
                       builder: (_) => BlocProvider.value(
                         value: context.read<SessionEditCubit>(),
-                        child: IntervalEditPage(historyId: session.historyId),
+                        child: IntervalEditPage(
+                          historyId: session.historyId,
+                          activityName: currentActionName,
+                        ),
                       ),
                     ),
                   ),
@@ -203,6 +213,14 @@ class _SessionEditContentState extends State<_SessionEditContent> {
         );
       },
     );
+  }
+
+  String? _currentActionName(SessionEditLoaded state, AppLocalizations l10n) {
+    final currentActionId = _draftActionId ?? state.session.actionNameId;
+    return state.availableActions
+        .where((a) => a.id == currentActionId)
+        .firstOrNull
+        ?.localizedName(l10n);
   }
 
   bool _hasChanges(HistorySessionEntity session) =>
