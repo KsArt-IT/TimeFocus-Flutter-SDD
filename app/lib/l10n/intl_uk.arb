@@ -106,6 +106,8 @@
   "noRunningActions": "Немає активних активностей",
   "allActions": "Активності",
   "actionGroup": "Група",
+  "groupMembers": "Активності в групі",
+  "addToGroup": "Додати активність до групи",
   "createAction": "Нова активність",
   "editAction": "Редагувати активність",
   "createGroup": "Нова група",

@@ -12,6 +12,7 @@ import 'package:timefocus/gen/app_localizations.dart';
 import 'package:timefocus/shared/enums/action_mode.dart';
 import 'package:timefocus/shared/enums/pomodoro_type.dart';
 import 'package:timefocus/shared/widgets/action_localization.dart';
+import 'package:timefocus/shared/widgets/activity_grid_tile.dart';
 import 'package:timefocus/shared/widgets/color_picker/color_picker_dialog.dart';
 import 'package:timefocus/shared/widgets/fa_icon_helper.dart';
 import 'package:timefocus/shared/widgets/icon_picker/icon_picker_dialog.dart';
@@ -132,7 +133,7 @@ class _ActionEditPageState extends State<ActionEditPage> {
         ],
       ),
       body: ListView(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.fromLTRB(16, 16, 16, _isGroup && widget.actionId != null ? 88 : 16),
         children: [
           TextField(
             controller: _nameController,
@@ -178,6 +179,12 @@ class _ActionEditPageState extends State<ActionEditPage> {
             value: _isGroup,
             onChanged: widget.actionId == null ? (v) => setState(() => _isGroup = v) : null,
           ),
+          if (_isGroup && widget.actionId != null)
+            _GroupMembersSection(
+              l10n: l10n,
+              members: _allActions.where((a) => a.groupId == widget.actionId).toList(),
+              onRemove: _removeFromGroup,
+            ),
           if (!_isGroup) ...[
             DropdownButtonFormField<int?>(
               initialValue: _groupId,
@@ -240,6 +247,13 @@ class _ActionEditPageState extends State<ActionEditPage> {
           ],
         ],
       ),
+      floatingActionButton: _isGroup && widget.actionId != null
+          ? FloatingActionButton(
+              tooltip: l10n.addToGroup,
+              onPressed: () => _addMemberToGroup(context),
+              child: const Icon(Icons.add),
+            )
+          : null,
     );
   }
 
@@ -248,6 +262,42 @@ class _ActionEditPageState extends State<ActionEditPage> {
     if (picked != null && mounted) {
       setState(() => _color = picked.toARGB32());
     }
+  }
+
+  Future<void> _refreshAllActions() async {
+    final all = await getIt<ActionNameRepository>().watchAll().first;
+    if (!mounted) return;
+    setState(() => _allActions = all);
+  }
+
+  Future<void> _removeFromGroup(ActionNameEntity member) async {
+    final result = await getIt<ActionNameRepository>().update(member.copyWith(groupId: null));
+    if (result.isFailure) {
+      logger.e('failed to remove activity from group', error: result.errorOrNull);
+      return;
+    }
+    await _refreshAllActions();
+  }
+
+  /// Picks from activities that are ungrouped and not themselves groups
+  /// (a DB-level selection, not merely hiding already-grouped items).
+  Future<void> _addMemberToGroup(BuildContext context) async {
+    final candidates = _allActions
+        .where((a) => a.groupId == null && !a.isGroup && !a.archived && a.id != widget.actionId)
+        .toList();
+    final picked = await showDialog<ActionNameEntity>(
+      context: context,
+      builder: (_) => _GroupMemberPickerDialog(candidates: candidates),
+    );
+    if (picked == null) return;
+    final result = await getIt<ActionNameRepository>().update(
+      picked.copyWith(groupId: widget.actionId),
+    );
+    if (result.isFailure) {
+      logger.e('failed to add activity to group', error: result.errorOrNull);
+      return;
+    }
+    await _refreshAllActions();
   }
 
   Future<void> _toggleArchived(BuildContext context) async {
@@ -328,5 +378,94 @@ class _ActionEditPageState extends State<ActionEditPage> {
       return;
     }
     context.pop();
+  }
+}
+
+/// Lists the group's current members; adding more happens via the page's
+/// FAB (see [_ActionEditPageState._addMemberToGroup]).
+class _GroupMembersSection extends StatelessWidget {
+  const _GroupMembersSection({required this.l10n, required this.members, required this.onRemove});
+
+  final AppLocalizations l10n;
+  final List<ActionNameEntity> members;
+  final ValueChanged<ActionNameEntity> onRemove;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SizedBox(height: 12),
+        Text(l10n.groupMembers, style: Theme.of(context).textTheme.labelLarge),
+        for (final member in members)
+          ListTile(
+            contentPadding: EdgeInsets.zero,
+            leading: FaIcon(faIconFromCode(member.icon), color: Color(member.color)),
+            title: Text(member.localizedName(l10n)),
+            trailing: IconButton(
+              icon: const Icon(Icons.close),
+              tooltip: l10n.delete,
+              onPressed: () => onRemove(member),
+            ),
+          ),
+      ],
+    );
+  }
+}
+
+/// Grid dialog for picking one ungrouped, non-group activity to add to the
+/// group being edited.
+class _GroupMemberPickerDialog extends StatelessWidget {
+  const _GroupMemberPickerDialog({required this.candidates});
+
+  final List<ActionNameEntity> candidates;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    return Dialog(
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 480, maxHeight: 560),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            AppBar(
+              automaticallyImplyLeading: false,
+              title: Text(l10n.addToGroup),
+              actions: [
+                IconButton(
+                  icon: const Icon(Icons.close),
+                  onPressed: () => Navigator.of(context).pop(),
+                ),
+              ],
+            ),
+            Flexible(
+              child: candidates.isEmpty
+                  ? Padding(
+                      padding: const EdgeInsets.all(24),
+                      child: Text(l10n.allActions, textAlign: TextAlign.center),
+                    )
+                  : GridView.builder(
+                      shrinkWrap: true,
+                      padding: const EdgeInsets.all(12),
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 4,
+                        mainAxisSpacing: 8,
+                        crossAxisSpacing: 8,
+                      ),
+                      itemCount: candidates.length,
+                      itemBuilder: (context, index) {
+                        final action = candidates[index];
+                        return ActivityGridTile(
+                          action: action,
+                          onTap: () => Navigator.of(context).pop(action),
+                        );
+                      },
+                    ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

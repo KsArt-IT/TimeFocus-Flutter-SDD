@@ -112,6 +112,8 @@
   "noRunningActions": "Нет запущенных активностей",
   "allActions": "Активности",
   "actionGroup": "Группа",
+  "groupMembers": "Активности в группе",
+  "addToGroup": "Добавить активность в группу",
   "createAction": "Новая активность",
   "editAction": "Редактировать активность",
   "createGroup": "Новая группа",

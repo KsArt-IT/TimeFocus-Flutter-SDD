@@ -142,6 +142,8 @@
   "noRunningActions": "No active activities",
   "allActions": "Activities",
   "actionGroup": "Group",
+  "groupMembers": "Activities in group",
+  "addToGroup": "Add activity to group",
   "createAction": "New Activity",
   "editAction": "Edit Activity",
   "createGroup": "New Group",
