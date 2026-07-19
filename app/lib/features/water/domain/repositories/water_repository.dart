@@ -17,6 +17,12 @@ abstract interface class WaterRepository {
 
   Future<Result<void>> saveSettings(WaterSettingsEntity settings);
 
+  /// Scheduled-mode reminder times of day (minutes since midnight), sorted.
+  Future<Result<List<int>>> reminderTimes();
+
+  /// Replaces the whole set of scheduled-mode reminder times.
+  Future<Result<void>> saveReminderTimes(List<int> timesMinutes);
+
   Stream<List<WaterQuickButtonEntity>> watchQuickButtons();
 
   Future<Result<void>> saveQuickButton(WaterQuickButtonEntity button);

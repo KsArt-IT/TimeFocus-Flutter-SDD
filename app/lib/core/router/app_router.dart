@@ -7,6 +7,14 @@ import 'package:timefocus/features/history/presentation/pages/interval_edit_page
 import 'package:timefocus/features/history/presentation/pages/reports_page.dart';
 import 'package:timefocus/features/history/presentation/pages/session_edit_page.dart';
 import 'package:timefocus/features/schedule/presentation/pages/schedule_page.dart';
+import 'package:timefocus/features/settings/presentation/pages/action_edit_page.dart';
+import 'package:timefocus/features/settings/presentation/pages/actions_settings_page.dart';
+import 'package:timefocus/features/settings/presentation/pages/more_page.dart';
+import 'package:timefocus/features/settings/presentation/pages/pomodoro_settings_page.dart';
+import 'package:timefocus/features/settings/presentation/pages/reminders_settings_page.dart';
+import 'package:timefocus/features/settings/presentation/pages/schedule_settings_page.dart';
+import 'package:timefocus/features/settings/presentation/pages/system_settings_page.dart';
+import 'package:timefocus/features/settings/presentation/pages/water_settings_page.dart';
 import 'package:timefocus/features/tracker/presentation/pages/tracker_page.dart';
 
 /// Route paths used across the app (deep links included).
@@ -78,6 +86,42 @@ GoRouter createAppRouter() => GoRouter(
     GoRoute(
       path: AppRoutes.reports,
       builder: (context, state) => const ReportsPage(),
+    ),
+    GoRoute(
+      path: AppRoutes.more,
+      builder: (context, state) => const MorePage(),
+    ),
+    GoRoute(
+      path: AppRoutes.actionEdit,
+      builder: (context, state) => const ActionEditPage(),
+    ),
+    GoRoute(
+      path: '${AppRoutes.actionEdit}/:id',
+      builder: (context, state) => ActionEditPage(actionId: int.parse(state.pathParameters['id']!)),
+    ),
+    GoRoute(
+      path: '${AppRoutes.settings}/system',
+      builder: (context, state) => const SystemSettingsPage(),
+    ),
+    GoRoute(
+      path: '${AppRoutes.settings}/actions',
+      builder: (context, state) => const ActionsSettingsPage(),
+    ),
+    GoRoute(
+      path: '${AppRoutes.settings}/pomodoro',
+      builder: (context, state) => const PomodoroSettingsPage(),
+    ),
+    GoRoute(
+      path: '${AppRoutes.settings}/water',
+      builder: (context, state) => const WaterSettingsPage(),
+    ),
+    GoRoute(
+      path: '${AppRoutes.settings}/reminders',
+      builder: (context, state) => const RemindersSettingsPage(),
+    ),
+    GoRoute(
+      path: '${AppRoutes.settings}/schedule',
+      builder: (context, state) => const ScheduleSettingsPage(),
     ),
   ],
 );

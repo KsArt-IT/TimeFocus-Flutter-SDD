@@ -496,6 +496,13 @@
   "reportChartTimeByDay": "Time by day",
   "reportChartWater": "Water",
   "historySessionsCount": "{count, plural, one{{count} session} other{{count} sessions}}",
+  "@historySessionsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "settingsTitle": "Settings",
   "settingsProfile": "Profile",
   "settingsName": "Name",
@@ -508,7 +515,15 @@
   "settingsNotificationsEnabled": "Notifications enabled",
   "settingsNotificationsGlobalMute": "All notifications",
   "settingsDisplay": "Display",
+  "settingsActions": "Activities",
+  "settingsAccount": "Account",
   "settingsAbout": "About",
+  "comingSoon": "Coming soon",
+  "actionDefaultDuration": "Default duration (sec)",
+  "scheduleDayTypeWeekday": "Weekdays",
+  "scheduleDayTypeWeekend": "Weekend",
+  "waterQuickButtonVolume": "Volume (ml)",
+  "waterQuickButtonType": "Type",
   "settingsVersion": "Version {version}",
   "@settingsVersion": {
     "placeholders": {

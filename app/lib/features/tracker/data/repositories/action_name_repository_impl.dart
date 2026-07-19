@@ -20,6 +20,11 @@ class ActionNameRepositoryImpl with SafeCallMixin implements ActionNameRepositor
       .map((rows) => rows.map((r) => r.toEntity()).toList());
 
   @override
+  Stream<List<ActionNameEntity>> watchAll() => _db.actionDao.watchAll().map(
+    (rows) => rows.map((r) => r.toEntity()).toList(),
+  );
+
+  @override
   Future<Result<ActionNameEntity>> getById(int id) => safeCall(() async {
     final row = await _db.actionDao.getById(id);
     if (row == null) {
@@ -48,8 +53,8 @@ class ActionNameRepositoryImpl with SafeCallMixin implements ActionNameRepositor
   );
 
   @override
-  Future<Result<void>> archive(int id) => voidSafeCall(
-    () => _db.actionDao.setArchived(id, archived: true),
+  Future<Result<void>> setArchived(int id, {required bool archived}) => voidSafeCall(
+    () => _db.actionDao.setArchived(id, archived: archived),
   );
 
   @override

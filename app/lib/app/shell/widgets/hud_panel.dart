@@ -8,8 +8,8 @@ import 'package:timefocus/core/constants/app_constants.dart';
 import 'package:timefocus/features/water/domain/entities/water_quick_button_entity.dart';
 import 'package:timefocus/features/water/presentation/cubit/hud_cubit.dart';
 import 'package:timefocus/gen/app_localizations.dart';
-import 'package:timefocus/shared/enums/drink_type.dart';
 import 'package:timefocus/shared/enums/hud_context_type.dart';
+import 'package:timefocus/shared/widgets/drink_localization.dart';
 import 'package:timefocus/shared/widgets/fa_icon_helper.dart';
 
 /// HUD panel: water bar with a goal marker and a not-color-only deficit
@@ -193,7 +193,7 @@ class _QuickButtonTile extends StatelessWidget {
     final l10n = AppLocalizations.of(context);
     return ListTile(
       leading: FaIcon(faIconFromCode(button.icon)),
-      title: Text(_drinkLabel(l10n, button.label)),
+      title: Text(button.label.localizedLabel(l10n)),
       trailing: Text(l10n.drinkVolumeMl(button.volume)),
       onTap: () {
         Navigator.of(context).pop();
@@ -202,14 +202,6 @@ class _QuickButtonTile extends StatelessWidget {
     );
   }
 }
-
-String _drinkLabel(AppLocalizations l10n, DrinkType label) => switch (label) {
-  DrinkType.tea => l10n.drinkTypeTea,
-  DrinkType.coffee => l10n.drinkTypeCoffee,
-  DrinkType.milk => l10n.drinkTypeMilk,
-  DrinkType.bottle => l10n.drinkTypeBottle,
-  DrinkType.water => l10n.drinkTypeWater,
-};
 
 class _ContextIcon extends StatelessWidget {
   const _ContextIcon({required this.contextType, required this.pulsing});

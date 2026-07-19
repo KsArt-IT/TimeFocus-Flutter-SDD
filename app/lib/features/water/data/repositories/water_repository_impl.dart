@@ -41,6 +41,14 @@ class WaterRepositoryImpl with SafeCallMixin implements WaterRepository {
   );
 
   @override
+  Future<Result<List<int>>> reminderTimes() => safeCall(() => _db.waterDao.reminderTimes());
+
+  @override
+  Future<Result<void>> saveReminderTimes(List<int> timesMinutes) => voidSafeCall(
+    () => _db.waterDao.replaceReminderTimes(timesMinutes),
+  );
+
+  @override
   Stream<List<WaterQuickButtonEntity>> watchQuickButtons() =>
       _db.waterDao.watchQuickButtons().map((rows) => rows.map((r) => r.toEntity()).toList());
 

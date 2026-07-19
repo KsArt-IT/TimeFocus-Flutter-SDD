@@ -509,6 +509,13 @@
   "reportChartTimeByDay": "Время по дням",
   "reportChartWater": "Вода",
   "historySessionsCount": "{count, plural, one{{count} сессия} few{{count} сессии} many{{count} сессий} other{{count} сессии}}",
+  "@historySessionsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "settingsTitle": "Настройки",
   "settingsProfile": "Профиль",
   "settingsName": "Имя",
@@ -521,7 +528,15 @@
   "settingsNotificationsEnabled": "Уведомления включены",
   "settingsNotificationsGlobalMute": "Все уведомления",
   "settingsDisplay": "Отображение",
+  "settingsActions": "Активности",
+  "settingsAccount": "Учетная запись",
   "settingsAbout": "О приложении",
+  "comingSoon": "Скоро появится",
+  "actionDefaultDuration": "Длительность по умолчанию (сек)",
+  "scheduleDayTypeWeekday": "Будни",
+  "scheduleDayTypeWeekend": "Выходные",
+  "waterQuickButtonVolume": "Объём (мл)",
+  "waterQuickButtonType": "Тип",
   "settingsVersion": "Версия {version}",
   "@settingsVersion": {
     "placeholders": {

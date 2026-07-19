@@ -460,6 +460,13 @@
   "reportChartTimeByDay": "Час за днями",
   "reportChartWater": "Вода",
   "historySessionsCount": "{count, plural, one{{count} сесія} few{{count} сесії} many{{count} сесій} other{{count} сесії}}",
+  "@historySessionsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "settingsTitle": "Налаштування",
   "settingsProfile": "Профіль",
   "settingsName": "Ім'я",
@@ -472,7 +479,15 @@
   "settingsNotificationsEnabled": "Сповіщення увімкнено",
   "settingsNotificationsGlobalMute": "Всі сповіщення",
   "settingsDisplay": "Відображення",
+  "settingsActions": "Активності",
+  "settingsAccount": "Обліковий запис",
   "settingsAbout": "Про застосунок",
+  "comingSoon": "Скоро з'явиться",
+  "actionDefaultDuration": "Тривалість за замовчуванням (сек)",
+  "scheduleDayTypeWeekday": "Будні",
+  "scheduleDayTypeWeekend": "Вихідні",
+  "waterQuickButtonVolume": "Обсяг (мл)",
+  "waterQuickButtonType": "Тип",
   "settingsVersion": "Версія {version}",
   "@settingsVersion": {
     "placeholders": {
