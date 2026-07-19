@@ -59,7 +59,7 @@ class _HistoryPageContent extends StatelessWidget {
               HistoryHeaderBar(header: state.header),
               const Divider(height: 1),
               Expanded(child: _HistoryList(state: state)),
-              HistoryBottomPanel(mode: state.mode, period: state.period),
+              HistoryBottomPanel(mode: state.mode, period: state.period, anchor: state.anchor),
             ],
           ),
         },
