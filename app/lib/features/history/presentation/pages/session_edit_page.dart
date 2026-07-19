@@ -4,11 +4,12 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:timefocus/core/di/injection.dart';
+import 'package:timefocus/core/router/app_router.dart';
 import 'package:timefocus/features/history/domain/entities/history_session_entity.dart';
 import 'package:timefocus/features/history/presentation/cubit/session_edit_cubit.dart';
-import 'package:timefocus/features/history/presentation/pages/interval_edit_page.dart';
 import 'package:timefocus/features/tracker/domain/entities/action_name_entity.dart';
 import 'package:timefocus/features/tracker/domain/entities/running_with_name_entity.dart';
 import 'package:timefocus/gen/app_localizations.dart';
@@ -104,13 +105,10 @@ class _SessionEditContentState extends State<_SessionEditContent> {
     final l10n = AppLocalizations.of(context);
     return BlocConsumer<SessionEditCubit, SessionEditState>(
       listenWhen: (previous, current) => current is SessionEditDeleted,
-      listener: (context, state) => Navigator.of(context).pop(),
+      listener: (context, state) => context.pop(),
       builder: (context, state) {
         if (state is SessionEditLoaded) _syncDraft(state.session);
         final hasChanges = state is SessionEditLoaded && _hasChanges(state.session);
-        final currentActionName = state is SessionEditLoaded
-            ? _currentActionName(state, l10n)
-            : null;
 
         return Scaffold(
           appBar: AppBar(
@@ -179,18 +177,7 @@ class _SessionEditContentState extends State<_SessionEditContent> {
                     trailing: Text(
                       formatDuration(interval.finishedAt.difference(interval.startedAt).inSeconds),
                     ),
-                    onTap: () => Navigator.of(context).push<void>(
-                      MaterialPageRoute(
-                        builder: (_) => BlocProvider.value(
-                          value: context.read<SessionEditCubit>(),
-                          child: IntervalEditPage(
-                            historyId: session.historyId,
-                            existing: interval,
-                            activityName: currentActionName,
-                          ),
-                        ),
-                      ),
-                    ),
+                    onTap: () => _editInterval(context, session.historyId, interval.id),
                   ),
               ],
             ),
@@ -198,8 +185,7 @@ class _SessionEditContentState extends State<_SessionEditContent> {
           floatingActionButton: state is SessionEditLoaded
               ? FloatingActionButton(
                   tooltip: l10n.addInterval,
-                  onPressed: () =>
-                      _addInterval(context, state.session.historyId, currentActionName),
+                  onPressed: () => _editInterval(context, state.session.historyId, null),
                   child: const Icon(Icons.add),
                 )
               : null,
@@ -208,25 +194,18 @@ class _SessionEditContentState extends State<_SessionEditContent> {
     );
   }
 
-  void _addInterval(BuildContext context, int historyId, String? activityName) {
+  /// Pushes the interval-edit route (a standalone screen with its own
+  /// cubit, see IntervalEditPage) and reloads this session once it returns
+  /// — that other cubit instance already saved/deleted for real, this one
+  /// just needs to catch up.
+  void _editInterval(BuildContext context, int historyId, int? intervalId) {
+    final cubit = context.read<SessionEditCubit>();
+    final query = intervalId != null ? '?intervalId=$intervalId' : '';
     unawaited(
-      Navigator.of(context).push<void>(
-        MaterialPageRoute(
-          builder: (_) => BlocProvider.value(
-            value: context.read<SessionEditCubit>(),
-            child: IntervalEditPage(historyId: historyId, activityName: activityName),
-          ),
-        ),
-      ),
+      context.push<void>('${AppRoutes.intervalEdit}/$historyId$query').then((_) {
+        if (context.mounted) unawaited(cubit.load(historyId));
+      }),
     );
-  }
-
-  String? _currentActionName(SessionEditLoaded state, AppLocalizations l10n) {
-    final currentActionId = _draftActionId ?? state.session.actionNameId;
-    return state.availableActions
-        .where((a) => a.id == currentActionId)
-        .firstOrNull
-        ?.localizedName(l10n);
   }
 
   bool _hasChanges(HistorySessionEntity session) =>
@@ -259,7 +238,7 @@ class _SessionEditContentState extends State<_SessionEditContent> {
     }
 
     if (!context.mounted) return;
-    Navigator.of(context).pop();
+    context.pop();
   }
 
   Future<bool> _confirmMerge(BuildContext context) async {

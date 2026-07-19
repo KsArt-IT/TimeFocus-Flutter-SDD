@@ -3,6 +3,9 @@ import 'package:go_router/go_router.dart';
 
 import 'package:timefocus/app/shell/shell_page.dart';
 import 'package:timefocus/features/history/presentation/pages/history_page.dart';
+import 'package:timefocus/features/history/presentation/pages/interval_edit_page.dart';
+import 'package:timefocus/features/history/presentation/pages/reports_page.dart';
+import 'package:timefocus/features/history/presentation/pages/session_edit_page.dart';
 import 'package:timefocus/features/schedule/presentation/pages/schedule_page.dart';
 import 'package:timefocus/features/tracker/presentation/pages/tracker_page.dart';
 
@@ -16,6 +19,8 @@ abstract final class AppRoutes {
   static const String settings = '/settings';
   static const String actionEdit = '/action/edit';
   static const String intervalEdit = '/interval/edit';
+  static const String sessionEdit = '/session/edit';
+  static const String reports = '/reports';
 }
 
 final GlobalKey<NavigatorState> rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -52,6 +57,27 @@ GoRouter createAppRouter() => GoRouter(
           ],
         ),
       ],
+    ),
+    // Outside the shell (no HUD/bottom nav) — full-screen editors.
+    GoRoute(
+      path: '${AppRoutes.sessionEdit}/:id',
+      builder: (context, state) => SessionEditPage(
+        historyId: int.parse(state.pathParameters['id']!),
+      ),
+    ),
+    GoRoute(
+      path: '${AppRoutes.intervalEdit}/:historyId',
+      builder: (context, state) {
+        final intervalId = state.uri.queryParameters['intervalId'];
+        return IntervalEditPage(
+          historyId: int.parse(state.pathParameters['historyId']!),
+          intervalId: intervalId == null ? null : int.parse(intervalId),
+        );
+      },
+    ),
+    GoRoute(
+      path: AppRoutes.reports,
+      builder: (context, state) => const ReportsPage(),
     ),
   ],
 );

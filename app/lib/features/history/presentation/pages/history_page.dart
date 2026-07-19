@@ -2,11 +2,11 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 import 'package:timefocus/core/di/injection.dart';
+import 'package:timefocus/core/router/app_router.dart';
 import 'package:timefocus/features/history/presentation/cubit/history_cubit.dart';
-import 'package:timefocus/features/history/presentation/pages/reports_page.dart';
-import 'package:timefocus/features/history/presentation/pages/session_edit_page.dart';
 import 'package:timefocus/features/history/presentation/widgets/history_bottom_panel.dart';
 import 'package:timefocus/features/history/presentation/widgets/history_header_bar.dart';
 import 'package:timefocus/features/history/presentation/widgets/interval_tile.dart';
@@ -44,9 +44,7 @@ class _HistoryPageContent extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.bar_chart_outlined),
             tooltip: l10n.reportsTitle,
-            onPressed: () => Navigator.of(context).push<void>(
-              MaterialPageRoute(builder: (_) => const ReportsPage()),
-            ),
+            onPressed: () => context.push(AppRoutes.reports),
           ),
         ],
       ),
@@ -97,9 +95,7 @@ class _HistoryList extends StatelessWidget {
             final interval = state.intervals[index];
             return IntervalTile(
               interval: interval,
-              onTap: () => Navigator.of(context).push<void>(
-                MaterialPageRoute(builder: (_) => SessionEditPage(historyId: interval.historyId)),
-              ),
+              onTap: () => context.push('${AppRoutes.sessionEdit}/${interval.historyId}'),
             );
           },
         );
