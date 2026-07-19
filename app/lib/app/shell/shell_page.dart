@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-
 import 'package:timefocus/app/shell/widgets/hud_panel.dart';
 import 'package:timefocus/gen/app_localizations.dart';
 
@@ -17,8 +16,8 @@ class ShellPage extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            const HudPanel(),
             Expanded(child: navigationShell),
+            const HudPanel(),
           ],
         ),
       ),

@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
 import 'package:timefocus/app/shell/widgets/toilet_context_icon.dart';
 import 'package:timefocus/core/constants/app_constants.dart';
 import 'package:timefocus/features/water/domain/entities/water_quick_button_entity.dart';
@@ -22,16 +21,16 @@ class HudPanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<HudCubit, HudState>(
-      builder: (context, state) => switch (state) {
-        HudLoaded() => _HudPanelContent(state: state),
-        HudInitial() || HudError() => const SizedBox.shrink(),
-      },
+      builder: (context, state) => state.maybeMap(
+        orElse: SizedBox.shrink,
+        loaded: _HudPanelContent.new,
+      ),
     );
   }
 }
 
 class _HudPanelContent extends StatelessWidget {
-  const _HudPanelContent({required this.state});
+  const _HudPanelContent(this.state);
 
   final HudLoaded state;
 
