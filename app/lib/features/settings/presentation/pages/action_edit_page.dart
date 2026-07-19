@@ -150,7 +150,7 @@ class _ActionEditPageState extends State<ActionEditPage> {
               Expanded(
                 child: ListTile(
                   contentPadding: EdgeInsets.zero,
-                  leading: FaIcon(faIconFromCode(_icon)),
+                  leading: FaIcon(faIconFromCode(_icon), color: Color(_color)),
                   title: Text(l10n.actionIcon),
                   onTap: () async {
                     final picked = await IconPickerDialog.show(
