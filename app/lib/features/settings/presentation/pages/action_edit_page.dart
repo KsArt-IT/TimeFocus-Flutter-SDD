@@ -14,7 +14,7 @@ import 'package:timefocus/shared/enums/action_mode.dart';
 import 'package:timefocus/shared/enums/pomodoro_type.dart';
 import 'package:timefocus/shared/widgets/action_localization.dart';
 import 'package:timefocus/shared/widgets/fa_icon_helper.dart';
-import 'package:timefocus/shared/widgets/icon_picker_dialog.dart';
+import 'package:timefocus/shared/widgets/icon_picker/icon_picker_dialog.dart';
 
 /// T076: create/edit an activity or group (FR-008/FR-043) — a standalone
 /// route (AppRoutes.actionEdit), [actionId] null means "create new".
@@ -153,8 +153,12 @@ class _ActionEditPageState extends State<ActionEditPage> {
                   leading: FaIcon(faIconFromCode(_icon)),
                   title: Text(l10n.actionIcon),
                   onTap: () async {
-                    final picked = await IconPickerDialog.show(context);
-                    if (picked != null) setState(() => _icon = picked);
+                    final picked = await IconPickerDialog.show(
+                      context,
+                      initialIcon: faIconFromCode(_icon),
+                      selectedColor: Color(_color),
+                    );
+                    if (picked != null) setState(() => _icon = picked.codePoint);
                   },
                 ),
               ),
