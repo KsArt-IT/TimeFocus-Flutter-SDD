@@ -459,6 +459,40 @@
   "changeActivity": "Change activity",
   "deleteHistory": "Delete from history",
   "deleteHistoryConfirm": "Delete all intervals for this activity in the selected period?",
+  "historyBackToToday": "Today",
+  "historyPomodoroCompleted": "{count} completed",
+  "@historyPomodoroCompleted": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "historyPomodoroInterrupted": "{count} interrupted",
+  "@historyPomodoroInterrupted": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "sessionEditTitle": "Session",
+  "sessionComment": "Comment",
+  "sessionDeleteConfirm": "Delete this session and all its intervals?",
+  "now": "Now",
+  "intervalOverlapWarning": "Overlaps with another interval — saved anyway",
+  "intervalEndBeforeStart": "End can't be before start",
+  "reportsTitle": "Reports",
+  "reportPresetToday": "Today",
+  "reportPresetYesterday": "Yesterday",
+  "reportPresetThisWeek": "This week",
+  "reportPresetLastWeek": "Last week",
+  "reportPresetThisMonth": "This month",
+  "reportPresetLastMonth": "Last month",
+  "reportPresetLast30Days": "Last 30 days",
+  "reportChartTimeByDay": "Time by day",
+  "reportChartWater": "Water",
+  "historySessionsCount": "{count, plural, one{{count} session} other{{count} sessions}}",
   "settingsTitle": "Settings",
   "settingsProfile": "Profile",
   "settingsName": "Name",

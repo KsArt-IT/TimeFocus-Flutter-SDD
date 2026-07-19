@@ -177,6 +177,15 @@ class HistoryDao extends DatabaseAccessor<AppDatabase> with _$HistoryDaoMixin {
   Future<ActionHistoryIntervalModel?> getInterval(int intervalId) =>
       (select(actionHistoryIntervals)..where((t) => t.id.equals(intervalId))).getSingleOrNull();
 
+  Future<int> insertInterval(int historyId, DateTime startedAt, DateTime finishedAt) =>
+      into(actionHistoryIntervals).insert(
+        ActionHistoryIntervalsCompanion.insert(
+          actionHistoryId: historyId,
+          startedAt: startedAt,
+          finishedAt: finishedAt,
+        ),
+      );
+
   Future<void> writeInterval(
     int intervalId, {
     required DateTime startedAt,

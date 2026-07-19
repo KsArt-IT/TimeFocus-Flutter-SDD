@@ -423,6 +423,40 @@
   "changeActivity": "Змінити активність",
   "deleteHistory": "Видалити з історії",
   "deleteHistoryConfirm": "Видалити всі інтервали цієї активності за вибраний період?",
+  "historyBackToToday": "Сьогодні",
+  "historyPomodoroCompleted": "{count} завершено",
+  "@historyPomodoroCompleted": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "historyPomodoroInterrupted": "{count} перервано",
+  "@historyPomodoroInterrupted": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "sessionEditTitle": "Сесія",
+  "sessionComment": "Коментар",
+  "sessionDeleteConfirm": "Видалити цю сесію та всі її інтервали?",
+  "now": "Зараз",
+  "intervalOverlapWarning": "Перетинається з іншим інтервалом — все одно збережено",
+  "intervalEndBeforeStart": "Кінець не може бути раніше початку",
+  "reportsTitle": "Звіти",
+  "reportPresetToday": "Сьогодні",
+  "reportPresetYesterday": "Вчора",
+  "reportPresetThisWeek": "Цей тиждень",
+  "reportPresetLastWeek": "Минулий тиждень",
+  "reportPresetThisMonth": "Цей місяць",
+  "reportPresetLastMonth": "Минулий місяць",
+  "reportPresetLast30Days": "Останні 30 днів",
+  "reportChartTimeByDay": "Час за днями",
+  "reportChartWater": "Вода",
+  "historySessionsCount": "{count, plural, one{{count} сесія} few{{count} сесії} many{{count} сесій} other{{count} сесії}}",
   "settingsTitle": "Налаштування",
   "settingsProfile": "Профіль",
   "settingsName": "Ім'я",

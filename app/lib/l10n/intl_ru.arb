@@ -472,6 +472,40 @@
   "changeActivity": "Изменить активность",
   "deleteHistory": "Удалить из истории",
   "deleteHistoryConfirm": "Удалить все интервалы этой активности за выбранный период?",
+  "historyBackToToday": "Сегодня",
+  "historyPomodoroCompleted": "{count} завершено",
+  "@historyPomodoroCompleted": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "historyPomodoroInterrupted": "{count} прервано",
+  "@historyPomodoroInterrupted": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "sessionEditTitle": "Сессия",
+  "sessionComment": "Комментарий",
+  "sessionDeleteConfirm": "Удалить эту сессию и все её интервалы?",
+  "now": "Сейчас",
+  "intervalOverlapWarning": "Пересекается с другим интервалом — всё равно сохранено",
+  "intervalEndBeforeStart": "Конец не может быть раньше начала",
+  "reportsTitle": "Отчёты",
+  "reportPresetToday": "Сегодня",
+  "reportPresetYesterday": "Вчера",
+  "reportPresetThisWeek": "Эта неделя",
+  "reportPresetLastWeek": "Прошлая неделя",
+  "reportPresetThisMonth": "Этот месяц",
+  "reportPresetLastMonth": "Прошлый месяц",
+  "reportPresetLast30Days": "Последние 30 дней",
+  "reportChartTimeByDay": "Время по дням",
+  "reportChartWater": "Вода",
+  "historySessionsCount": "{count, plural, one{{count} сессия} few{{count} сессии} many{{count} сессий} other{{count} сессии}}",
   "settingsTitle": "Настройки",
   "settingsProfile": "Профиль",
   "settingsName": "Имя",
