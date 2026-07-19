@@ -6,7 +6,14 @@ part 'pomodoro_event.freezed.dart';
 
 /// Reason a running Pomodoro work/break interval is being interrupted.
 /// Mirrors TransitionEffect.pomodoroShouldStop.reason from tracker.
-enum PomodoroStopReason { pausedByUser, stoppedByUser, pausedByOthers, manualBreak, secondPomodoro }
+enum PomodoroStopReason {
+  pausedByUser,
+  stoppedByUser,
+  pausedByOthers,
+  manualBreak,
+  secondPomodoro,
+  strictEvent,
+}
 
 @freezed
 sealed class PomodoroEvent with _$PomodoroEvent {

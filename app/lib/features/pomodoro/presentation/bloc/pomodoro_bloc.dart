@@ -16,11 +16,14 @@ import 'package:timefocus/features/pomodoro/domain/repositories/pomodoro_setting
 import 'package:timefocus/features/pomodoro/domain/usecases/finish_pomodoro_interval_usecase.dart';
 import 'package:timefocus/features/pomodoro/presentation/bloc/pomodoro_event.dart';
 import 'package:timefocus/features/pomodoro/presentation/bloc/pomodoro_state.dart';
+import 'package:timefocus/features/schedule/domain/entities/schedule_event_entity.dart';
+import 'package:timefocus/features/schedule/domain/usecases/check_strict_events_usecase.dart';
 import 'package:timefocus/features/tracker/domain/repositories/action_name_repository.dart';
 import 'package:timefocus/gen/app_localizations.dart';
 import 'package:timefocus/shared/enums/notification_type.dart';
 import 'package:timefocus/shared/enums/pomodoro_status.dart';
 import 'package:timefocus/shared/enums/pomodoro_type.dart';
+import 'package:timefocus/shared/widgets/schedule_event_localization.dart';
 import 'package:vibration/vibration.dart';
 
 export 'package:timefocus/features/pomodoro/presentation/bloc/pomodoro_event.dart';
@@ -36,6 +39,7 @@ class PomodoroBloc extends Bloc<PomodoroEvent, PomodoroState> {
     this._actions,
     this._finishInterval,
     this._scheduler,
+    this._strictEvents,
   ) : super(const PomodoroState.idle()) {
     on<PomodoroStarted>(_onStarted, transformer: droppable());
     on<PomodoroWorkIntervalFinished>(_onWorkFinished, transformer: sequential());
@@ -51,6 +55,7 @@ class PomodoroBloc extends Bloc<PomodoroEvent, PomodoroState> {
   final ActionNameRepository _actions;
   final FinishPomodoroIntervalUseCase _finishInterval;
   final NotificationScheduler _scheduler;
+  final CheckStrictEventsUseCase _strictEvents;
 
   /// stoppedByUser is the only interrupt reason that resets the cycle
   /// (FR-014); the DB has no column for "why interrupted", so the reset is
@@ -62,6 +67,11 @@ class PomodoroBloc extends Bloc<PomodoroEvent, PomodoroState> {
   final Map<int, int> _pendingNextCycle = {};
 
   Timer? _intervalTimer;
+
+  /// Forces the running work interval to stop at the soonest strict
+  /// schedule event it won't reach (FR-031/032) — armed alongside
+  /// [_intervalTimer], since there is no background process to do this.
+  Timer? _strictEventTimer;
 
   Future<void> _onStarted(PomodoroStarted event, Emitter<PomodoroState> emit) async {
     final cycle = await _resolveStartCycle(event.actionNameId);
@@ -97,6 +107,51 @@ class PomodoroBloc extends Bloc<PomodoroEvent, PomodoroState> {
     );
     _armTimer(endsAt, () => add(PomodoroEvent.workIntervalFinished(session.id)));
     await _scheduleWorkFinished(session, event.actionNameId, settings);
+    await _checkStrictEvents(session.startTime, endsAt);
+  }
+
+  /// FR-032: warn immediately if this work interval won't finish before a
+  /// strict event, and force-interrupt at that event's exact time (FR-031)
+  /// since completion only happens via [PomodoroWorkIntervalFinished].
+  Future<void> _checkStrictEvents(DateTime now, DateTime workEndAt) async {
+    _strictEventTimer?.cancel();
+    final result = await _strictEvents(now: now, workEndAt: workEndAt);
+    if (isClosed) return;
+    final missed = result.valueOrNull;
+    if (missed == null || missed.isEmpty) return;
+
+    final soonest = missed.first;
+    final day = DateTime(now.year, now.month, now.day);
+    final eventAt = day.add(Duration(minutes: soonest.timeMinutes));
+    final delay = eventAt.difference(DateTime.now());
+    _strictEventTimer = Timer(delay.isNegative ? Duration.zero : delay, () {
+      if (!isClosed) add(const PomodoroEvent.interrupted(PomodoroStopReason.strictEvent));
+    });
+
+    await _scheduleMealStrictWarning(soonest, eventAt, workEndAt);
+  }
+
+  Future<void> _scheduleMealStrictWarning(
+    ScheduleEventEntity event,
+    DateTime eventAt,
+    DateTime workEndAt,
+  ) async {
+    final l10n = lookupAppLocalizations(const Locale('en'));
+    final minutesUntilEvent = eventAt.difference(DateTime.now()).inMinutes;
+    final eventName = event.displayName(l10n);
+    await _scheduler.schedule(
+      NotificationDraft(
+        type: NotificationType.mealStrictWarning,
+        scheduledAt: DateTime.now(),
+        title: l10n.mealStrictWarningTitle(eventName),
+        body: l10n.mealStrictWarningBody(eventName, minutesUntilEvent),
+        payload: {
+          'scheduleEventId': event.id,
+          'minutesUntilEvent': minutesUntilEvent,
+          'currentPomodoroEndAt': workEndAt.toIso8601String(),
+        },
+      ),
+    );
   }
 
   Future<int> _resolveStartCycle(int actionNameId) async {
@@ -114,6 +169,7 @@ class PomodoroBloc extends Bloc<PomodoroEvent, PomodoroState> {
     final current = state;
     if (current is! PomodoroWorkRunning || current.session.id != event.sessionId) return;
     _intervalTimer?.cancel();
+    _strictEventTimer?.cancel();
     await _scheduler.cancelByType(NotificationType.pomodoroFinished);
     if (isClosed) return;
 
@@ -227,6 +283,7 @@ class PomodoroBloc extends Bloc<PomodoroEvent, PomodoroState> {
     if (activeId == null) return;
 
     _intervalTimer?.cancel();
+    _strictEventTimer?.cancel();
     await _sessions.finish(activeId, PomodoroStatus.interrupted, DateTime.now());
     await _scheduler.cancelByType(NotificationType.pomodoroFinished);
     await _scheduler.cancelByType(NotificationType.breakFinished);
@@ -252,6 +309,7 @@ class PomodoroBloc extends Bloc<PomodoroEvent, PomodoroState> {
     };
     if (activeId == null) return;
     _intervalTimer?.cancel();
+    _strictEventTimer?.cancel();
     await _sessions.finish(activeId, PomodoroStatus.skipped, DateTime.now());
     await _scheduler.cancelByType(NotificationType.pomodoroFinished);
     await _scheduler.cancelByType(NotificationType.breakFinished);
@@ -370,6 +428,7 @@ class PomodoroBloc extends Bloc<PomodoroEvent, PomodoroState> {
   @override
   Future<void> close() {
     _intervalTimer?.cancel();
+    _strictEventTimer?.cancel();
     return super.close();
   }
 }

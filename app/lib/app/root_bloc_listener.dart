@@ -82,9 +82,7 @@ class RootBlocListener extends StatelessWidget {
     tracker_effect.PomodoroStopReason.pausedByOthers => PomodoroStopReason.pausedByOthers,
     tracker_effect.PomodoroStopReason.manualBreak => PomodoroStopReason.manualBreak,
     tracker_effect.PomodoroStopReason.secondPomodoro => PomodoroStopReason.secondPomodoro,
-    // Strict schedule events are wired in US4 (T052); treat as a generic
-    // system interruption meanwhile.
-    tracker_effect.PomodoroStopReason.strictEvent => PomodoroStopReason.pausedByOthers,
+    tracker_effect.PomodoroStopReason.strictEvent => PomodoroStopReason.strictEvent,
   };
 
   void _onPomodoroStateEntered(BuildContext context, PomodoroState state) {

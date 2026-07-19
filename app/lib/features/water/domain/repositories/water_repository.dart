@@ -8,6 +8,9 @@ abstract interface class WaterRepository {
   /// Volume drunk on [day] (UTC midnight), reactive.
   Stream<int> watchDrankToday(DateTime day);
 
+  /// Individual drink log points in [day] (for the schedule timeline).
+  Stream<List<({DateTime createdAt, int volume})>> watchLogPoints(DateTime day);
+
   Stream<WaterSettingsEntity> watchSettings();
 
   Future<Result<WaterSettingsEntity>> currentSettings();

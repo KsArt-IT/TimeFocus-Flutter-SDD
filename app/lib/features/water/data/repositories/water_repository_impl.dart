@@ -22,6 +22,11 @@ class WaterRepositoryImpl with SafeCallMixin implements WaterRepository {
       _db.waterDao.watchDrankBetween(day, day.add(const Duration(days: 1)));
 
   @override
+  Stream<List<({DateTime createdAt, int volume})>> watchLogPoints(DateTime day) => _db.waterDao
+      .watchLogsBetween(day, day.add(const Duration(days: 1)))
+      .map((rows) => rows.map((r) => (createdAt: r.createdAt, volume: r.volume)).toList());
+
+  @override
   Stream<WaterSettingsEntity> watchSettings() =>
       _db.waterDao.watchSettings().map((m) => m.toEntity());
 

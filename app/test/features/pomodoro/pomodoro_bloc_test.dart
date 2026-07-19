@@ -10,6 +10,7 @@ import 'package:timefocus/features/pomodoro/domain/repositories/pomodoro_reposit
 import 'package:timefocus/features/pomodoro/domain/repositories/pomodoro_settings_repository.dart';
 import 'package:timefocus/features/pomodoro/domain/usecases/finish_pomodoro_interval_usecase.dart';
 import 'package:timefocus/features/pomodoro/presentation/bloc/pomodoro_bloc.dart';
+import 'package:timefocus/features/schedule/domain/usecases/check_strict_events_usecase.dart';
 import 'package:timefocus/features/tracker/domain/entities/action_name_entity.dart';
 import 'package:timefocus/features/tracker/domain/repositories/action_name_repository.dart';
 import 'package:timefocus/shared/enums/action_mode.dart';
@@ -26,6 +27,8 @@ class _MockActionNameRepository extends Mock implements ActionNameRepository {}
 class _MockFinishInterval extends Mock implements FinishPomodoroIntervalUseCase {}
 
 class _MockScheduler extends Mock implements NotificationScheduler {}
+
+class _MockCheckStrictEvents extends Mock implements CheckStrictEventsUseCase {}
 
 final now = DateTime(2026, 7, 18, 10);
 
@@ -95,6 +98,7 @@ void main() {
   late _MockActionNameRepository actions;
   late _MockFinishInterval finishInterval;
   late _MockScheduler scheduler;
+  late _MockCheckStrictEvents strictEvents;
 
   setUp(() {
     sessions = _MockPomodoroRepository();
@@ -102,6 +106,13 @@ void main() {
     actions = _MockActionNameRepository();
     finishInterval = _MockFinishInterval();
     scheduler = _MockScheduler();
+    strictEvents = _MockCheckStrictEvents();
+    when(
+      () => strictEvents(
+        now: any(named: 'now'),
+        workEndAt: any(named: 'workEndAt'),
+      ),
+    ).thenAnswer((_) async => const Result.success([]));
 
     when(() => settingsRepo.current()).thenAnswer((_) async => Result.success(settings()));
     when(() => actions.getById(work.id)).thenAnswer((_) async => const Result.success(work));
@@ -122,7 +133,8 @@ void main() {
     ).thenAnswer((_) async => const Result.success(null));
   });
 
-  PomodoroBloc build() => PomodoroBloc(sessions, settingsRepo, actions, finishInterval, scheduler);
+  PomodoroBloc build() =>
+      PomodoroBloc(sessions, settingsRepo, actions, finishInterval, scheduler, strictEvents);
 
   blocTest<PomodoroBloc, PomodoroState>(
     'started → workRunning',

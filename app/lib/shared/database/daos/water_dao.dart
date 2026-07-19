@@ -23,6 +23,15 @@ class WaterDao extends DatabaseAccessor<AppDatabase> with _$WaterDaoMixin {
     return query.watchSingle().map((row) => row.read(total) ?? 0);
   }
 
+  /// Individual log rows in range, oldest first (for the schedule timeline).
+  Stream<List<WaterLogModel>> watchLogsBetween(DateTime from, DateTime to) =>
+      (select(waterLogs)
+            ..where(
+              (t) => t.createdAt.isBiggerOrEqualValue(from) & t.createdAt.isSmallerThanValue(to),
+            )
+            ..orderBy([(t) => OrderingTerm.asc(t.createdAt)]))
+          .watch();
+
   Future<void> insertLog(int volume, DateTime now) => transaction(() async {
     await into(waterLogs).insert(WaterLogsCompanion.insert(volume: volume, createdAt: now));
     await (update(waterSettings)..where((t) => t.id.equals(_singletonId))).write(
