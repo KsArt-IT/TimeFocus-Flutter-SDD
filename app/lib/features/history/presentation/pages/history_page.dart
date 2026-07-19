@@ -56,7 +56,7 @@ class _HistoryPageContent extends StatelessWidget {
           HistoryError(:final failure) => Center(child: Text(failure.localizedMessage(l10n))),
           HistoryLoaded() => Column(
             children: [
-              HistoryHeaderBar(header: state.header),
+              HistoryHeaderBar(header: state.header, listTotalSec: _listTotalSec(state)),
               const Divider(height: 1),
               Expanded(child: _HistoryList(state: state)),
               HistoryBottomPanel(mode: state.mode, period: state.period, anchor: state.anchor),
@@ -66,6 +66,17 @@ class _HistoryPageContent extends StatelessWidget {
       ),
     );
   }
+
+  /// Sum of durations of whatever the list is currently showing — includes
+  /// activities the header's own FR-039 figure excludes (e.g. Sleep).
+  int _listTotalSec(HistoryLoaded state) => switch (state.mode) {
+    HistoryMode.intervals => state.intervals.fold(
+      0,
+      (sum, i) => sum + i.finishedAt.difference(i.startedAt).inSeconds,
+    ),
+    HistoryMode.totals => state.totals.fold(0, (sum, t) => sum + t.totalSec),
+    HistoryMode.stats => 0,
+  };
 }
 
 class _HistoryList extends StatelessWidget {

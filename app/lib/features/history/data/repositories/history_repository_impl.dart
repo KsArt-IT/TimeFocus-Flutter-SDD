@@ -1,5 +1,6 @@
 import 'package:injectable/injectable.dart';
 
+import 'package:timefocus/core/constants/system_actions.dart';
 import 'package:timefocus/core/errors/app_failure.dart';
 import 'package:timefocus/core/errors/safe_call_mixin.dart';
 import 'package:timefocus/core/result/result.dart';
@@ -21,10 +22,16 @@ class HistoryRepositoryImpl with SafeCallMixin implements HistoryRepository {
   @override
   Future<Result<HistoryHeaderEntity>> header(DateTime from, DateTime to) => safeCall(() async {
     final totalSec = await _db.historyDao.totalSecExcludingSleep(from, to);
+    final workSec = await _db.historyDao.totalSecForSystemAction(
+      SystemActionKeys.work,
+      from,
+      to,
+    );
     final (completed, interrupted) = await _db.pomodoroDao.countByPeriod(from, to);
     final (drank, goal) = await _db.waterDao.totalByPeriod(from, to);
     return HistoryHeaderEntity(
       totalSec: totalSec,
+      workSec: workSec,
       pomodoroCompleted: completed,
       pomodoroInterrupted: interrupted,
       waterDrankMl: drank,

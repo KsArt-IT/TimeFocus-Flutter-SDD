@@ -57,6 +57,28 @@ class HistoryDao extends DatabaseAccessor<AppDatabase> with _$HistoryDaoMixin {
     return row.read(total) ?? 0;
   }
 
+  /// Total tracked seconds of a single system activity in range (e.g. just
+  /// "Work", for the history header).
+  Future<int> totalSecForSystemAction(String systemActionName, DateTime from, DateTime to) async {
+    final diff =
+        actionHistoryIntervals.finishedAt.unixepoch - actionHistoryIntervals.startedAt.unixepoch;
+    final total = diff.sum();
+    final isAction =
+        actionNames.isSystem.equals(true) & actionNames.name.equals(systemActionName);
+    final query =
+        selectOnly(actionHistoryIntervals).join([
+            innerJoin(
+              actionHistories,
+              actionHistories.id.equalsExp(actionHistoryIntervals.actionHistoryId),
+            ),
+            innerJoin(actionNames, actionNames.id.equalsExp(actionHistories.actionNameId)),
+          ])
+          ..where(_inRange(from, to) & isAction)
+          ..addColumns([total]);
+    final row = await query.getSingle();
+    return row.read(total) ?? 0;
+  }
+
   /// Completed/interrupted Pomodoro counts in range.
   Future<(int completed, int interrupted)> pomodoroCounts(DateTime from, DateTime to) async {
     final count = pomodoroSessions.id.count();

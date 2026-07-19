@@ -448,6 +448,7 @@
     }
   },
   "historyWorkTotal": "Work time",
+  "historyListTotal": "Total",
   "editInterval": "Edit interval",
   "intervalStart": "Start",
   "intervalEnd": "End",

@@ -4,42 +4,45 @@ import 'package:timefocus/features/history/domain/entities/history_header_entity
 import 'package:timefocus/gen/app_localizations.dart';
 import 'package:timefocus/shared/widgets/ticking_timer.dart';
 
-/// History screen header (FR-039): total tracked time (excl. Sleep),
-/// Pomodoro completed/interrupted, water drunk/goal.
+/// History screen header (FR-039), one row per metric: work time (excl.
+/// Sleep) vs. the total of what's currently listed, Pomodoro
+/// completed/interrupted, water drunk/goal.
 class HistoryHeaderBar extends StatelessWidget {
-  const HistoryHeaderBar({required this.header, super.key});
+  const HistoryHeaderBar({required this.header, required this.listTotalSec, super.key});
 
   final HistoryHeaderEntity header;
+
+  /// Sum of the durations of whatever HistoryPage's list is currently
+  /// showing (intervals or totals) — not FR-039's Sleep-excluding figure.
+  final int listTotalSec;
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      child: Row(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      child: Column(
         children: [
-          Expanded(
-            child: _Stat(
-              icon: Icons.timer_outlined,
-              primary: formatDuration(header.totalSec),
-              secondary: l10n.historyWorkTotal,
-            ),
+          _HeaderRow(
+            icon: Icons.timer_outlined,
+            values: [
+              (label: l10n.historyListTotal, value: formatDuration(listTotalSec)),
+              (label: l10n.systemActionWork, value: formatDuration(header.workSec)),
+            ],
           ),
-          Expanded(
-            child: _Stat(
-              icon: Icons.local_fire_department_outlined,
-              primary:
-                  '${header.pomodoroCompleted}/${header.pomodoroCompleted + header.pomodoroInterrupted}',
-              secondary: l10n.settingsPomodoro,
-            ),
+          _HeaderRow(
+            icon: Icons.local_fire_department_outlined,
+            values: [
+              (label: null, value: l10n.historyPomodoroCompleted(header.pomodoroCompleted)),
+              (label: null, value: l10n.historyPomodoroInterrupted(header.pomodoroInterrupted)),
+            ],
           ),
-          Expanded(
-            child: _Stat(
-              icon: Icons.water_drop_outlined,
-              primary:
-                  '${l10n.waterGoalMl(header.waterDrankMl)}/${l10n.waterGoalMl(header.waterGoalMl)}',
-              secondary: l10n.waterGoal,
-            ),
+          _HeaderRow(
+            icon: Icons.water_drop_outlined,
+            values: [
+              (label: l10n.waterConsumed, value: l10n.waterGoalMl(header.waterDrankMl)),
+              (label: l10n.waterGoal, value: l10n.waterGoalMl(header.waterGoalMl)),
+            ],
           ),
         ],
       ),
@@ -47,37 +50,54 @@ class HistoryHeaderBar extends StatelessWidget {
   }
 }
 
-class _Stat extends StatelessWidget {
-  const _Stat({required this.icon, required this.primary, required this.secondary});
+class _HeaderRow extends StatelessWidget {
+  const _HeaderRow({required this.icon, required this.values});
 
   final IconData icon;
-  final String primary;
-  final String secondary;
+  final List<({String? label, String value})> values;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Semantics(
-      label: '$secondary: $primary',
-      child: Column(
-        children: [
-          Icon(icon, color: theme.colorScheme.primary),
-          const SizedBox(height: 4),
-          Text(
-            primary,
-            style: theme.textTheme.titleMedium,
-            textAlign: TextAlign.center,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
-          Text(
-            secondary,
-            style: theme.textTheme.bodySmall,
-            textAlign: TextAlign.center,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
-        ],
+    final text = values
+        .map((v) => v.label == null ? v.value : '${v.label}: ${v.value}')
+        .join('  ·  ');
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Semantics(
+        label: text,
+        child: Row(
+          children: [
+            Icon(icon, size: 20, color: theme.colorScheme.primary),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Wrap(
+                spacing: 12,
+                children: [
+                  for (final v in values)
+                    RichText(
+                      text: TextSpan(
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          color: theme.colorScheme.onSurface,
+                        ),
+                        children: [
+                          if (v.label != null)
+                            TextSpan(
+                              text: '${v.label}: ',
+                              style: TextStyle(color: theme.colorScheme.onSurfaceVariant),
+                            ),
+                          TextSpan(
+                            text: v.value,
+                            style: const TextStyle(fontWeight: FontWeight.w600),
+                          ),
+                        ],
+                      ),
+                    ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

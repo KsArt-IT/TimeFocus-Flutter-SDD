@@ -9,6 +9,7 @@ part 'history_header_entity.freezed.dart';
 abstract class HistoryHeaderEntity with _$HistoryHeaderEntity {
   const factory HistoryHeaderEntity({
     @Default(0) int totalSec,
+    @Default(0) int workSec,
     @Default(0) int pomodoroCompleted,
     @Default(0) int pomodoroInterrupted,
     @Default(0) int waterDrankMl,

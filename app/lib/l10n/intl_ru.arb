@@ -461,6 +461,7 @@
     }
   },
   "historyWorkTotal": "Рабочее время",
+  "historyListTotal": "Всего",
   "editInterval": "Редактировать интервал",
   "intervalStart": "Начало",
   "intervalEnd": "Конец",

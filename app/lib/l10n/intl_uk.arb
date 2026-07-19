@@ -412,6 +412,7 @@
     }
   },
   "historyWorkTotal": "Робочий час",
+  "historyListTotal": "Всього",
   "editInterval": "Редагувати інтервал",
   "intervalStart": "Початок",
   "intervalEnd": "Кінець",
