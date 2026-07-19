@@ -9,6 +9,10 @@ class ShellPage extends StatelessWidget {
 
   final StatefulNavigationShell navigationShell;
 
+  /// Branch index of the History tab (see AppRoutes/createAppRouter) — the
+  /// HUD panel gets in the way of History's own bottom navigation there.
+  static const int _historyBranchIndex = 2;
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
@@ -17,7 +21,7 @@ class ShellPage extends StatelessWidget {
         child: Column(
           children: [
             Expanded(child: navigationShell),
-            const HudPanel(),
+            if (navigationShell.currentIndex != _historyBranchIndex) const HudPanel(),
           ],
         ),
       ),
