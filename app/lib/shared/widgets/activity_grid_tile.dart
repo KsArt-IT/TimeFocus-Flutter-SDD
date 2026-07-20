@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:timefocus/core/constants/app_constants.dart';
+import 'package:timefocus/core/constants/app_dimens.dart';
 import 'package:timefocus/features/tracker/domain/entities/action_name_entity.dart';
 import 'package:timefocus/gen/app_localizations.dart';
 import 'package:timefocus/shared/widgets/action_localization.dart';
@@ -26,42 +27,49 @@ class ActivityGridTile extends StatelessWidget {
       label: name,
       child: Material(
         color: color.withValues(alpha: 0.15),
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: .circular(AppDimens.inset4x),
         child: InkWell(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: .circular(AppDimens.inset4x),
           onTap: onTap,
           child: ConstrainedBox(
             constraints: const BoxConstraints(
               minWidth: AppConstants.minTapTargetDp,
               minHeight: AppConstants.minTapTargetDp,
             ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Stack(
-                  clipBehavior: Clip.none,
-                  children: [
-                    FaIcon(faIconFromCode(action.icon), color: color, size: 26),
-                    if (action.isGroup)
-                      Positioned(
-                        right: -10,
-                        top: -6,
-                        child: Icon(Icons.folder, size: 12, color: theme.colorScheme.outline),
-                      ),
-                  ],
-                ),
-                const SizedBox(height: 6),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 4),
-                  child: Text(
-                    name,
-                    style: theme.textTheme.labelMedium,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    textAlign: TextAlign.center,
+            child: Padding(
+              padding: const .all(AppDimens.inset1x),
+              child: Column(
+                mainAxisAlignment: .center,
+                spacing: AppDimens.inset1x,
+                children: [
+                  Stack(
+                    clipBehavior: .none,
+                    children: [
+                      FaIcon(faIconFromCode(action.icon), color: color, size: AppDimens.iconSize),
+                      if (action.isGroup)
+                        Positioned(
+                          right: -10,
+                          top: -6,
+                          child: Icon(
+                            Icons.folder,
+                            size: AppDimens.inset4x,
+                            color: theme.colorScheme.outline,
+                          ),
+                        ),
+                    ],
                   ),
-                ),
-              ],
+                  Text(
+                    name,
+                    style: theme.textTheme.labelSmall?.copyWith(
+                      height: 1.0,
+                      letterSpacing: -0.2,
+                    ),
+                    maxLines: 2,
+                    overflow: .ellipsis,
+                    textAlign: .center,
+                  ),
+                ],
+              ),
             ),
           ),
         ),

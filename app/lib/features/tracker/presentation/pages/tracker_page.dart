@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:timefocus/features/settings/presentation/cubit/app_settings_cubit.dart';
 import 'package:timefocus/features/settings/presentation/cubit/app_settings_state.dart';
 import 'package:timefocus/features/tracker/presentation/bloc/action_bloc.dart';
+import 'package:timefocus/features/tracker/presentation/widgets/action_empty.dart';
 import 'package:timefocus/features/tracker/presentation/widgets/action_grid.dart';
 import 'package:timefocus/features/tracker/presentation/widgets/confirm_interrupt_dialog.dart';
 import 'package:timefocus/features/tracker/presentation/widgets/running_actions_list.dart';
@@ -15,7 +16,6 @@ class TrackerPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    final textTheme = Theme.of(context).textTheme;
 
     return BlocConsumer<ActionBloc, ActionState>(
       listenWhen: (previous, current) => current.maybeMap(
@@ -40,12 +40,7 @@ class TrackerPage extends StatelessWidget {
           children: [
             Expanded(
               child: running.isEmpty
-                  ? Center(
-                      child: Text(
-                        l10n.noRunningActions,
-                        style: textTheme.bodyMedium,
-                      ),
-                    )
+                  ? ActionEmpty(icon: Icons.timer_outlined, label: l10n.noRunningActions)
                   : RunningActionsList(running: running, todayTotals: todayTotals),
             ),
             const Divider(height: 1),
@@ -53,13 +48,16 @@ class TrackerPage extends StatelessWidget {
               buildWhen: (p, c) =>
                   p.settings.columnCount != c.settings.columnCount ||
                   p.settings.rowCount != c.settings.rowCount,
-              builder: (context, state) => ActionGrid(
-                actions: grid,
-                columns: state.settings.columnCount,
-                rowCount: state.settings.rowCount,
-                currentGroupId: currentGroupId,
-              ),
+              builder: (context, state) => grid.isEmpty && currentGroupId == null
+                  ? ActionEmpty(icon: Icons.grid_view_outlined, label: l10n.allActions)
+                  : ActionGrid(
+                      actions: grid,
+                      columns: state.settings.columnCount,
+                      maxRowCount: state.settings.rowCount,
+                      isGroup: currentGroupId != null,
+                    ),
             ),
+            const Divider(height: 1),
           ],
         ),
       ),

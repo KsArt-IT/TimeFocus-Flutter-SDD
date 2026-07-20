@@ -30,4 +30,10 @@ abstract final class AppDimens {
   static const bottomPaddingSmall = 80.0;
   static const bottomPaddingMedium = 120.0;
   static const bottomPaddingLarge = 180.0;
+
+  /// Padding sizes
+  static const iconSizeSmall = 18.0;
+  static const iconSize = 24.0;
+  static const iconSizeMedium = 32.0;
+  static const iconSizeLarge = 64.0;
 }
