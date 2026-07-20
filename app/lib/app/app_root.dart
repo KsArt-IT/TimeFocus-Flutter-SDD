@@ -14,8 +14,35 @@ import 'package:timefocus/features/water/presentation/cubit/hud_cubit.dart';
 
 /// Application root: provides all global Bloc/Cubit singletons.
 /// Coordination between them happens only in [RootBlocListener].
-class AppRoot extends StatelessWidget {
+class AppRoot extends StatefulWidget {
   const AppRoot({super.key});
+
+  @override
+  State<AppRoot> createState() => _AppRootState();
+}
+
+class _AppRootState extends State<AppRoot> with WidgetsBindingObserver {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    // Resuming from background re-runs rescheduleAll (FR-035a), which
+    // re-derives every scheduledAt from local time — the guard against a
+    // system clock/timezone change made while the app was backgrounded.
+    if (state == AppLifecycleState.resumed) {
+      getIt<NotificationBloc>().add(const NotificationEvent.initialized());
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

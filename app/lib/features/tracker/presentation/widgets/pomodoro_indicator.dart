@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:timefocus/core/utils/time_guard.dart';
 import 'package:timefocus/features/pomodoro/presentation/bloc/pomodoro_bloc.dart';
 import 'package:timefocus/gen/app_localizations.dart';
 import 'package:timefocus/shared/widgets/ticking_timer.dart';
@@ -80,7 +81,7 @@ class _CountdownState extends State<_Countdown> {
 
   @override
   Widget build(BuildContext context) {
-    final remaining = widget.endsAt.difference(DateTime.now()).inSeconds;
-    return Text(formatDuration(remaining < 0 ? 0 : remaining), style: widget.style);
+    final remaining = widget.endsAt.delayFrom(DateTime.now()).inSeconds;
+    return Text(formatDuration(remaining), style: widget.style);
   }
 }

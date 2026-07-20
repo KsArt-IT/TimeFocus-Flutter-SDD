@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:timefocus/core/utils/time_guard.dart';
 
 /// Rebuilds once per second; elapsed is always recomputed from wall clock
 /// (no background process): accumulated + (active ? now − startedAt : 0).
@@ -51,8 +52,8 @@ class _TickingTimerState extends State<TickingTimer> {
   }
 
   int get _elapsedSec {
-    final live = widget.isActive ? DateTime.now().difference(widget.startedAt).inSeconds : 0;
-    final total = widget.accumulatedSec + (live < 0 ? 0 : live);
+    final live = widget.isActive ? DateTime.now().secondsSince(widget.startedAt) : 0;
+    final total = widget.accumulatedSec + live;
     return total < 0 ? 0 : total;
   }
 

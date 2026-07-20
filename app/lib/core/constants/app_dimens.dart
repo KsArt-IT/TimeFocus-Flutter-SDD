@@ -26,8 +26,8 @@ abstract final class AppDimens {
   static const radius10x = 40.0;
 
   /// Padding sizes
-  static const  bottomPaddingSmaller = 48.0;
-  static const  bottomPaddingSmall = 80.0;
-  static const  bottomPaddingMedium = 120.0;
-  static const  bottomPaddingLarge = 180.0;
+  static const bottomPaddingSmaller = 48.0;
+  static const bottomPaddingSmall = 80.0;
+  static const bottomPaddingMedium = 120.0;
+  static const bottomPaddingLarge = 180.0;
 }

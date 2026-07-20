@@ -5,6 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:timefocus/core/constants/app_constants.dart';
 import 'package:timefocus/core/constants/system_actions.dart';
 import 'package:timefocus/core/di/injection.dart';
+import 'package:timefocus/core/utils/motion_utils.dart';
 import 'package:timefocus/features/tracker/domain/repositories/action_name_repository.dart';
 import 'package:timefocus/features/tracker/presentation/bloc/action_bloc.dart';
 import 'package:timefocus/features/water/presentation/cubit/hud_cubit.dart';
@@ -32,7 +33,7 @@ class ToiletContextIcon extends StatelessWidget {
         onPressed: () => _onTap(context),
         icon: AnimatedScale(
           duration: const Duration(milliseconds: 600),
-          scale: pulsing ? 1.15 : 1.0,
+          scale: pulsing && shouldAnimate(context) ? 1.15 : 1.0,
           child: FaIcon(
             faIconFromCode(0xf7d8),
             color: Theme.of(context).colorScheme.tertiary,

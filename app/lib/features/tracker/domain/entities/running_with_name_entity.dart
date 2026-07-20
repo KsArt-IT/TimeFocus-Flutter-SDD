@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import 'package:timefocus/core/utils/time_guard.dart';
 import 'package:timefocus/features/tracker/domain/entities/action_name_entity.dart';
 import 'package:timefocus/shared/enums/action_status.dart';
 
@@ -26,8 +27,8 @@ abstract class RunningWithNameEntity with _$RunningWithNameEntity {
   /// Timer invariant: elapsed = accumulated + (active ? now − startedAt : 0).
   /// Clamped ≥ 0 to survive system clock changes.
   int elapsedSec(DateTime now) {
-    final live = isActive ? now.difference(startedAt).inSeconds : 0;
-    final total = accumulatedSec + (live < 0 ? 0 : live);
+    final live = isActive ? now.secondsSince(startedAt) : 0;
+    final total = accumulatedSec + live;
     return total < 0 ? 0 : total;
   }
 }

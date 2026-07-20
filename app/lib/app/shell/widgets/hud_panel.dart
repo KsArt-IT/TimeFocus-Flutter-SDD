@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:timefocus/app/shell/widgets/toilet_context_icon.dart';
 import 'package:timefocus/core/constants/app_constants.dart';
+import 'package:timefocus/core/utils/motion_utils.dart';
 import 'package:timefocus/features/water/domain/entities/water_quick_button_entity.dart';
 import 'package:timefocus/features/water/presentation/cubit/hud_cubit.dart';
 import 'package:timefocus/gen/app_localizations.dart';
@@ -228,7 +229,7 @@ class _ContextIcon extends StatelessWidget {
         onPressed: () => buildContext.read<HudCubit>().dismissContext(),
         icon: AnimatedScale(
           duration: const Duration(milliseconds: 600),
-          scale: pulsing ? 1.15 : 1.0,
+          scale: pulsing && shouldAnimate(buildContext) ? 1.15 : 1.0,
           child: FaIcon(icon, color: theme.colorScheme.secondary, semanticLabel: label),
         ),
       ),

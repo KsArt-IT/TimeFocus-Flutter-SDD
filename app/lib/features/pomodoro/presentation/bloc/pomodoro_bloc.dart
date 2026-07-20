@@ -8,6 +8,7 @@ import 'package:timefocus/core/constants/app_constants.dart';
 import 'package:timefocus/core/errors/app_failure.dart';
 import 'package:timefocus/core/result/result.dart';
 import 'package:timefocus/core/utils/app_logger.dart';
+import 'package:timefocus/core/utils/time_guard.dart';
 import 'package:timefocus/features/notifications/domain/entities/notification_draft.dart';
 import 'package:timefocus/features/notifications/domain/repositories/notification_scheduler.dart';
 import 'package:timefocus/features/pomodoro/domain/entities/pomodoro_session_entity.dart';
@@ -126,8 +127,7 @@ class PomodoroBloc extends Bloc<PomodoroEvent, PomodoroState> {
     final soonest = missed.first;
     final day = DateTime(now.year, now.month, now.day);
     final eventAt = day.add(Duration(minutes: soonest.timeMinutes));
-    final delay = eventAt.difference(DateTime.now());
-    _strictEventTimer = Timer(delay.isNegative ? Duration.zero : delay, () {
+    _strictEventTimer = Timer(eventAt.delayFrom(DateTime.now()), () {
       if (!isClosed) add(const PomodoroEvent.interrupted(PomodoroStopReason.strictEvent));
     });
 
@@ -410,8 +410,7 @@ class PomodoroBloc extends Bloc<PomodoroEvent, PomodoroState> {
 
   void _armTimer(DateTime endsAt, void Function() onFire) {
     _intervalTimer?.cancel();
-    final delay = endsAt.difference(DateTime.now());
-    _intervalTimer = Timer(delay.isNegative ? Duration.zero : delay, () {
+    _intervalTimer = Timer(endsAt.delayFrom(DateTime.now()), () {
       if (!isClosed) onFire();
     });
   }

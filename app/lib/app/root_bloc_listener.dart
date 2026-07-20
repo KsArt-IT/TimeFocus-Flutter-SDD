@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:timefocus/core/constants/system_actions.dart';
+import 'package:timefocus/core/errors/app_failure.dart';
 import 'package:timefocus/core/router/app_router.dart';
 import 'package:timefocus/features/notifications/domain/entities/notification_intent.dart';
 import 'package:timefocus/features/notifications/presentation/bloc/notification_bloc.dart';
@@ -43,6 +44,10 @@ class RootBlocListener extends StatelessWidget {
         BlocListener<PomodoroBloc, PomodoroState>(
           listenWhen: (previous, current) => previous.runtimeType != current.runtimeType,
           listener: _onPomodoroStateEntered,
+        ),
+        BlocListener<HudCubit, HudState>(
+          listenWhen: (previous, current) => current is HudError,
+          listener: _onHudError,
         ),
         BlocListener<NotificationBloc, NotificationState>(
           listenWhen: (previous, current) => current.pendingIntent != null,
@@ -127,9 +132,24 @@ class RootBlocListener extends StatelessWidget {
         );
       case PomodoroBreakRunning():
         context.read<HudCubit>().onPomodoroBreakStarted();
-      case PomodoroError():
-        break;
+      case PomodoroError(:final failure):
+        _showFailureToast(context, failure);
     }
+  }
+
+  void _onHudError(BuildContext context, HudState state) {
+    if (state is! HudError) return;
+    _showFailureToast(context, state.failure);
+  }
+
+  void _showFailureToast(BuildContext context, AppFailure failure) {
+    final l10n = AppLocalizations.of(context);
+    toastification.show(
+      context: context,
+      type: ToastificationType.error,
+      title: Text(failure.localizedMessage(l10n)),
+      autoCloseDuration: const Duration(seconds: 4),
+    );
   }
 
   void _onNotificationIntent(BuildContext context, NotificationState state) {
