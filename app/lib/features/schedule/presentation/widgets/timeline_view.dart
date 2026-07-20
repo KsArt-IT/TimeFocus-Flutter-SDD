@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:timefocus/core/constants/app_dimens.dart';
 import 'package:timefocus/features/schedule/domain/entities/timeline_item.dart';
 import 'package:timefocus/features/schedule/presentation/widgets/timeline_item_tile.dart';
 import 'package:timefocus/features/schedule/presentation/widgets/timeline_layout.dart';
@@ -19,9 +19,12 @@ class TimelineView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final layout = TimelineLayout(items);
-    final totalHeight = 24 * 60 * _pixelsPerMinute;
+    final (startHour, endHour) = _hourRange();
+    final startOffsetMinutes = startHour * 60;
+    final totalHeight = (endHour - startHour) * 60 * _pixelsPerMinute;
 
     return SingleChildScrollView(
+      padding: const EdgeInsets.only(bottom: AppDimens.bottomPaddingSmall),
       child: SizedBox(
         height: totalHeight,
         child: Row(
@@ -30,7 +33,7 @@ class TimelineView extends StatelessWidget {
             SizedBox(
               width: _hourLabelWidth,
               height: totalHeight,
-              child: _HourLabels(totalHeight: totalHeight),
+              child: _HourLabels(startHour: startHour, endHour: endHour),
             ),
             Expanded(
               child: LayoutBuilder(
@@ -38,8 +41,9 @@ class TimelineView extends StatelessWidget {
                   final laneWidth = constraints.maxWidth / layout.laneCount;
                   return Stack(
                     children: [
-                      ..._hourGridLines(context, totalHeight),
-                      for (final laned in layout.laned) _positionedTile(laned, laneWidth),
+                      ..._hourGridLines(context, startHour, endHour, startOffsetMinutes),
+                      for (final laned in layout.laned)
+                        _positionedTile(laned, laneWidth, startOffsetMinutes),
                     ],
                   );
                 },
@@ -51,7 +55,24 @@ class TimelineView extends StatelessWidget {
     );
   }
 
-  Widget _positionedTile(LanedTimelineItem laned, double laneWidth) {
+  /// Full day when there are no items; otherwise the hour range spanning the
+  /// earliest start to the latest end, so the grid has no dead space.
+  (int, int) _hourRange() {
+    if (items.isEmpty) return (0, 24);
+
+    final minStart = items
+        .map((item) => item.start.hour * 60 + item.start.minute)
+        .reduce((a, b) => a < b ? a : b);
+    final maxEnd = items
+        .map((item) => item.effectiveEnd.hour * 60 + item.effectiveEnd.minute)
+        .reduce((a, b) => a > b ? a : b);
+
+    final startHour = minStart ~/ 60;
+    final endHour = ((maxEnd + 59) ~/ 60).clamp(startHour + 1, 24);
+    return (startHour, endHour);
+  }
+
+  Widget _positionedTile(LanedTimelineItem laned, double laneWidth, int startOffsetMinutes) {
     final startMinutes = laned.item.start.hour * 60 + laned.item.start.minute;
     final endMinutes = laned.item.effectiveEnd.hour * 60 + laned.item.effectiveEnd.minute;
     final height = ((endMinutes - startMinutes) * _pixelsPerMinute).clamp(
@@ -59,7 +80,7 @@ class TimelineView extends StatelessWidget {
       double.infinity,
     );
     return Positioned(
-      top: startMinutes * _pixelsPerMinute,
+      top: (startMinutes - startOffsetMinutes) * _pixelsPerMinute,
       left: laned.lane * laneWidth,
       width: laneWidth,
       height: height,
@@ -67,12 +88,17 @@ class TimelineView extends StatelessWidget {
     );
   }
 
-  List<Widget> _hourGridLines(BuildContext context, double totalHeight) {
+  List<Widget> _hourGridLines(
+    BuildContext context,
+    int startHour,
+    int endHour,
+    int startOffsetMinutes,
+  ) {
     final color = Theme.of(context).dividerColor;
     return [
-      for (var hour = 0; hour < 24; hour++)
+      for (var hour = startHour; hour < endHour; hour++)
         Positioned(
-          top: hour * 60 * _pixelsPerMinute,
+          top: (hour * 60 - startOffsetMinutes) * _pixelsPerMinute,
           left: 0,
           right: 0,
           child: Divider(height: 1, thickness: 0.5, color: color),
@@ -82,18 +108,20 @@ class TimelineView extends StatelessWidget {
 }
 
 class _HourLabels extends StatelessWidget {
-  const _HourLabels({required this.totalHeight});
+  const _HourLabels({required this.startHour, required this.endHour});
 
-  final double totalHeight;
+  final int startHour;
+  final int endHour;
 
   @override
   Widget build(BuildContext context) {
     final style = Theme.of(context).textTheme.labelSmall;
+    final startOffsetMinutes = startHour * 60;
     return Stack(
       children: [
-        for (var hour = 0; hour < 24; hour++)
+        for (var hour = startHour; hour < endHour; hour++)
           Positioned(
-            top: hour * 60 * TimelineView._pixelsPerMinute,
+            top: (hour * 60 - startOffsetMinutes) * TimelineView._pixelsPerMinute,
             child: Padding(
               padding: const EdgeInsets.only(right: 8),
               child: Text('${hour.toString().padLeft(2, '0')}:00', style: style),

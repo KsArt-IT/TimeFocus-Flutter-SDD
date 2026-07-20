@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'package:timefocus/core/di/injection.dart';
 import 'package:timefocus/features/schedule/domain/entities/timeline_item.dart';
 import 'package:timefocus/features/schedule/presentation/cubit/schedule_cubit.dart';
@@ -51,10 +50,10 @@ class _SchedulePageContent extends StatelessWidget {
                   ),
         },
       ),
-      floatingActionButton: FloatingActionButton.extended(
+      floatingActionButton: FloatingActionButton(
+        tooltip: l10n.scheduleAddEvent,
         onPressed: () => unawaited(showEditEventSheet(context)),
-        icon: const Icon(Icons.add),
-        label: Text(l10n.scheduleAddEvent),
+        child: const Icon(Icons.add),
       ),
     );
   }
