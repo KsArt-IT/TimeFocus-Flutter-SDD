@@ -141,7 +141,7 @@ class NotificationSchedulerImpl with SafeCallMixin implements NotificationSchedu
     final drafts = _deferred.drain();
     for (final (index, draft) in drafts.indexed) {
       await _doSchedule(
-        draft.copyWith(scheduledAt: DateTime.now().add(Duration(seconds: 3 * index))),
+        draft.copyWith(scheduledAt: DateTime.now().add(Duration(seconds: 3 * (index + 1)))),
       );
     }
   });
