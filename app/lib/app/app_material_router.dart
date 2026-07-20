@@ -19,7 +19,7 @@ class AppMaterialRouter extends StatefulWidget {
 }
 
 class _AppMaterialRouterState extends State<AppMaterialRouter> {
-  late final GoRouter _router = createAppRouter();
+  late final GoRouter _router = createAppRouter(context.read<AppSettingsCubit>());
 
   @override
   void initState() {

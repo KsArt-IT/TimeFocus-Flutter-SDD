@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 
@@ -6,7 +8,9 @@ import 'package:timefocus/features/history/presentation/pages/history_page.dart'
 import 'package:timefocus/features/history/presentation/pages/interval_edit_page.dart';
 import 'package:timefocus/features/history/presentation/pages/reports_page.dart';
 import 'package:timefocus/features/history/presentation/pages/session_edit_page.dart';
+import 'package:timefocus/features/onboarding/presentation/pages/onboarding_page.dart';
 import 'package:timefocus/features/schedule/presentation/pages/schedule_page.dart';
+import 'package:timefocus/features/settings/presentation/cubit/app_settings_cubit.dart';
 import 'package:timefocus/features/settings/presentation/pages/action_edit_page.dart';
 import 'package:timefocus/features/settings/presentation/pages/actions_settings_page.dart';
 import 'package:timefocus/features/settings/presentation/pages/more_page.dart';
@@ -33,10 +37,26 @@ abstract final class AppRoutes {
 
 final GlobalKey<NavigatorState> rootNavigatorKey = GlobalKey<NavigatorState>();
 
-GoRouter createAppRouter() => GoRouter(
+/// T085: onboardingCompleted == false → /onboarding, and back once done —
+/// re-evaluated whenever [settingsCubit] emits (Drift stream, FR-044).
+GoRouter createAppRouter(AppSettingsCubit settingsCubit) => GoRouter(
   navigatorKey: rootNavigatorKey,
   initialLocation: AppRoutes.tracker,
+  refreshListenable: _GoRouterRefreshStream(settingsCubit.stream),
+  redirect: (context, state) {
+    final settings = settingsCubit.state;
+    if (!settings.ready) return null;
+    final atOnboarding = state.matchedLocation == AppRoutes.onboarding;
+    if (!settings.settings.onboardingCompleted) {
+      return atOnboarding ? null : AppRoutes.onboarding;
+    }
+    return atOnboarding ? AppRoutes.tracker : null;
+  },
   routes: [
+    GoRoute(
+      path: AppRoutes.onboarding,
+      builder: (context, state) => const OnboardingPage(),
+    ),
     StatefulShellRoute.indexedStack(
       builder: (context, state, navigationShell) => ShellPage(navigationShell: navigationShell),
       branches: [
@@ -125,3 +145,18 @@ GoRouter createAppRouter() => GoRouter(
     ),
   ],
 );
+
+/// Notifies go_router to re-run `redirect` on every cubit emission.
+class _GoRouterRefreshStream extends ChangeNotifier {
+  _GoRouterRefreshStream(Stream<dynamic> stream) {
+    _subscription = stream.listen((_) => notifyListeners());
+  }
+
+  late final StreamSubscription<dynamic> _subscription;
+
+  @override
+  void dispose() {
+    unawaited(_subscription.cancel());
+    super.dispose();
+  }
+}
