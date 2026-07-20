@@ -22,7 +22,10 @@ import 'package:timefocus/shared/widgets/ticking_timer.dart';
 /// FR-040: change the session's activity/comment, edit/add/delete its
 /// intervals, or delete the whole session (cascade).
 class SessionEditPage extends StatelessWidget {
-  const SessionEditPage({required this.historyId, super.key});
+  const SessionEditPage({
+    required this.historyId,
+    super.key,
+  });
 
   final int historyId;
 
@@ -250,11 +253,11 @@ class _SessionEditContentState extends State<_SessionEditContent> {
         content: Text(l10n.sessionMergeConfirm),
         actions: [
           TextButton(
-            onPressed: () => Navigator.of(dialogContext).pop(false),
+            onPressed: () => dialogContext.pop(false),
             child: Text(l10n.cancel),
           ),
           TextButton(
-            onPressed: () => Navigator.of(dialogContext).pop(true),
+            onPressed: () => dialogContext.pop(true),
             child: Text(l10n.save),
           ),
         ],
@@ -276,11 +279,11 @@ class _SessionEditContentState extends State<_SessionEditContent> {
         content: Text(l10n.sessionDeleteConfirm),
         actions: [
           TextButton(
-            onPressed: () => Navigator.of(dialogContext).pop(false),
+            onPressed: () => dialogContext.pop(false),
             child: Text(l10n.cancel),
           ),
           TextButton(
-            onPressed: () => Navigator.of(dialogContext).pop(true),
+            onPressed: () => dialogContext.pop(true),
             child: Text(l10n.delete),
           ),
         ],
@@ -385,7 +388,6 @@ class _RunningStatusRow extends StatelessWidget {
                     ? _draftAccumulatedSec
                     : running?.accumulatedSec ?? 0,
                 isActive: _effectiveStatus == ActionStatus.active,
-                style: Theme.of(context).textTheme.bodyMedium,
               ),
             ),
         ],

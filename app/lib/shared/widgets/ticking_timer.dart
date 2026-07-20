@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:timefocus/core/constants/app_dimens.dart';
 import 'package:timefocus/core/utils/time_guard.dart';
 
 /// Rebuilds once per second; elapsed is always recomputed from wall clock
@@ -10,14 +11,12 @@ class TickingTimer extends StatefulWidget {
     required this.startedAt,
     required this.accumulatedSec,
     required this.isActive,
-    this.style,
     super.key,
   });
 
   final DateTime startedAt;
   final int accumulatedSec;
   final bool isActive;
-  final TextStyle? style;
 
   @override
   State<TickingTimer> createState() => _TickingTimerState();
@@ -51,15 +50,33 @@ class _TickingTimerState extends State<TickingTimer> {
     super.dispose();
   }
 
-  int get _elapsedSec {
-    final live = widget.isActive ? DateTime.now().secondsSince(widget.startedAt) : 0;
-    final total = widget.accumulatedSec + live;
-    return total < 0 ? 0 : total;
-  }
-
   @override
   Widget build(BuildContext context) {
-    return Text(formatDuration(_elapsedSec), style: widget.style);
+    final theme = Theme.of(context);
+    final elapsedSec = widget.isActive ? DateTime.now().secondsSince(widget.startedAt) : 0;
+
+    return Row(
+      crossAxisAlignment: .end,
+      children: [
+        Text(
+          formatDuration(elapsedSec),
+          style: theme.textTheme.bodyLarge?.copyWith(
+            fontFeatures: const [FontFeature.tabularFigures()],
+            color: widget.isActive ? theme.colorScheme.primary : theme.colorScheme.outline,
+            height: 1.0,
+          ),
+        ),
+        if (widget.accumulatedSec > 0) ...[
+          const SizedBox(width: AppDimens.radius2x),
+          Text(
+            formatDuration(elapsedSec + widget.accumulatedSec),
+            style: theme.textTheme.bodySmall?.copyWith(
+              height: 1.0,
+            ),
+          ),
+        ],
+      ],
+    );
   }
 }
 

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'package:timefocus/core/di/injection.dart';
 import 'package:timefocus/features/onboarding/presentation/cubit/onboarding_cubit.dart';
 import 'package:timefocus/gen/app_localizations.dart';
@@ -76,7 +75,9 @@ class _StepControls extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    final theme = Theme.of(context);
     final isLastStep = state.step >= OnboardingCubit.totalSteps - 1;
+
     return Row(
       children: [
         Expanded(
@@ -88,8 +89,8 @@ class _StepControls extends StatelessWidget {
                   child: CircleAvatar(
                     radius: 4,
                     backgroundColor: i == state.step
-                        ? Theme.of(context).colorScheme.primary
-                        : Theme.of(context).colorScheme.surfaceContainerHighest,
+                        ? theme.colorScheme.primary
+                        : theme.colorScheme.surfaceContainerHighest,
                   ),
                 ),
             ],
@@ -117,6 +118,7 @@ class _WelcomeStep extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    final theme = Theme.of(context);
     final features = [
       (Icons.timer_outlined, l10n.navTracker),
       (Icons.timer, l10n.settingsPomodoro),
@@ -130,18 +132,18 @@ class _WelcomeStep extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(l10n.onboardingWelcomeTitle, style: Theme.of(context).textTheme.headlineSmall),
+          Text(l10n.onboardingWelcomeTitle, style: theme.textTheme.headlineSmall),
           const SizedBox(height: 8),
-          Text(l10n.onboardingWelcomeSubtitle, style: Theme.of(context).textTheme.bodyMedium),
+          Text(l10n.onboardingWelcomeSubtitle, style: theme.textTheme.bodyMedium),
           const SizedBox(height: 24),
           for (final (icon, label) in features)
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 8),
               child: Row(
                 children: [
-                  Icon(icon, color: Theme.of(context).colorScheme.primary),
+                  Icon(icon, color: theme.colorScheme.primary),
                   const SizedBox(width: 16),
-                  Text(label, style: Theme.of(context).textTheme.bodyLarge),
+                  Text(label, style: theme.textTheme.bodyLarge),
                 ],
               ),
             ),
@@ -157,6 +159,7 @@ class _NameStep extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    final theme = Theme.of(context);
     final cubit = context.read<OnboardingCubit>();
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -164,7 +167,7 @@ class _NameStep extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(l10n.onboardingNameTitle, style: Theme.of(context).textTheme.headlineSmall),
+          Text(l10n.onboardingNameTitle, style: theme.textTheme.headlineSmall),
           const SizedBox(height: 16),
           TextField(
             autofocus: true,
@@ -183,6 +186,7 @@ class _NotificationStep extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    final theme = Theme.of(context);
     return BlocBuilder<OnboardingCubit, OnboardingState>(
       builder: (context, state) {
         final cubit = context.read<OnboardingCubit>();
@@ -195,15 +199,15 @@ class _NotificationStep extends StatelessWidget {
               Icon(
                 Icons.notifications_active_outlined,
                 size: 48,
-                color: Theme.of(context).colorScheme.primary,
+                color: theme.colorScheme.primary,
               ),
               const SizedBox(height: 16),
               Text(
                 l10n.permissionNotificationTitle,
-                style: Theme.of(context).textTheme.headlineSmall,
+                style: theme.textTheme.headlineSmall,
               ),
               const SizedBox(height: 8),
-              Text(l10n.permissionNotificationBody, style: Theme.of(context).textTheme.bodyMedium),
+              Text(l10n.permissionNotificationBody, style: theme.textTheme.bodyMedium),
               const SizedBox(height: 24),
               OutlinedButton(
                 onPressed: state.requestingPermission ? null : cubit.requestNotificationPermission,

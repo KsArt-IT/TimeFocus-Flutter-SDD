@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
 import 'package:timefocus/features/history/domain/entities/history_interval_entity.dart';
 import 'package:timefocus/gen/app_localizations.dart';
 import 'package:timefocus/shared/widgets/action_localization.dart';
-import 'package:timefocus/shared/widgets/fa_icon_helper.dart';
+import 'package:timefocus/shared/widgets/circle_fa_icon.dart';
 import 'package:timefocus/shared/widgets/ticking_timer.dart';
 
 /// One row of the "Intervals" mode list — tap opens the session editor.
@@ -28,9 +26,9 @@ class IntervalTile extends StatelessWidget {
 
     return ListTile(
       onTap: onTap,
-      leading: CircleAvatar(
-        backgroundColor: color.withValues(alpha: 0.2),
-        child: FaIcon(faIconFromCode(interval.icon), color: color, size: 18),
+      leading: CircleFaIcon(
+        icon: interval.icon,
+        color: color,
       ),
       title: Text(name),
       subtitle: Text(_timeRange(interval.startedAt, interval.finishedAt)),

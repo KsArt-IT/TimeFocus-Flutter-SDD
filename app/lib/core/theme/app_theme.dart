@@ -25,10 +25,6 @@ abstract final class AppTheme {
         centerTitle: true,
       ),
       cardTheme: const CardThemeData(
-        margin: .symmetric(
-          horizontal: AppDimens.radius3x,
-          vertical: AppDimens.radius4x,
-        ),
         shape: RoundedRectangleBorder(borderRadius: .all(.circular(AppDimens.radius4x))),
       ),
       navigationBarTheme: NavigationBarThemeData(
