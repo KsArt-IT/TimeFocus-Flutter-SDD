@@ -19,16 +19,18 @@ void main() {
     final actions = await db.select(db.actionNames).get();
     expect(actions.length, 12);
     expect(actions.every((a) => a.isSystem), isTrue);
-    expect(actions.map((a) => a.name).toSet(), SystemActionKeys.all.toSet());
+    expect(actions.map((a) => a.name).toSet(), SystemActionKeys.values.map((e) => e.name).toSet());
 
-    ActionNameModel byName(String name) => actions.singleWhere((a) => a.name == name);
+    ActionNameModel byName(SystemActionKeys action) => actions.singleWhere(
+      (a) => a.name == action.name,
+    );
     expect(byName(SystemActionKeys.toilet).hudPriority, 4);
     expect(byName(SystemActionKeys.meal).hudPriority, 3);
     expect(byName(SystemActionKeys.sport).hudPriority, 2);
     expect(byName(SystemActionKeys.sleep).hudPriority, 1);
 
     final work = byName(SystemActionKeys.work);
-    final breakAction = byName(SystemActionKeys.breakKey);
+    final breakAction = byName(SystemActionKeys.breakFor);
     expect(work.mode, ActionMode.pomodoro.index);
     expect(work.breakActionId, breakAction.id);
     expect(breakAction.mode, ActionMode.breakFor.index);

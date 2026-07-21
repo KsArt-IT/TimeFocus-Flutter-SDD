@@ -247,6 +247,17 @@
       }
     }
   },
+  "waterCurrentAndGoal": "{ml}/{mlG} мл",
+  "@waterCurrentAndGoal": {
+    "placeholders": {
+      "ml": {
+        "type": "int"
+      },
+      "mlG": {
+        "type": "int"
+      }
+    }
+  },
   "waterGoalReached": "Ціль досягнута! 🎉",
   "waterRecommendGlasses": "Рекомендуємо випити {count} склянки",
   "@waterRecommendGlasses": {

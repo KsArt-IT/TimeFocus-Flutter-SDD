@@ -24,7 +24,7 @@ class HistoryRepositoryImpl with SafeCallMixin implements HistoryRepository {
   Future<Result<HistoryHeaderEntity>> header(DateTime from, DateTime to) => safeCall(() async {
     final totalSec = await _db.historyDao.totalSecExcludingSleep(from, to);
     final workSec = await _db.historyDao.totalSecForSystemAction(
-      SystemActionKeys.work,
+      SystemActionKeys.work.name,
       from,
       to,
     );

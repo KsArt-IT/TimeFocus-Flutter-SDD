@@ -10,7 +10,7 @@ void main() {
 
   setUp(() async {
     db = AppDatabase.forTesting(NativeDatabase.memory());
-    final work = await db.actionDao.getBySystemName(SystemActionKeys.work);
+    final work = await db.actionDao.getBySystemName(SystemActionKeys.work.name);
     workId = work!.id;
   });
 

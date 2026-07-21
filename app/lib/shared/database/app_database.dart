@@ -81,7 +81,7 @@ class AppDatabase extends _$AppDatabase {
     await transaction(() async {
       final breakId = await into(actionNames).insert(
         ActionNamesCompanion.insert(
-          name: SystemActionKeys.breakKey,
+          name: SystemActionKeys.breakFor.name,
           color: 0xFF7FB069,
           icon: 0xf4b8,
           mode: Value(ActionMode.breakFor.index),
@@ -91,7 +91,7 @@ class AppDatabase extends _$AppDatabase {
       );
       final seedActions = <ActionNamesCompanion>[
         ActionNamesCompanion.insert(
-          name: SystemActionKeys.work,
+          name: SystemActionKeys.work.name,
           color: 0xFF4A6FA5,
           icon: 0xf0b1,
           mode: Value(ActionMode.pomodoro.index),
@@ -101,14 +101,14 @@ class AppDatabase extends _$AppDatabase {
           sortOrder: const Value(0),
         ),
         ActionNamesCompanion.insert(
-          name: SystemActionKeys.rest,
+          name: SystemActionKeys.rest.name,
           color: 0xFF9B8AC4,
           icon: 0xf880,
           isSystem: const Value(true),
           sortOrder: const Value(2),
         ),
         ActionNamesCompanion.insert(
-          name: SystemActionKeys.sleep,
+          name: SystemActionKeys.sleep.name,
           color: 0xFF5C6BC0,
           icon: 0xf236,
           isSystem: const Value(true),
@@ -116,7 +116,7 @@ class AppDatabase extends _$AppDatabase {
           sortOrder: const Value(3),
         ),
         ActionNamesCompanion.insert(
-          name: SystemActionKeys.toilet,
+          name: SystemActionKeys.toilet.name,
           color: 0xFF8D9CA3,
           icon: 0xf7d8,
           pauseOthers: const Value(true),
@@ -126,7 +126,7 @@ class AppDatabase extends _$AppDatabase {
           sortOrder: const Value(4),
         ),
         ActionNamesCompanion.insert(
-          name: SystemActionKeys.meal,
+          name: SystemActionKeys.meal.name,
           color: 0xFFE0885A,
           icon: 0xf2e7,
           pauseOthers: const Value(true),
@@ -136,7 +136,7 @@ class AppDatabase extends _$AppDatabase {
           sortOrder: const Value(5),
         ),
         ActionNamesCompanion.insert(
-          name: SystemActionKeys.sport,
+          name: SystemActionKeys.sport.name,
           color: 0xFFD1495B,
           icon: 0xf44b,
           pauseOthers: const Value(true),
@@ -146,7 +146,7 @@ class AppDatabase extends _$AppDatabase {
           sortOrder: const Value(6),
         ),
         ActionNamesCompanion.insert(
-          name: SystemActionKeys.warmup,
+          name: SystemActionKeys.warmup.name,
           color: 0xFFE6A23C,
           icon: 0xf70c,
           pauseOthers: const Value(true),
@@ -155,28 +155,28 @@ class AppDatabase extends _$AppDatabase {
           sortOrder: const Value(7),
         ),
         ActionNamesCompanion.insert(
-          name: SystemActionKeys.walk,
+          name: SystemActionKeys.walk.name,
           color: 0xFF56A3A6,
           icon: 0xf554,
           isSystem: const Value(true),
           sortOrder: const Value(8),
         ),
         ActionNamesCompanion.insert(
-          name: SystemActionKeys.meditation,
+          name: SystemActionKeys.meditation.name,
           color: 0xFF7E57C2,
           icon: 0xf5bb,
           isSystem: const Value(true),
           sortOrder: const Value(9),
         ),
         ActionNamesCompanion.insert(
-          name: SystemActionKeys.prayer,
+          name: SystemActionKeys.prayer.name,
           color: 0xFFB08968,
           icon: 0xf684,
           isSystem: const Value(true),
           sortOrder: const Value(10),
         ),
         ActionNamesCompanion.insert(
-          name: SystemActionKeys.medicine,
+          name: SystemActionKeys.medicine.name,
           color: 0xFF66BB6A,
           icon: 0xf484,
           defaultDurationSec: const Value(120),

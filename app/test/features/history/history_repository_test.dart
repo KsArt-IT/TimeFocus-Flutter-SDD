@@ -14,8 +14,8 @@ void main() {
   setUp(() async {
     db = AppDatabase.forTesting(NativeDatabase.memory());
     repository = HistoryRepositoryImpl(db);
-    workId = (await db.actionDao.getBySystemName(SystemActionKeys.work))!.id;
-    sleepId = (await db.actionDao.getBySystemName(SystemActionKeys.sleep))!.id;
+    workId = (await db.actionDao.getBySystemName(SystemActionKeys.work.name))!.id;
+    sleepId = (await db.actionDao.getBySystemName(SystemActionKeys.sleep.name))!.id;
   });
 
   tearDown(() => db.close());

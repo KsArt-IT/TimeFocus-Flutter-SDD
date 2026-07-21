@@ -289,6 +289,17 @@
       }
     }
   },
+  "waterCurrentAndGoal": "{ml}/{mlG} ml",
+  "@waterCurrentAndGoal": {
+    "placeholders": {
+      "ml": {
+        "type": "int"
+      },
+      "mlG": {
+        "type": "int"
+      }
+    }
+  },
   "waterGoalReached": "Goal reached! 🎉",
   "waterRecommendGlasses": "Try drinking {count} glasses",
   "@waterRecommendGlasses": {

@@ -4,14 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
-import 'package:timefocus/app/shell/widgets/toilet_context_icon.dart';
+import 'package:timefocus/app/shell/widgets/hud_context_icon.dart';
 import 'package:timefocus/core/constants/app_constants.dart';
+import 'package:timefocus/core/constants/app_dimens.dart';
 import 'package:timefocus/core/router/app_router.dart';
-import 'package:timefocus/core/utils/motion_utils.dart';
 import 'package:timefocus/features/water/domain/entities/water_quick_button_entity.dart';
 import 'package:timefocus/features/water/presentation/cubit/hud_cubit.dart';
 import 'package:timefocus/gen/app_localizations.dart';
-import 'package:timefocus/shared/enums/hud_context_type.dart';
 import 'package:timefocus/shared/widgets/drink_localization.dart';
 import 'package:timefocus/shared/widgets/fa_icon_helper.dart';
 
@@ -39,61 +38,87 @@ class _HudPanelContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final contextType = state.context;
+
+    return Padding(
+      padding: const .symmetric(horizontal: AppDimens.inset3x, vertical: AppDimens.inset1x),
+      child: Row(
+        children: [
+          Expanded(child: _WaterPanel(state: state)),
+          const SizedBox(width: 8),
+          _GlassButton(pulsing: state.glassBlinking),
+          SizedBox(
+            width: AppConstants.minTapTargetDp,
+            height: AppConstants.minTapTargetDp,
+            child: contextType == .empty
+                ? Icon(
+                    Icons.notifications_none_rounded,
+                    size: AppDimens.iconSize,
+                    color: theme.colorScheme.primary.withValues(alpha: 0.2),
+                  )
+                : HudContextIcon(contextType: contextType, pulsing: state.contextPulsing),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _WaterPanel extends StatelessWidget {
+  const _WaterPanel({required this.state});
+
+  final HudLoaded state;
+
+  @override
+  Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
     final behindSchedule = state.currentMl < state.expectedByNowMl;
     final goalReached = state.currentMl >= state.goalMl;
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-      child: Row(
-        children: [
-          Expanded(
-            child: Semantics(
-              button: true,
-              label: l10n.holdForWaterHistory,
-              child: GestureDetector(
-                behavior: .opaque,
-                onLongPress: () => context.push(AppRoutes.historyWater),
-                child: Column(
-                  crossAxisAlignment: .start,
-                  children: [
-                    Row(
-                      children: [
-                        if (behindSchedule)
-                          Icon(Icons.arrow_downward, size: 14, color: theme.colorScheme.error)
-                        else if (goalReached)
-                          Icon(Icons.check_circle, size: 14, color: theme.colorScheme.primary),
-                        if (behindSchedule || goalReached) const SizedBox(width: 4),
-                        Text(
-                          goalReached
-                              ? l10n.waterGoalReached
-                              : behindSchedule
-                              ? l10n.waterDeficit(state.expectedByNowMl - state.currentMl)
-                              : l10n.waterRemaining(state.goalMl - state.currentMl),
-                          style: theme.textTheme.bodySmall,
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 4),
-                    _WaterBar(
-                      currentMl: state.currentMl,
-                      goalMl: state.goalMl,
-                      expectedByNowMl: state.expectedByNowMl,
-                      behindSchedule: behindSchedule,
-                    ),
-                  ],
+    return Semantics(
+      button: true,
+      label: l10n.holdForWaterHistory,
+      child: GestureDetector(
+        behavior: .opaque,
+        onLongPress: () => context.push(AppRoutes.historyWater),
+        child: Column(
+          crossAxisAlignment: .start,
+          children: [
+            Row(
+              children: [
+                if (behindSchedule)
+                  Icon(Icons.arrow_downward, size: 14, color: theme.colorScheme.error)
+                else if (goalReached)
+                  Icon(Icons.check_circle, size: 14, color: theme.colorScheme.primary),
+                if (behindSchedule || goalReached) const SizedBox(width: AppDimens.inset1x),
+                Expanded(
+                  child: Text(
+                    goalReached
+                        ? l10n.waterGoalReached
+                        : behindSchedule
+                        ? l10n.waterDeficit(state.expectedByNowMl - state.currentMl)
+                        : l10n.waterRemaining(state.goalMl - state.currentMl),
+                    style: theme.textTheme.bodySmall,
+                    overflow: .ellipsis,
+                  ),
                 ),
-              ),
+                Text(
+                  l10n.waterCurrentAndGoal(state.currentMl, state.goalMl),
+                  style: theme.textTheme.bodySmall,
+                ),
+              ],
             ),
-          ),
-          const SizedBox(width: 8),
-          _GlassButton(pulsing: state.glassBlinking),
-          if (state.context != .toilet && state.context != .empty)
-            _ContextIcon(contextType: state.context, pulsing: state.contextPulsing)
-          else if (state.context == .toilet)
-            ToiletContextIcon(pulsing: state.contextPulsing),
-        ],
+            const SizedBox(height: AppDimens.inset1x),
+            _WaterBar(
+              currentMl: state.currentMl,
+              goalMl: state.goalMl,
+              expectedByNowMl: state.expectedByNowMl,
+              behindSchedule: behindSchedule,
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -119,23 +144,25 @@ class _WaterBar extends StatelessWidget {
     final expectedFraction = goalMl <= 0 ? 0.0 : (expectedByNowMl / goalMl).clamp(0.0, 1.0);
 
     return SizedBox(
-      height: 10,
+      height: AppDimens.inset4x,
       child: LayoutBuilder(
         builder: (context, constraints) => Stack(
-          alignment: AlignmentDirectional.centerStart,
           children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(5),
-              child: LinearProgressIndicator(
-                value: fraction,
-                minHeight: 10,
-                backgroundColor: theme.colorScheme.surfaceContainerHighest,
-                color: behindSchedule ? theme.colorScheme.error : theme.colorScheme.primary,
-              ),
+            LinearProgressIndicator(
+              value: fraction,
+              borderRadius: .circular(AppDimens.radius1x),
+              minHeight: AppDimens.inset2x,
+              backgroundColor: theme.colorScheme.surfaceContainerHighest,
+              color: behindSchedule ? theme.colorScheme.error : theme.colorScheme.tertiary,
             ),
             Positioned(
-              left: (constraints.maxWidth * expectedFraction).clamp(0, constraints.maxWidth - 2),
-              child: Container(width: 2, height: 10, color: theme.colorScheme.onSurface),
+              left: constraints.maxWidth * expectedFraction - AppDimens.inset3x,
+              bottom: -6,
+              child: Icon(
+                Icons.arrow_drop_up_rounded,
+                size: AppDimens.iconSize,
+                color: behindSchedule ? theme.colorScheme.error : theme.colorScheme.onSurface,
+              ),
             ),
           ],
         ),
@@ -207,42 +234,9 @@ class _QuickButtonTile extends StatelessWidget {
       title: Text(button.label.localizedLabel(l10n)),
       trailing: Text(l10n.drinkVolumeMl(button.volume)),
       onTap: () {
-        Navigator.of(context).pop();
+        context.pop();
         unawaited(cubit.logDrink(button.id));
       },
-    );
-  }
-}
-
-class _ContextIcon extends StatelessWidget {
-  const _ContextIcon({required this.contextType, required this.pulsing});
-
-  final HudContextType contextType;
-  final bool pulsing;
-
-  @override
-  Widget build(BuildContext buildContext) {
-    final l10n = AppLocalizations.of(buildContext);
-    final theme = Theme.of(buildContext);
-    final (icon, label) = switch (contextType) {
-      HudContextType.meal => (FontAwesomeIcons.utensils, l10n.scheduleEventMeal),
-      HudContextType.sport => (FontAwesomeIcons.personRunning, l10n.scheduleEventSport),
-      HudContextType.sleep => (FontAwesomeIcons.bed, l10n.scheduleEventSleep),
-      HudContextType.toilet || HudContextType.empty => (FontAwesomeIcons.circle, ''),
-    };
-
-    return SizedBox(
-      width: AppConstants.minTapTargetDp,
-      height: AppConstants.minTapTargetDp,
-      child: IconButton(
-        tooltip: label,
-        onPressed: () => buildContext.read<HudCubit>().dismissContext(),
-        icon: AnimatedScale(
-          duration: const Duration(milliseconds: 600),
-          scale: pulsing && shouldAnimate(buildContext) ? 1.15 : 1.0,
-          child: FaIcon(icon, color: theme.colorScheme.secondary, semanticLabel: label),
-        ),
-      ),
     );
   }
 }

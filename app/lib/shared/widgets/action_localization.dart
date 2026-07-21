@@ -13,19 +13,20 @@ extension ActionNameL10n on ActionNameEntity {
 /// carry the raw (name, isSystem) pair — e.g. History's joined DAO rows.
 String localizedActionName(AppLocalizations l10n, {required String name, required bool isSystem}) {
   if (!isSystem) return name;
-  return switch (name) {
-    SystemActionKeys.work => l10n.systemActionWork,
-    SystemActionKeys.breakKey => l10n.systemActionBreak,
-    SystemActionKeys.rest => l10n.systemActionRest,
-    SystemActionKeys.sleep => l10n.systemActionSleep,
-    SystemActionKeys.toilet => l10n.systemActionToilet,
-    SystemActionKeys.meal => l10n.systemActionMeal,
-    SystemActionKeys.sport => l10n.systemActionSport,
-    SystemActionKeys.warmup => l10n.systemActionWarmup,
-    SystemActionKeys.walk => l10n.systemActionWalk,
-    SystemActionKeys.meditation => l10n.systemActionMeditation,
-    SystemActionKeys.prayer => l10n.systemActionPrayer,
-    SystemActionKeys.medicine => l10n.systemActionMedicine,
+
+  return switch (SystemActionKeys.fromName(name)) {
+    .work => l10n.systemActionWork,
+    .breakFor => l10n.systemActionBreak,
+    .rest => l10n.systemActionRest,
+    .sleep => l10n.systemActionSleep,
+    .toilet => l10n.systemActionToilet,
+    .meal => l10n.systemActionMeal,
+    .sport => l10n.systemActionSport,
+    .warmup => l10n.systemActionWarmup,
+    .walk => l10n.systemActionWalk,
+    .meditation => l10n.systemActionMeditation,
+    .prayer => l10n.systemActionPrayer,
+    .medicine => l10n.systemActionMedicine,
     _ => name,
   };
 }

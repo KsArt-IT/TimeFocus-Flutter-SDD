@@ -11,7 +11,11 @@ abstract final class AppTheme {
   static ThemeData get dark => _build(.dark);
 
   static ThemeData _build(Brightness brightness) {
-    final scheme = ColorScheme.fromSeed(seedColor: _seed, brightness: brightness);
+    final scheme = ColorScheme.fromSeed(
+      seedColor: _seed,
+      brightness: brightness,
+      tertiary: Colors.lightBlue[brightness == .dark ? 900: 200],
+    );
     return ThemeData(
       useMaterial3: true,
       colorScheme: scheme,
