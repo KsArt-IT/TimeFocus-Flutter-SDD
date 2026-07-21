@@ -23,6 +23,7 @@ void main() {
     ).thenAnswer((_) async => const Result.success(header));
     when(() => repository.watchIntervals(any(), any())).thenAnswer((_) => Stream.value(const []));
     when(() => repository.watchTotals(any(), any())).thenAnswer((_) => Stream.value(const []));
+    when(() => repository.watchWaterLogs(any(), any())).thenAnswer((_) => Stream.value(const []));
   });
 
   HistoryCubit build() => HistoryCubit(repository);

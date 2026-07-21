@@ -296,6 +296,7 @@
   },
   "addDrink": "Добавить напиток",
   "holdForMore": "Удержите для выбора напитка",
+  "holdForWaterHistory": "Удержите для истории приёма воды",
   "waterReminderModeInterval": "Интервал",
   "@waterReminderModeInterval": {
     "description": "WaterReminderMode.interval"
@@ -439,6 +440,7 @@
   "historyModeTotalByAction": "Итого",
   "historyModeStatistics": "Статистика",
   "historyModeStatisticsComingSoon": "Статистика появится в следующей версии",
+  "historyModeWater": "Вода",
   "periodDay": "День",
   "@periodDay": {
     "description": "HistoryPeriod.day"
@@ -473,6 +475,10 @@
   "intervalAdded": "Интервал добавлен",
   "intervalDeleted": "Интервал удалён",
   "intervalUpdated": "Интервал обновлён",
+  "editWaterLog": "Приём воды",
+  "waterVolumeMl": "Объём (мл)",
+  "waterLogTime": "Время",
+  "waterLogDelete": "Удалить запись",
   "addInterval": "Добавить интервал",
   "changeActivity": "Изменить активность",
   "deleteHistory": "Удалить из истории",

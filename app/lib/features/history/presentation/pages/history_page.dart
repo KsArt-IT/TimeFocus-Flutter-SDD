@@ -11,19 +11,25 @@ import 'package:timefocus/features/history/presentation/widgets/history_bottom_p
 import 'package:timefocus/features/history/presentation/widgets/history_header_bar.dart';
 import 'package:timefocus/features/history/presentation/widgets/interval_tile.dart';
 import 'package:timefocus/features/history/presentation/widgets/total_tile.dart';
+import 'package:timefocus/features/history/presentation/widgets/water_log_tile.dart';
 import 'package:timefocus/gen/app_localizations.dart';
 import 'package:timefocus/shared/enums/history_mode.dart';
 
 /// US6: history screen — mode/period navigation, header, editable list.
 class HistoryPage extends StatelessWidget {
-  const HistoryPage({super.key});
+  const HistoryPage({
+    this.initialMode = .intervals,
+    super.key,
+  });
+
+  final HistoryMode initialMode;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider<HistoryCubit>(
       create: (_) {
         final cubit = getIt<HistoryCubit>();
-        unawaited(cubit.subscribe());
+        unawaited(cubit.subscribe(initialMode: initialMode));
         return cubit;
       },
       child: const _HistoryPageContent(),
@@ -72,6 +78,7 @@ class _HistoryPageContent extends StatelessWidget {
       0,
       (sum, i) => sum + i.finishedAt.difference(i.startedAt).inSeconds,
     ),
+    HistoryMode.water => 0,
     HistoryMode.totals => state.totals.fold(0, (sum, t) => sum + t.totalSec),
     HistoryMode.stats => 0,
   };
@@ -96,6 +103,18 @@ class _HistoryList extends StatelessWidget {
             return IntervalTile(
               interval: interval,
               onTap: () => context.push('${AppRoutes.sessionEdit}/${interval.historyId}'),
+            );
+          },
+        );
+      case HistoryMode.water:
+        if (state.waterLogs.isEmpty) return Center(child: Text(l10n.historyEmpty));
+        return ListView.builder(
+          itemCount: state.waterLogs.length,
+          itemBuilder: (context, index) {
+            final log = state.waterLogs[index];
+            return WaterLogTile(
+              log: log,
+              onTap: () => context.push('${AppRoutes.waterLogEdit}/${log.id}'),
             );
           },
         );

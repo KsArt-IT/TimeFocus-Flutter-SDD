@@ -39,6 +39,19 @@ class WaterDao extends DatabaseAccessor<AppDatabase> with _$WaterDaoMixin {
     );
   });
 
+  Future<WaterLogModel?> getLogById(int id) =>
+      (select(waterLogs)..where((t) => t.id.equals(id))).getSingleOrNull();
+
+  Future<void> updateLog(int id, {required int volume, required DateTime createdAt}) =>
+      (update(waterLogs)..where((t) => t.id.equals(id))).write(
+        WaterLogsCompanion(
+          volume: Value(volume),
+          createdAt: Value(createdAt),
+        ),
+      );
+
+  Future<void> deleteLog(int id) => (delete(waterLogs)..where((t) => t.id.equals(id))).go();
+
   Future<WaterSettingModel> getSettings() =>
       (select(waterSettings)..where((t) => t.id.equals(_singletonId))).getSingle();
 

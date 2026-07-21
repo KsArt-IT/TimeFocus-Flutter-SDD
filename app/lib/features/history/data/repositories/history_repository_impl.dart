@@ -10,6 +10,8 @@ import 'package:timefocus/features/history/domain/entities/history_interval_enti
 import 'package:timefocus/features/history/domain/entities/history_session_entity.dart';
 import 'package:timefocus/features/history/domain/entities/history_total_entity.dart';
 import 'package:timefocus/features/history/domain/repositories/history_repository.dart';
+import 'package:timefocus/features/water/data/mappers/water_mappers.dart';
+import 'package:timefocus/features/water/domain/entities/water_log_entity.dart';
 import 'package:timefocus/shared/database/app_database.dart';
 
 @LazySingleton(as: HistoryRepository)
@@ -48,6 +50,13 @@ class HistoryRepositoryImpl with SafeCallMixin implements HistoryRepository {
   @override
   Stream<List<HistoryTotalEntity>> watchTotals(DateTime from, DateTime to) => _db.historyDao
       .watchTotals(from, to)
+      .map(
+        (rows) => rows.map((r) => r.toEntity()).toList(),
+      );
+
+  @override
+  Stream<List<WaterLogEntity>> watchWaterLogs(DateTime from, DateTime to) => _db.waterDao
+      .watchLogsBetween(from, to)
       .map(
         (rows) => rows.map((r) => r.toEntity()).toList(),
       );

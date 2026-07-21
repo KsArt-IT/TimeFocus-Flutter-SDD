@@ -1,5 +1,6 @@
 import 'package:drift/drift.dart';
 
+import 'package:timefocus/features/water/domain/entities/water_log_entity.dart';
 import 'package:timefocus/features/water/domain/entities/water_quick_button_entity.dart';
 import 'package:timefocus/features/water/domain/entities/water_settings_entity.dart';
 import 'package:timefocus/shared/database/app_database.dart';
@@ -34,6 +35,10 @@ extension WaterSettingsEntityMapper on WaterSettingsEntity {
     showToiletOnWater: Value(showToiletOnWater),
     showToiletOnBreak: Value(showToiletOnBreak),
   );
+}
+
+extension WaterLogModelMapper on WaterLogModel {
+  WaterLogEntity toEntity() => WaterLogEntity(id: id, volume: volume, createdAt: createdAt);
 }
 
 extension WaterQuickButtonModelMapper on WaterQuickButtonModel {

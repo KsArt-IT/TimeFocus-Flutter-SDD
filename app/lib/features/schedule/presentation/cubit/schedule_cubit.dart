@@ -13,6 +13,7 @@ import 'package:timefocus/features/schedule/domain/entities/timeline_item.dart';
 import 'package:timefocus/features/schedule/domain/repositories/schedule_repository.dart';
 import 'package:timefocus/features/schedule/domain/usecases/plan_day_events_usecase.dart';
 import 'package:timefocus/features/schedule/presentation/cubit/schedule_state.dart';
+import 'package:timefocus/features/water/domain/entities/water_log_entity.dart';
 import 'package:timefocus/features/water/domain/repositories/water_repository.dart';
 import 'package:timefocus/gen/app_localizations.dart';
 import 'package:timefocus/shared/enums/day_type.dart';
@@ -42,7 +43,7 @@ class ScheduleCubit extends Cubit<ScheduleState> {
 
   StreamSubscription<List<ScheduleEventEntity>>? _eventsSub;
   StreamSubscription<List<TimelineItem>>? _actualSub;
-  StreamSubscription<List<({DateTime createdAt, int volume})>>? _waterSub;
+  StreamSubscription<List<WaterLogEntity>>? _waterSub;
 
   List<ScheduleEventEntity> _events = const [];
   List<TimelineItem> _actual = const [];
@@ -64,7 +65,7 @@ class ScheduleCubit extends Cubit<ScheduleState> {
       _emit();
     }, onError: (Object e) => logger.e('schedule intervals stream error', error: e));
 
-    _waterSub = _waterRepo.watchLogPoints(_day).listen((points) {
+    _waterSub = _waterRepo.watchLogPoints(_day, _day.add(const Duration(days: 1))).listen((points) {
       _water = points
           .map(
             (p) => TimelineItem(

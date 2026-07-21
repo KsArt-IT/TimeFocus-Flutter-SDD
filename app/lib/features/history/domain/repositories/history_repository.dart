@@ -4,6 +4,7 @@ import 'package:timefocus/features/history/domain/entities/history_interval_edit
 import 'package:timefocus/features/history/domain/entities/history_interval_entity.dart';
 import 'package:timefocus/features/history/domain/entities/history_session_entity.dart';
 import 'package:timefocus/features/history/domain/entities/history_total_entity.dart';
+import 'package:timefocus/features/water/domain/entities/water_log_entity.dart';
 
 abstract interface class HistoryRepository {
   /// totalSec excludes the system "Sleep" activity (FR-039).
@@ -12,6 +13,9 @@ abstract interface class HistoryRepository {
   Stream<List<HistoryIntervalEntity>> watchIntervals(DateTime from, DateTime to);
 
   Stream<List<HistoryTotalEntity>> watchTotals(DateTime from, DateTime to);
+
+  /// Water log entries in range, oldest first — HistoryMode.water list.
+  Stream<List<WaterLogEntity>> watchWaterLogs(DateTime from, DateTime to);
 
   Future<Result<HistorySessionEntity>> session(int historyId);
 

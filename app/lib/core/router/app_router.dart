@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
-
 import 'package:timefocus/app/shell/shell_page.dart';
 import 'package:timefocus/features/history/presentation/pages/history_page.dart';
 import 'package:timefocus/features/history/presentation/pages/interval_edit_page.dart';
@@ -20,6 +19,8 @@ import 'package:timefocus/features/settings/presentation/pages/schedule_settings
 import 'package:timefocus/features/settings/presentation/pages/system_settings_page.dart';
 import 'package:timefocus/features/settings/presentation/pages/water_settings_page.dart';
 import 'package:timefocus/features/tracker/presentation/pages/tracker_page.dart';
+import 'package:timefocus/features/water/presentation/pages/water_log_edit_page.dart';
+import 'package:timefocus/shared/enums/history_mode.dart';
 
 /// Route paths used across the app (deep links included).
 abstract final class AppRoutes {
@@ -33,6 +34,8 @@ abstract final class AppRoutes {
   static const String intervalEdit = '/interval/edit';
   static const String sessionEdit = '/session/edit';
   static const String reports = '/reports';
+  static const String historyWater = '/history/water';
+  static const String waterLogEdit = '/water/log/edit';
 }
 
 final GlobalKey<NavigatorState> rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -106,6 +109,18 @@ GoRouter createAppRouter(AppSettingsCubit settingsCubit) => GoRouter(
     GoRoute(
       path: AppRoutes.reports,
       builder: (context, state) => const ReportsPage(),
+    ),
+    GoRoute(
+      path: AppRoutes.historyWater,
+      builder: (context, state) => const HistoryPage(
+        initialMode: HistoryMode.water,
+      ),
+    ),
+    GoRoute(
+      path: '${AppRoutes.waterLogEdit}/:id',
+      builder: (context, state) => WaterLogEditPage(
+        logId: int.parse(state.pathParameters['id']!),
+      ),
     ),
     GoRoute(
       path: AppRoutes.more,

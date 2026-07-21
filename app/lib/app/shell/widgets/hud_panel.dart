@@ -3,8 +3,10 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 import 'package:timefocus/app/shell/widgets/toilet_context_icon.dart';
 import 'package:timefocus/core/constants/app_constants.dart';
+import 'package:timefocus/core/router/app_router.dart';
 import 'package:timefocus/core/utils/motion_utils.dart';
 import 'package:timefocus/features/water/domain/entities/water_quick_button_entity.dart';
 import 'package:timefocus/features/water/presentation/cubit/hud_cubit.dart';
@@ -47,41 +49,49 @@ class _HudPanelContent extends StatelessWidget {
       child: Row(
         children: [
           Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
+            child: Semantics(
+              button: true,
+              label: l10n.holdForWaterHistory,
+              child: GestureDetector(
+                behavior: .opaque,
+                onLongPress: () => context.push(AppRoutes.historyWater),
+                child: Column(
+                  crossAxisAlignment: .start,
                   children: [
-                    if (behindSchedule)
-                      Icon(Icons.arrow_downward, size: 14, color: theme.colorScheme.error)
-                    else if (goalReached)
-                      Icon(Icons.check_circle, size: 14, color: theme.colorScheme.primary),
-                    if (behindSchedule || goalReached) const SizedBox(width: 4),
-                    Text(
-                      goalReached
-                          ? l10n.waterGoalReached
-                          : behindSchedule
-                          ? l10n.waterDeficit(state.expectedByNowMl - state.currentMl)
-                          : l10n.waterRemaining(state.goalMl - state.currentMl),
-                      style: theme.textTheme.bodySmall,
+                    Row(
+                      children: [
+                        if (behindSchedule)
+                          Icon(Icons.arrow_downward, size: 14, color: theme.colorScheme.error)
+                        else if (goalReached)
+                          Icon(Icons.check_circle, size: 14, color: theme.colorScheme.primary),
+                        if (behindSchedule || goalReached) const SizedBox(width: 4),
+                        Text(
+                          goalReached
+                              ? l10n.waterGoalReached
+                              : behindSchedule
+                              ? l10n.waterDeficit(state.expectedByNowMl - state.currentMl)
+                              : l10n.waterRemaining(state.goalMl - state.currentMl),
+                          style: theme.textTheme.bodySmall,
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 4),
+                    _WaterBar(
+                      currentMl: state.currentMl,
+                      goalMl: state.goalMl,
+                      expectedByNowMl: state.expectedByNowMl,
+                      behindSchedule: behindSchedule,
                     ),
                   ],
                 ),
-                const SizedBox(height: 4),
-                _WaterBar(
-                  currentMl: state.currentMl,
-                  goalMl: state.goalMl,
-                  expectedByNowMl: state.expectedByNowMl,
-                  behindSchedule: behindSchedule,
-                ),
-              ],
+              ),
             ),
           ),
           const SizedBox(width: 8),
           _GlassButton(pulsing: state.glassBlinking),
-          if (state.context != HudContextType.toilet && state.context != HudContextType.empty)
+          if (state.context != .toilet && state.context != .empty)
             _ContextIcon(contextType: state.context, pulsing: state.contextPulsing)
-          else if (state.context == HudContextType.toilet)
+          else if (state.context == .toilet)
             ToiletContextIcon(pulsing: state.contextPulsing),
         ],
       ),

@@ -1,9 +1,11 @@
 import 'package:injectable/injectable.dart';
 
+import 'package:timefocus/core/errors/app_failure.dart';
 import 'package:timefocus/core/errors/safe_call_mixin.dart';
 import 'package:timefocus/core/result/result.dart';
 import 'package:timefocus/features/water/data/mappers/water_mappers.dart';
 import 'package:timefocus/features/water/domain/entities/day_schedule_times_entity.dart';
+import 'package:timefocus/features/water/domain/entities/water_log_entity.dart';
 import 'package:timefocus/features/water/domain/entities/water_quick_button_entity.dart';
 import 'package:timefocus/features/water/domain/entities/water_settings_entity.dart';
 import 'package:timefocus/features/water/domain/repositories/water_repository.dart';
@@ -22,9 +24,27 @@ class WaterRepositoryImpl with SafeCallMixin implements WaterRepository {
       _db.waterDao.watchDrankBetween(day, day.add(const Duration(days: 1)));
 
   @override
-  Stream<List<({DateTime createdAt, int volume})>> watchLogPoints(DateTime day) => _db.waterDao
-      .watchLogsBetween(day, day.add(const Duration(days: 1)))
-      .map((rows) => rows.map((r) => (createdAt: r.createdAt, volume: r.volume)).toList());
+  Stream<List<WaterLogEntity>> watchLogPoints(DateTime from, DateTime to) =>
+      _db.waterDao.watchLogsBetween(from, to).map((rows) => rows.map((r) => r.toEntity()).toList());
+
+  @override
+  Future<Result<WaterLogEntity>> getLog(int id) => safeCall(() async {
+    final row = await _db.waterDao.getLogById(id);
+    if (row == null) {
+      throw const DatabaseFailure('water log not found', code: DatabaseFailure.entityNotFound);
+    }
+    return row.toEntity();
+  });
+
+  @override
+  Future<Result<void>> updateLog({
+    required int id,
+    required int volume,
+    required DateTime createdAt,
+  }) => voidSafeCall(() => _db.waterDao.updateLog(id, volume: volume, createdAt: createdAt));
+
+  @override
+  Future<Result<void>> deleteLog(int id) => voidSafeCall(() => _db.waterDao.deleteLog(id));
 
   @override
   Stream<WaterSettingsEntity> watchSettings() =>

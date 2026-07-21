@@ -93,12 +93,14 @@ class HistoryBottomPanel extends StatelessWidget {
     HistoryMode.intervals => Icons.view_agenda_outlined,
     HistoryMode.totals => Icons.summarize_outlined,
     HistoryMode.stats => Icons.insights_outlined,
+    HistoryMode.water => Icons.local_drink_outlined,
   };
 
   String _modeLabel(AppLocalizations l10n, HistoryMode mode) => switch (mode) {
     HistoryMode.intervals => l10n.historyModeIntervals,
     HistoryMode.totals => l10n.historyModeTotalByAction,
     HistoryMode.stats => l10n.historyModeStatistics,
+    HistoryMode.water => l10n.historyModeWater,
   };
 
   String _periodLabel(AppLocalizations l10n, HistoryPeriod period) => switch (period) {

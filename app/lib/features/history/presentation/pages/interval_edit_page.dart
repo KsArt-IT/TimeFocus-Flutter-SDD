@@ -4,14 +4,13 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:intl/intl.dart';
-
 import 'package:timefocus/core/di/injection.dart';
 import 'package:timefocus/features/history/domain/entities/history_interval_edit.dart';
 import 'package:timefocus/features/history/domain/entities/history_session_entity.dart';
 import 'package:timefocus/features/history/presentation/cubit/session_edit_cubit.dart';
 import 'package:timefocus/gen/app_localizations.dart';
 import 'package:timefocus/shared/widgets/action_localization.dart';
+import 'package:timefocus/shared/widgets/date_time_field.dart';
 
 /// FR-040: date+time editing, quick-adjust buttons (now/−5/−1/+1/+5 min),
 /// inline validation (end < start blocks save), overlap → warning toast,
@@ -120,13 +119,13 @@ class _IntervalEditContentState extends State<_IntervalEditContent> {
           body: ListView(
             padding: const EdgeInsets.all(16),
             children: [
-              _DateTimeField(
+              DateTimeField(
                 label: l10n.intervalStart,
                 value: _startedAt!,
                 onChanged: (v) => setState(() => _startedAt = v),
               ),
               const SizedBox(height: 16),
-              _DateTimeField(
+              DateTimeField(
                 label: l10n.intervalEnd,
                 value: _finishedAt!,
                 onChanged: (v) => setState(() => _finishedAt = v),
@@ -165,86 +164,4 @@ class _IntervalEditContentState extends State<_IntervalEditContent> {
     }
     context.pop();
   }
-}
-
-/// One label + a date button (left) and a time button (right) that both
-/// edit the same [value], plus quick-adjust buttons for the time part.
-class _DateTimeField extends StatelessWidget {
-  const _DateTimeField({required this.label, required this.value, required this.onChanged});
-
-  final String label;
-  final DateTime value;
-  final ValueChanged<DateTime> onChanged;
-
-  static const _quickAdjustMinutes = [-5, -1, 1, 5];
-
-  Future<void> _pickDate(BuildContext context) async {
-    final now = DateTime.now();
-    final picked = await showDatePicker(
-      context: context,
-      initialDate: value,
-      firstDate: DateTime(now.year - 5),
-      lastDate: DateTime(now.year + 1),
-    );
-    if (picked != null) {
-      onChanged(DateTime(picked.year, picked.month, picked.day, value.hour, value.minute));
-    }
-  }
-
-  Future<void> _pickTime(BuildContext context) async {
-    final picked = await showTimePicker(
-      context: context,
-      initialTime: TimeOfDay.fromDateTime(value),
-    );
-    if (picked != null) {
-      onChanged(DateTime(value.year, value.month, value.day, picked.hour, picked.minute));
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(label, style: Theme.of(context).textTheme.labelLarge),
-        const SizedBox(height: 4),
-        Row(
-          children: [
-            Expanded(
-              child: InkWell(
-                onTap: () => _pickDate(context),
-                child: Text(
-                  DateFormat.yMMMd(l10n.localeName).format(value),
-                  style: Theme.of(context).textTheme.headlineSmall,
-                ),
-              ),
-            ),
-            InkWell(
-              onTap: () => _pickTime(context),
-              child: Text(_hm(value), style: Theme.of(context).textTheme.headlineSmall),
-            ),
-          ],
-        ),
-        const SizedBox(height: 8),
-        Wrap(
-          spacing: 8,
-          children: [
-            for (final minutes in _quickAdjustMinutes)
-              OutlinedButton(
-                onPressed: () => onChanged(value.add(Duration(minutes: minutes))),
-                child: Text(minutes > 0 ? '+$minutes' : '$minutes'),
-              ),
-            OutlinedButton(
-              onPressed: () => onChanged(DateTime.now()),
-              child: Text(l10n.now),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-
-  String _hm(DateTime t) =>
-      '${t.hour.toString().padLeft(2, '0')}:${t.minute.toString().padLeft(2, '0')}';
 }

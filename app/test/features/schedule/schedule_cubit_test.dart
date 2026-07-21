@@ -55,7 +55,7 @@ void main() {
   void stubStreams({List<ScheduleEventEntity> events = const []}) {
     when(() => schedule.watchDay(any())).thenAnswer((_) => Stream.value(events));
     when(() => schedule.watchActualIntervals(any())).thenAnswer((_) => Stream.value(const []));
-    when(() => water.watchLogPoints(any())).thenAnswer((_) => Stream.value(const []));
+    when(() => water.watchLogPoints(any(), any())).thenAnswer((_) => Stream.value(const []));
   }
 
   setUp(() {

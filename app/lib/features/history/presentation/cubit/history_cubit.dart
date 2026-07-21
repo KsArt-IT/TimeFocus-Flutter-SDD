@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
-
 import 'package:timefocus/core/utils/app_logger.dart';
+import 'package:timefocus/features/history/domain/entities/history_header_entity.dart';
 import 'package:timefocus/features/history/domain/repositories/history_repository.dart';
 import 'package:timefocus/features/history/domain/usecases/history_period_range_usecase.dart';
 import 'package:timefocus/features/history/presentation/cubit/history_state.dart';
@@ -26,7 +26,10 @@ class HistoryCubit extends Cubit<HistoryState> {
 
   StreamSubscription<void>? _sub;
 
-  Future<void> subscribe() => _reload();
+  Future<void> subscribe({HistoryMode initialMode = .intervals}) {
+    _mode = initialMode;
+    return _reload();
+  }
 
   void setMode(HistoryMode mode) {
     if (mode == _mode) return;
@@ -61,12 +64,13 @@ class HistoryCubit extends Cubit<HistoryState> {
 
     final headerResult = await _repository.header(from, to);
     if (isClosed) return;
-    final header = headerResult.valueOrNull;
-    if (header == null) {
-      emit(HistoryState.error(headerResult.errorOrNull!));
-      return;
-    }
+    headerResult.map(
+      success: (header) => subscribeByMode(from, to, header),
+      failure: (error) => emit(HistoryState.error(error)),
+    );
+  }
 
+  void subscribeByMode(DateTime from, DateTime to, HistoryHeaderEntity header) {
     switch (_mode) {
       case HistoryMode.intervals:
         _sub = _repository
@@ -104,6 +108,21 @@ class HistoryCubit extends Cubit<HistoryState> {
         emit(
           HistoryState.loaded(mode: _mode, period: _period, anchor: _anchor, header: header),
         );
+      case HistoryMode.water:
+        _sub = _repository
+            .watchWaterLogs(from, to)
+            .listen(
+              (items) => emit(
+                HistoryState.loaded(
+                  mode: _mode,
+                  period: _period,
+                  anchor: _anchor,
+                  header: header,
+                  waterLogs: items,
+                ),
+              ),
+              onError: (Object e) => logger.e('history water logs stream error', error: e),
+            );
     }
   }
 
