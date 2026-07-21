@@ -37,6 +37,9 @@ class AppSettingsCubit extends Cubit<AppSettingsState> {
   Future<void> setGridSize({required int columns, required int rows}) =>
       _save(state.settings.copyWith(columnCount: columns, rowCount: rows));
 
+  Future<void> setRowCountAdaptive({required bool adaptive}) =>
+      _save(state.settings.copyWith(rowCountAdaptive: adaptive));
+
   Future<void> setName(String name) => _save(state.settings.copyWith(name: name));
 
   Future<void> setNotificationsEnabled({required bool enabled}) =>

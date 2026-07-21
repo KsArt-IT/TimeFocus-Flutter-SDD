@@ -11,6 +11,7 @@ abstract class UserSettingsEntity with _$UserSettingsEntity {
     @Default('') String name,
     @Default(AppConstants.defaultGridColumns) int columnCount,
     @Default(AppConstants.defaultGridRows) int rowCount,
+    @Default(true) bool rowCountAdaptive,
     @Default(AppThemeMode.system) AppThemeMode themeMode,
     @Default('system') String language,
     @Default(true) bool notificationsEnabled,

@@ -102,6 +102,13 @@ class SystemSettingsPage extends StatelessWidget {
                   },
                 ),
               ),
+              SwitchListTile(
+                contentPadding: EdgeInsets.zero,
+                title: Text(l10n.rowCountAdaptive),
+                subtitle: Text(l10n.rowCountAdaptiveDescription),
+                value: settings.rowCountAdaptive,
+                onChanged: (v) => cubit.setRowCountAdaptive(adaptive: v),
+              ),
             ],
           );
         },

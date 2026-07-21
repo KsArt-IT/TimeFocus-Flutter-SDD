@@ -23,6 +23,7 @@ class UserSettings extends Table {
   IntColumn get columnCount =>
       integer().withDefault(const Constant(AppConstants.defaultGridColumns))();
   IntColumn get rowCount => integer().withDefault(const Constant(AppConstants.defaultGridRows))();
+  BoolColumn get rowCountAdaptive => boolean().withDefault(const Constant(true))();
   IntColumn get themeMode => integer().withDefault(const Constant(2))();
   TextColumn get language => text().withDefault(const Constant('system'))();
   BoolColumn get notificationsEnabled => boolean().withDefault(const Constant(true))();

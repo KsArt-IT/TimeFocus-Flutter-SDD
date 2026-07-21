@@ -13,14 +13,16 @@ class ActionGrid extends StatelessWidget {
   const ActionGrid({
     required this.actions,
     required this.columns,
-    required this.maxRowCount,
+    required this.rows,
+    required this.isRowsAdaptive,
     required this.isGroup,
     super.key,
   });
 
   final List<ActionNameEntity> actions;
   final int columns;
-  final int maxRowCount;
+  final int rows;
+  final bool isRowsAdaptive;
   final bool isGroup;
 
   static const double _spacing = AppDimens.inset2x;
@@ -37,7 +39,7 @@ class ActionGrid extends StatelessWidget {
     final itemCount = isGroup ? actions.length + 1 : actions.length;
 
     final totalRows = (itemCount / columns).ceil();
-    final visibleRows = totalRows > maxRowCount ? maxRowCount : totalRows;
+    final visibleRows = isRowsAdaptive ? (totalRows > rows ? rows : totalRows) : rows;
 
     final totalHeight =
         AppConstants.actionItemHeight * visibleRows +
@@ -51,9 +53,9 @@ class ActionGrid extends StatelessWidget {
       height: totalHeight,
       child: GridView.builder(
         padding: _gridPadding,
-        physics: totalRows <= maxRowCount
-            ? const NeverScrollableScrollPhysics()
-            : const AlwaysScrollableScrollPhysics(),
+        physics: totalRows > visibleRows
+            ? const AlwaysScrollableScrollPhysics()
+            : const NeverScrollableScrollPhysics(),
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: columns,
           crossAxisSpacing: _spacing,

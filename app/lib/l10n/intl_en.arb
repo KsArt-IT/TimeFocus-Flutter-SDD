@@ -54,13 +54,21 @@
   "@actionView": {
     "description": "Action view"
   },
+  "columnCount": "Column count",
+  "@columnCount": {
+    "description": "Column count"
+  },
   "rowCount": "Row count",
   "@rowCount": {
     "description": "Row count"
   },
-  "columnCount": "Column count",
-  "@columnCount": {
-    "description": "Column count"
+  "rowCountAdaptive": "Adaptive row count",
+  "@rowCountAdaptive": {
+    "description": "Adaptive row count"
+  },
+  "rowCountAdaptiveDescription": "Shrink the grid to fit the actual number of activities",
+  "@rowCountAdaptiveDescription": {
+    "description": "Adaptive row count explanation"
   },
   "buttonsSections": "---",
   "ok": "OK",

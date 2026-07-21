@@ -47,13 +47,15 @@ class TrackerPage extends StatelessWidget {
             BlocBuilder<AppSettingsCubit, AppSettingsState>(
               buildWhen: (p, c) =>
                   p.settings.columnCount != c.settings.columnCount ||
-                  p.settings.rowCount != c.settings.rowCount,
+                  p.settings.rowCount != c.settings.rowCount ||
+                  p.settings.rowCountAdaptive != c.settings.rowCountAdaptive,
               builder: (context, state) => grid.isEmpty && currentGroupId == null
                   ? ActionEmpty(icon: Icons.grid_view_outlined, label: l10n.allActions)
                   : ActionGrid(
                       actions: grid,
                       columns: state.settings.columnCount,
-                      maxRowCount: state.settings.rowCount,
+                      rows: state.settings.rowCount,
+                      isRowsAdaptive: state.settings.rowCountAdaptive,
                       isGroup: currentGroupId != null,
                     ),
             ),
