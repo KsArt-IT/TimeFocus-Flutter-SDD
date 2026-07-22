@@ -94,7 +94,7 @@ class NotificationSchedulerImpl with SafeCallMixin implements NotificationSchedu
     final runningResult = await _runnings.currentRunning();
     final running = runningResult.valueOrNull ?? const [];
     return running.any(
-      (r) => r.status == ActionStatus.active && SystemActionKeys.muting.contains(r.action.name),
+      (r) => r.status == ActionStatus.active && SystemAction.muting.contains(r.action.name),
     );
   }
 

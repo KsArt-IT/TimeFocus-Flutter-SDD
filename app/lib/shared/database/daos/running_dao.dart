@@ -27,22 +27,6 @@ class RunningDao extends DatabaseAccessor<AppDatabase> with _$RunningDaoMixin {
     );
   }
 
-  /// Highest hudPriority among currently active running activities
-  /// (Sleep=1, Sport=2, Meal=3, Toilet=4), or null when nothing is running.
-  Stream<int?> watchActiveHudPriority() {
-    final query = select(actionRunnings).join([
-      innerJoin(actionNames, actionNames.id.equalsExp(actionRunnings.actionNameId)),
-    ])..where(actionRunnings.status.equals(ActionStatus.active.index));
-    return query.watch().map((rows) {
-      int? max;
-      for (final row in rows) {
-        final priority = row.readTable(actionNames).hudPriority;
-        if (priority != null && (max == null || priority > max)) max = priority;
-      }
-      return max;
-    });
-  }
-
   Future<ActionRunningModel?> getById(int id) =>
       (select(actionRunnings)..where((t) => t.id.equals(id))).getSingleOrNull();
 

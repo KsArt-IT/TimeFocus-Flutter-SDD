@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:timefocus/core/constants/system_actions.dart';
 import 'package:timefocus/shared/database/app_database.dart';
 import 'package:timefocus/shared/enums/action_mode.dart';
+import 'package:timefocus/shared/enums/schedule_event_type.dart';
 
 void main() {
   late AppDatabase db;
@@ -15,29 +16,25 @@ void main() {
     await db.close();
   });
 
-  test('onCreate seeds 12 system activities with hud priorities', () async {
+  test('onCreate seeds 12 system activities', () async {
     final actions = await db.select(db.actionNames).get();
     expect(actions.length, 12);
     expect(actions.every((a) => a.isSystem), isTrue);
-    expect(actions.map((a) => a.name).toSet(), SystemActionKeys.values.map((e) => e.name).toSet());
+    expect(actions.map((a) => a.name).toSet(), SystemAction.values.map((e) => e.name).toSet());
 
-    ActionNameModel byName(SystemActionKeys action) => actions.singleWhere(
+    ActionNameModel byName(SystemAction action) => actions.singleWhere(
       (a) => a.name == action.name,
     );
-    expect(byName(SystemActionKeys.toilet).hudPriority, 4);
-    expect(byName(SystemActionKeys.meal).hudPriority, 3);
-    expect(byName(SystemActionKeys.sport).hudPriority, 2);
-    expect(byName(SystemActionKeys.sleep).hudPriority, 1);
 
-    final work = byName(SystemActionKeys.work);
-    final breakAction = byName(SystemActionKeys.breakFor);
+    final work = byName(SystemAction.work);
+    final breakAction = byName(SystemAction.breakFor);
     expect(work.mode, ActionMode.pomodoro.index);
     expect(work.breakActionId, breakAction.id);
     expect(breakAction.mode, ActionMode.breakFor.index);
 
-    expect(byName(SystemActionKeys.toilet).pauseOthers, isTrue);
-    expect(byName(SystemActionKeys.meal).pauseOthers, isTrue);
-    expect(byName(SystemActionKeys.toilet).defaultDurationSec, 180);
+    expect(byName(SystemAction.toilet).pauseOthers, isTrue);
+    expect(byName(SystemAction.meal).pauseOthers, isTrue);
+    expect(byName(SystemAction.toilet).defaultDurationSec, 180);
   });
 
   test('onCreate seeds 5 drink quick buttons', () async {
@@ -72,12 +69,14 @@ void main() {
   test('onCreate seeds weekday and weekend schedules', () async {
     final weekday = await db.scheduleDao.eventsForDay(0);
     final weekend = await db.scheduleDao.eventsForDay(1);
-    expect(weekday.length, 5);
-    expect(weekend.length, 5);
-    // wakeUp and sleep — exactly one per set.
-    expect(weekday.where((e) => e.type == 0).length, 1);
-    expect(weekday.where((e) => e.type == 4).length, 1);
-    expect(weekend.where((e) => e.type == 0).length, 1);
-    expect(weekend.where((e) => e.type == 4).length, 1);
+    expect(weekday.length, 6);
+    expect(weekend.length, 6);
+    // wakeUp, warmup and sleep — exactly one per set.
+    expect(weekday.where((e) => e.type == ScheduleEventType.wakeUp.name).length, 1);
+    expect(weekday.where((e) => e.type == ScheduleEventType.warmup.name).length, 1);
+    expect(weekday.where((e) => e.type == ScheduleEventType.sleep.name).length, 1);
+    expect(weekend.where((e) => e.type == ScheduleEventType.wakeUp.name).length, 1);
+    expect(weekend.where((e) => e.type == ScheduleEventType.warmup.name).length, 1);
+    expect(weekend.where((e) => e.type == ScheduleEventType.sleep.name).length, 1);
   });
 }

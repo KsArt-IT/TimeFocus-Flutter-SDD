@@ -1,12 +1,26 @@
-/// Type of a day schedule event.
+import 'package:timefocus/core/constants/system_actions.dart';
+
+/// Type of a day schedule event. Persisted in the DB by name
+/// (`schedule_events.type`), not index — free to reorder.
 enum ScheduleEventType {
-  wakeUp,
+  custom,
+  prayer,
+  medicine,
   meal,
   work,
   sport,
+  warmup,
+  breakFor,
+  rest,
+  walk,
+  meditation,
+  wakeUp,
   sleep,
-  custom;
+  ;
 
-  factory ScheduleEventType.fromIndex(int index) =>
-      ScheduleEventType.values.asMap()[index] ?? ScheduleEventType.custom;
+  static ScheduleEventType fromName(String n) =>
+      ScheduleEventType.values.asNameMap()[n] ?? ScheduleEventType.custom;
+
+  /// The system action this event type represents, or null for `wakeUp`/`custom`.
+  SystemAction? get systemAction => SystemAction.fromName(name);
 }

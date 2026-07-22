@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
-
 import 'package:timefocus/core/errors/app_failure.dart';
 import 'package:timefocus/core/utils/app_logger.dart';
 import 'package:timefocus/features/tracker/domain/entities/action_name_entity.dart';
@@ -35,6 +34,7 @@ class ActionBloc extends Bloc<ActionEvent, ActionState> {
     on<ActionsSubscribed>(_onSubscribed, transformer: restartable());
     on<ActionGroupOpened>(_onGroupOpened, transformer: restartable());
     on<ActionStarted>(_onStarted, transformer: droppable());
+    on<ActionStartSystemAction>(_onStartSystemAction, transformer: droppable());
     on<ActionStartConfirmed>(_onStartConfirmed, transformer: droppable());
     on<ActionStartCancelled>(_onStartCancelled);
     on<ActionPaused>(_onPaused, transformer: droppable());
@@ -118,6 +118,19 @@ class ActionBloc extends Bloc<ActionEvent, ActionState> {
 
   Future<void> _onStarted(ActionStarted event, Emitter<ActionState> emit) =>
       _start(event.actionNameId, source: event.source, confirmed: false, emit: emit);
+
+  Future<void> _onStartSystemAction(
+    ActionStartSystemAction event,
+    Emitter<ActionState> emit,
+  ) async {
+    final result = await _actionRepository.getBySystemName(
+      event.systemAction.name,
+    );
+    result.map(
+      success: (action) => add(ActionEvent.started(action.id)),
+      failure: (e) => _emitFailure(e, emit),
+    );
+  }
 
   Future<void> _onStartConfirmed(ActionStartConfirmed event, Emitter<ActionState> emit) =>
       _start(event.actionNameId, source: ActionStartSource.user, confirmed: true, emit: emit);

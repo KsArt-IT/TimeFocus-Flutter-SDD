@@ -39,7 +39,7 @@ class _HudPanelContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final contextType = state.context;
+    final queue = state.contextQueue;
 
     return Padding(
       padding: const .symmetric(horizontal: AppDimens.inset3x, vertical: AppDimens.inset1x),
@@ -49,15 +49,31 @@ class _HudPanelContent extends StatelessWidget {
           const SizedBox(width: 8),
           _GlassButton(pulsing: state.glassBlinking),
           SizedBox(
-            width: AppConstants.minTapTargetDp,
             height: AppConstants.minTapTargetDp,
-            child: contextType == .empty
+            width: AppConstants.minTapTargetDp * (queue.isEmpty ? 1 : queue.length.clamp(1, 3)),
+            child: queue.isEmpty
                 ? Icon(
                     Icons.notifications_none_rounded,
                     size: AppDimens.iconSize,
                     color: theme.colorScheme.primary.withValues(alpha: 0.2),
                   )
-                : HudContextIcon(contextType: contextType, pulsing: state.contextPulsing),
+                : ListView.separated(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: queue.length,
+                    separatorBuilder: (_, _) => const SizedBox(width: AppDimens.inset1x),
+                    itemBuilder: (context, i) {
+                      final item = queue[i];
+                      return Dismissible(
+                        key: ValueKey(item.id),
+                        direction: DismissDirection.up,
+                        onDismissed: (_) => context.read<HudCubit>().dismissQueueItem(item.id),
+                        child: SizedBox(
+                          width: AppConstants.minTapTargetDp,
+                          child: HudContextIcon(item: item),
+                        ),
+                      );
+                    },
+                  ),
           ),
         ],
       ),

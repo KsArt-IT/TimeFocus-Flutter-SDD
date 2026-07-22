@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-
+import 'package:timefocus/core/constants/system_actions.dart';
 import 'package:timefocus/features/tracker/domain/usecases/start_action_usecase.dart';
 
 part 'action_event.freezed.dart';
@@ -16,6 +16,10 @@ sealed class ActionEvent with _$ActionEvent {
     int actionNameId, {
     @Default(ActionStartSource.user) ActionStartSource source,
   }) = ActionStarted;
+
+  const factory ActionEvent.startSystemAction(
+    SystemAction systemAction,
+  ) = ActionStartSystemAction;
 
   /// Confirmation of interrupting the current Pomodoro (FR-011).
   const factory ActionEvent.startConfirmed(int actionNameId) = ActionStartConfirmed;

@@ -1,7 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'package:timefocus/core/errors/app_failure.dart';
-import 'package:timefocus/shared/enums/hud_context_type.dart';
+import 'package:timefocus/features/water/domain/entities/hud_queue_item_entity.dart';
 
 part 'hud_state.freezed.dart';
 
@@ -13,8 +13,7 @@ sealed class HudState with _$HudState {
     required int currentMl,
     required int goalMl,
     required int expectedByNowMl,
-    required HudContextType context,
-    @Default(false) bool contextPulsing,
+    @Default(<HudQueueItemEntity>[]) List<HudQueueItemEntity> contextQueue,
     @Default(false) bool glassBlinking,
   }) = HudLoaded;
 

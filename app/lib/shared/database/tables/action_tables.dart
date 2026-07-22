@@ -14,10 +14,15 @@ class ActionNames extends Table {
   IntColumn get mode => integer().withDefault(const Constant(0))();
   IntColumn get pomodoroType => integer().nullable()();
   IntColumn get breakActionId => integer().nullable().references(ActionNames, #id)();
+
+  /// true = при старте останавливает текущую pomodoro-активность
   BoolColumn get pauseOthers => boolean().withDefault(const Constant(false))();
+
+  /// Дефолтная длительность в секундах (туалет=180, спорт=1800)
   IntColumn get defaultDurationSec => integer().nullable()();
+
+  /// true = системная активность, нельзя удалить
   BoolColumn get isSystem => boolean().withDefault(const Constant(false))();
-  IntColumn get hudPriority => integer().nullable()();
   BoolColumn get archived => boolean().withDefault(const Constant(false))();
 }
 

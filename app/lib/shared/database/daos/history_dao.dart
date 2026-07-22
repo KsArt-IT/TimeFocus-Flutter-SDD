@@ -41,7 +41,7 @@ class HistoryDao extends DatabaseAccessor<AppDatabase> with _$HistoryDaoMixin {
         actionHistoryIntervals.finishedAt.unixepoch - actionHistoryIntervals.startedAt.unixepoch;
     final total = diff.sum();
     final isSleep =
-        actionNames.isSystem.equals(true) & actionNames.name.equals(SystemActionKeys.sleep.name);
+        actionNames.isSystem.equals(true) & actionNames.name.equals(SystemAction.sleep.name);
     final query =
         selectOnly(actionHistoryIntervals).join([
             innerJoin(

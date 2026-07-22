@@ -48,10 +48,6 @@ abstract interface class WaterRepository {
   /// Inserts a log entry and updates lastDrankAt.
   Future<Result<void>> log(int volume, DateTime now);
 
-  /// Highest hudPriority among currently active running activities
-  /// (Sleep=1, Sport=2, Meal=3, Toilet=4), or null when nothing is running.
-  Stream<int?> watchActiveHudPriority();
-
   /// wakeUp/sleep/meal anchors for [dayType] (used for the HUD norm-by-now
   /// interpolation and scheduled water reminders).
   Future<Result<DayScheduleTimesEntity>> dayScheduleTimes(DayType dayType);

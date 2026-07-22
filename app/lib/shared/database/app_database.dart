@@ -1,11 +1,11 @@
 import 'package:drift/drift.dart';
 import 'package:drift_flutter/drift_flutter.dart';
 import 'package:injectable/injectable.dart';
-
 import 'package:timefocus/core/constants/app_constants.dart';
 import 'package:timefocus/core/constants/system_actions.dart';
 import 'package:timefocus/shared/database/daos/action_dao.dart';
 import 'package:timefocus/shared/database/daos/history_dao.dart';
+import 'package:timefocus/shared/database/daos/hud_queue_dao.dart';
 import 'package:timefocus/shared/database/daos/notification_dao.dart';
 import 'package:timefocus/shared/database/daos/pomodoro_dao.dart';
 import 'package:timefocus/shared/database/daos/running_dao.dart';
@@ -14,6 +14,7 @@ import 'package:timefocus/shared/database/daos/settings_dao.dart';
 import 'package:timefocus/shared/database/daos/water_dao.dart';
 import 'package:timefocus/shared/database/tables/action_tables.dart';
 import 'package:timefocus/shared/database/tables/app_tables.dart';
+import 'package:timefocus/shared/database/tables/hud_tables.dart';
 import 'package:timefocus/shared/database/tables/pomodoro_tables.dart';
 import 'package:timefocus/shared/database/tables/schedule_tables.dart';
 import 'package:timefocus/shared/database/tables/water_tables.dart';
@@ -38,6 +39,7 @@ part 'app_database.g.dart';
     WaterQuickButtons,
     WaterLogs,
     DailyWaterGoals,
+    HudQueueItems,
     ScheduleEvents,
     Notifications,
     UserSettings,
@@ -48,6 +50,7 @@ part 'app_database.g.dart';
     HistoryDao,
     PomodoroDao,
     WaterDao,
+    HudQueueDao,
     ScheduleDao,
     NotificationDao,
     SettingsDao,
@@ -59,18 +62,13 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase.forTesting(super.e);
 
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => 3;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
     onCreate: (m) async {
       await m.createAll();
       await _seed();
-    },
-    onUpgrade: (m, from, to) async {
-      if (from < 2) {
-        await m.addColumn(userSettings, userSettings.rowCountAdaptive);
-      }
     },
     beforeOpen: (details) async {
       await customStatement('PRAGMA foreign_keys = ON');
@@ -81,9 +79,9 @@ class AppDatabase extends _$AppDatabase {
     await transaction(() async {
       final breakId = await into(actionNames).insert(
         ActionNamesCompanion.insert(
-          name: SystemActionKeys.breakFor.name,
+          name: SystemAction.breakFor.name,
           color: 0xFF7FB069,
-          icon: 0xf4b8,
+          icon: SystemAction.breakFor.icon.data.codePoint,
           mode: Value(ActionMode.breakFor.index),
           isSystem: const Value(true),
           sortOrder: const Value(1),
@@ -91,9 +89,9 @@ class AppDatabase extends _$AppDatabase {
       );
       final seedActions = <ActionNamesCompanion>[
         ActionNamesCompanion.insert(
-          name: SystemActionKeys.work.name,
+          name: SystemAction.work.name,
           color: 0xFF4A6FA5,
-          icon: 0xf0b1,
+          icon: SystemAction.work.icon.data.codePoint,
           mode: Value(ActionMode.pomodoro.index),
           pomodoroType: Value(PomodoroType.normal.index),
           breakActionId: Value(breakId),
@@ -101,85 +99,81 @@ class AppDatabase extends _$AppDatabase {
           sortOrder: const Value(0),
         ),
         ActionNamesCompanion.insert(
-          name: SystemActionKeys.rest.name,
+          name: SystemAction.rest.name,
           color: 0xFF9B8AC4,
-          icon: 0xf880,
+          icon: SystemAction.rest.icon.data.codePoint,
           isSystem: const Value(true),
           sortOrder: const Value(2),
         ),
         ActionNamesCompanion.insert(
-          name: SystemActionKeys.sleep.name,
-          color: 0xFF5C6BC0,
-          icon: 0xf236,
+          name: SystemAction.warmup.name,
+          color: 0xFFE6A23C,
+          icon: SystemAction.warmup.icon.data.codePoint,
+          pauseOthers: const Value(true),
+          defaultDurationSec: const Value(300),
           isSystem: const Value(true),
-          hudPriority: const Value(1),
           sortOrder: const Value(3),
         ),
         ActionNamesCompanion.insert(
-          name: SystemActionKeys.toilet.name,
+          name: SystemAction.toilet.name,
           color: 0xFF8D9CA3,
-          icon: 0xf7d8,
+          icon: SystemAction.toilet.icon.data.codePoint,
           pauseOthers: const Value(true),
           defaultDurationSec: const Value(180),
           isSystem: const Value(true),
-          hudPriority: const Value(4),
           sortOrder: const Value(4),
         ),
         ActionNamesCompanion.insert(
-          name: SystemActionKeys.meal.name,
+          name: SystemAction.meal.name,
           color: 0xFFE0885A,
-          icon: 0xf2e7,
+          icon: SystemAction.meal.icon.data.codePoint,
           pauseOthers: const Value(true),
           defaultDurationSec: const Value(1200),
           isSystem: const Value(true),
-          hudPriority: const Value(3),
           sortOrder: const Value(5),
         ),
         ActionNamesCompanion.insert(
-          name: SystemActionKeys.sport.name,
+          name: SystemAction.sport.name,
           color: 0xFFD1495B,
-          icon: 0xf44b,
+          icon: SystemAction.sport.icon.data.codePoint,
           pauseOthers: const Value(true),
           defaultDurationSec: const Value(1800),
           isSystem: const Value(true),
-          hudPriority: const Value(2),
           sortOrder: const Value(6),
         ),
         ActionNamesCompanion.insert(
-          name: SystemActionKeys.warmup.name,
-          color: 0xFFE6A23C,
-          icon: 0xf70c,
-          pauseOthers: const Value(true),
-          defaultDurationSec: const Value(300),
+          name: SystemAction.walk.name,
+          color: 0xFF56A3A6,
+          icon: SystemAction.walk.icon.data.codePoint,
           isSystem: const Value(true),
           sortOrder: const Value(7),
         ),
         ActionNamesCompanion.insert(
-          name: SystemActionKeys.walk.name,
-          color: 0xFF56A3A6,
-          icon: 0xf554,
+          name: SystemAction.meditation.name,
+          color: 0xFF7E57C2,
+          icon: SystemAction.meditation.icon.data.codePoint,
           isSystem: const Value(true),
           sortOrder: const Value(8),
         ),
         ActionNamesCompanion.insert(
-          name: SystemActionKeys.meditation.name,
-          color: 0xFF7E57C2,
-          icon: 0xf5bb,
+          name: SystemAction.prayer.name,
+          color: 0xFFB08968,
+          icon: SystemAction.prayer.icon.data.codePoint,
           isSystem: const Value(true),
           sortOrder: const Value(9),
         ),
         ActionNamesCompanion.insert(
-          name: SystemActionKeys.prayer.name,
-          color: 0xFFB08968,
-          icon: 0xf684,
+          name: SystemAction.medicine.name,
+          color: 0xFF66BB6A,
+          icon: SystemAction.medicine.icon.data.codePoint,
+          defaultDurationSec: const Value(120),
           isSystem: const Value(true),
           sortOrder: const Value(10),
         ),
         ActionNamesCompanion.insert(
-          name: SystemActionKeys.medicine.name,
-          color: 0xFF66BB6A,
-          icon: 0xf484,
-          defaultDurationSec: const Value(120),
+          name: SystemAction.sleep.name,
+          color: 0xFF5C6BC0,
+          icon: SystemAction.sleep.icon.data.codePoint,
           isSystem: const Value(true),
           sortOrder: const Value(11),
         ),
@@ -216,20 +210,23 @@ class AppDatabase extends _$AppDatabase {
       const weekend = 1;
       const schedule = [
         (day: weekday, type: ScheduleEventType.wakeUp, slot: null, time: 7 * 60),
+        (day: weekday, type: ScheduleEventType.warmup, slot: null, time: 7 * 60 + 10),
         (day: weekday, type: ScheduleEventType.meal, slot: MealSlot.breakfast, time: 8 * 60),
-        (day: weekday, type: ScheduleEventType.meal, slot: MealSlot.lunch, time: 13 * 60),
-        (day: weekday, type: ScheduleEventType.meal, slot: MealSlot.dinner, time: 19 * 60),
+        (day: weekday, type: ScheduleEventType.meal, slot: MealSlot.lunch, time: 12 * 60),
+        (day: weekday, type: ScheduleEventType.meal, slot: MealSlot.dinner, time: 18 * 60),
         (day: weekday, type: ScheduleEventType.sleep, slot: null, time: 23 * 60),
-        (day: weekend, type: ScheduleEventType.wakeUp, slot: null, time: 9 * 60),
-        (day: weekend, type: ScheduleEventType.meal, slot: MealSlot.breakfast, time: 9 * 60 + 30),
-        (day: weekend, type: ScheduleEventType.meal, slot: MealSlot.lunch, time: 14 * 60),
-        (day: weekend, type: ScheduleEventType.meal, slot: MealSlot.dinner, time: 19 * 60),
+
+        (day: weekend, type: ScheduleEventType.wakeUp, slot: null, time: 8 * 60),
+        (day: weekend, type: ScheduleEventType.warmup, slot: null, time: 8 * 60 + 10),
+        (day: weekend, type: ScheduleEventType.meal, slot: MealSlot.breakfast, time: 9 * 60),
+        (day: weekend, type: ScheduleEventType.meal, slot: MealSlot.lunch, time: 13 * 60),
+        (day: weekend, type: ScheduleEventType.meal, slot: MealSlot.dinner, time: 18 * 60),
         (day: weekend, type: ScheduleEventType.sleep, slot: null, time: 23 * 60 + 30),
       ];
       for (final (i, e) in schedule.indexed) {
         await into(scheduleEvents).insert(
           ScheduleEventsCompanion.insert(
-            type: e.type.index,
+            type: e.type.name,
             mealSubtype: Value(e.slot?.index),
             timeMinutes: e.time,
             dayType: Value(e.day),

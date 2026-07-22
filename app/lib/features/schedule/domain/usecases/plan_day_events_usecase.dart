@@ -58,10 +58,7 @@ class PlanDayEventsUseCase {
               at: eventAt.subtract(const Duration(minutes: AppConstants.sleepReminderMinutes)),
             ),
           );
-        case ScheduleEventType.wakeUp:
-        case ScheduleEventType.work:
-        case ScheduleEventType.sport:
-        case ScheduleEventType.custom:
+        default:
           break;
       }
     }

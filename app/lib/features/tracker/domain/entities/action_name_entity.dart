@@ -23,7 +23,6 @@ abstract class ActionNameEntity with _$ActionNameEntity {
     @Default(false) bool pauseOthers,
     int? defaultDurationSec,
     @Default(false) bool isSystem,
-    int? hudPriority,
     @Default(false) bool archived,
   }) = _ActionNameEntity;
 }

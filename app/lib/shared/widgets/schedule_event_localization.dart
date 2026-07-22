@@ -10,14 +10,8 @@ extension ScheduleEventL10n on ScheduleEventEntity {
     if (type == ScheduleEventType.meal && mealSubtype != null) {
       return mealSubtype!.localizedName(l10n);
     }
-    return switch (type) {
-      ScheduleEventType.wakeUp => l10n.scheduleEventWakeUp,
-      ScheduleEventType.meal => l10n.scheduleEventMeal,
-      ScheduleEventType.work => l10n.scheduleEventWork,
-      ScheduleEventType.sport => l10n.scheduleEventSport,
-      ScheduleEventType.sleep => l10n.scheduleEventSleep,
-      ScheduleEventType.custom => l10n.scheduleEventCustom,
-    };
+    return type.systemAction?.label(l10n) ??
+        (type == ScheduleEventType.wakeUp ? l10n.scheduleEventWakeUp : l10n.scheduleEventCustom);
   }
 }
 

@@ -24,7 +24,6 @@ extension ActionNameModelMapper on ActionNameModel {
     pauseOthers: pauseOthers,
     defaultDurationSec: defaultDurationSec,
     isSystem: isSystem,
-    hudPriority: hudPriority,
     archived: archived,
   );
 }
@@ -45,7 +44,6 @@ extension ActionNameEntityMapper on ActionNameEntity {
     pauseOthers: Value(pauseOthers),
     defaultDurationSec: Value(defaultDurationSec),
     isSystem: Value(isSystem),
-    hudPriority: Value(hudPriority),
     archived: Value(archived),
   );
 }

@@ -14,7 +14,7 @@ abstract final class AppTheme {
     final scheme = ColorScheme.fromSeed(
       seedColor: _seed,
       brightness: brightness,
-      tertiary: Colors.lightBlue[brightness == .dark ? 900: 200],
+      tertiary: Colors.lightBlue[brightness == .dark ? 900 : 200],
     );
     return ThemeData(
       useMaterial3: true,

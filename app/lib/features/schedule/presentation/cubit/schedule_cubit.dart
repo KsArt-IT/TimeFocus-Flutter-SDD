@@ -154,6 +154,7 @@ class ScheduleCubit extends Cubit<ScheduleState> {
       ScheduleEventType.sport => 0xFFD1495B,
       ScheduleEventType.sleep => 0xFF5C6BC0,
       ScheduleEventType.custom => 0xFF8D9CA3,
+      _ => 0xFF8D9CA3,
     },
     event: event,
   );

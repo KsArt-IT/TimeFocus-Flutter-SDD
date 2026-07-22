@@ -9,7 +9,7 @@ import 'package:timefocus/shared/enums/schedule_event_type.dart';
 extension ScheduleEventModelMapper on ScheduleEventModel {
   ScheduleEventEntity toEntity(DayType resolvedDayType) => ScheduleEventEntity(
     id: id,
-    type: ScheduleEventType.fromIndex(type),
+    type: ScheduleEventType.fromName(type),
     mealSubtype: mealSubtype == null ? null : MealSlot.fromIndex(mealSubtype!),
     timeMinutes: timeMinutes,
     durationMinutes: durationMinutes,
@@ -25,7 +25,7 @@ extension ScheduleEventModelMapper on ScheduleEventModel {
 extension ScheduleEventEntityMapper on ScheduleEventEntity {
   ScheduleEventsCompanion toCompanion({bool includeId = true}) => ScheduleEventsCompanion(
     id: includeId && id != 0 ? Value(id) : const Value.absent(),
-    type: Value(type.index),
+    type: Value(type.name),
     mealSubtype: Value(mealSubtype?.index),
     timeMinutes: Value(timeMinutes),
     durationMinutes: Value(durationMinutes),

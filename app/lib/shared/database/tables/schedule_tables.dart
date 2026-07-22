@@ -7,7 +7,7 @@ import 'package:timefocus/shared/database/tables/action_tables.dart';
 @DataClassName('ScheduleEventModel')
 class ScheduleEvents extends Table {
   IntColumn get id => integer().autoIncrement()();
-  IntColumn get type => integer()();
+  TextColumn get type => text()();
   IntColumn get mealSubtype => integer().nullable()();
   IntColumn get timeMinutes => integer()();
   IntColumn get durationMinutes =>

@@ -60,7 +60,7 @@ class RootBlocListener extends StatelessWidget {
 
   static bool _isMuted(ActionState state) => state.maybeMap(
     loaded: (s) => s.running.any(
-      (r) => r.status == ActionStatus.active && SystemActionKeys.muting.contains(r.action.name),
+      (r) => r.status == ActionStatus.active && SystemAction.muting.contains(r.action.name),
     ),
     orElse: () => false,
   );

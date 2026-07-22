@@ -11,22 +11,8 @@ extension ActionNameL10n on ActionNameEntity {
 
 /// Same rule as [ActionNameL10n.localizedName], for call sites that only
 /// carry the raw (name, isSystem) pair — e.g. History's joined DAO rows.
-String localizedActionName(AppLocalizations l10n, {required String name, required bool isSystem}) {
-  if (!isSystem) return name;
-
-  return switch (SystemActionKeys.fromName(name)) {
-    .work => l10n.systemActionWork,
-    .breakFor => l10n.systemActionBreak,
-    .rest => l10n.systemActionRest,
-    .sleep => l10n.systemActionSleep,
-    .toilet => l10n.systemActionToilet,
-    .meal => l10n.systemActionMeal,
-    .sport => l10n.systemActionSport,
-    .warmup => l10n.systemActionWarmup,
-    .walk => l10n.systemActionWalk,
-    .meditation => l10n.systemActionMeditation,
-    .prayer => l10n.systemActionPrayer,
-    .medicine => l10n.systemActionMedicine,
-    _ => name,
-  };
-}
+String localizedActionName(
+  AppLocalizations l10n, {
+  required String name,
+  required bool isSystem,
+}) => isSystem ? SystemAction.fromName(name)?.label(l10n) ?? name : name;

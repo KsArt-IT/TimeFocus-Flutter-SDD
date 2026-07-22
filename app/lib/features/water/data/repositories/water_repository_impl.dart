@@ -1,5 +1,6 @@
 import 'package:injectable/injectable.dart';
 
+import 'package:timefocus/core/constants/system_actions.dart';
 import 'package:timefocus/core/errors/app_failure.dart';
 import 'package:timefocus/core/errors/safe_call_mixin.dart';
 import 'package:timefocus/core/result/result.dart';
@@ -93,32 +94,32 @@ class WaterRepositoryImpl with SafeCallMixin implements WaterRepository {
   );
 
   @override
-  Stream<int?> watchActiveHudPriority() => _db.runningDao.watchActiveHudPriority();
-
-  @override
   Future<Result<DayScheduleTimesEntity>> dayScheduleTimes(DayType dayType) => safeCall(() async {
     final events = await _db.scheduleDao.eventsForDay(dayType.index);
     int? wakeUp;
     int? sleep;
     final meals = <int>[];
+    final systemActionTimes = <(SystemAction, int)>[];
     for (final e in events) {
-      switch (ScheduleEventType.fromIndex(e.type)) {
+      final type = ScheduleEventType.fromName(e.type);
+      switch (type) {
         case ScheduleEventType.wakeUp:
           wakeUp = e.timeMinutes;
         case ScheduleEventType.sleep:
           sleep = e.timeMinutes;
         case ScheduleEventType.meal:
           meals.add(e.timeMinutes);
-        case ScheduleEventType.work:
-        case ScheduleEventType.sport:
-        case ScheduleEventType.custom:
+        default:
           break;
       }
+      final action = type.systemAction;
+      if (action != null) systemActionTimes.add((action, e.timeMinutes));
     }
     return DayScheduleTimesEntity(
       wakeUpMinutes: wakeUp,
       sleepMinutes: sleep,
       mealTimesMinutes: meals,
+      systemActionTimes: systemActionTimes,
     );
   });
 }

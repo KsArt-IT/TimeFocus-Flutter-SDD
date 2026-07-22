@@ -195,14 +195,9 @@ class _EditEventFormState extends State<_EditEventForm> {
     Navigator.of(context).pop();
   }
 
-  String _typeLabel(AppLocalizations l10n, ScheduleEventType t) => switch (t) {
-    ScheduleEventType.wakeUp => l10n.scheduleEventWakeUp,
-    ScheduleEventType.meal => l10n.scheduleEventMeal,
-    ScheduleEventType.work => l10n.scheduleEventWork,
-    ScheduleEventType.sport => l10n.scheduleEventSport,
-    ScheduleEventType.sleep => l10n.scheduleEventSleep,
-    ScheduleEventType.custom => l10n.scheduleEventCustom,
-  };
+  String _typeLabel(AppLocalizations l10n, ScheduleEventType t) =>
+      t.systemAction?.label(l10n) ??
+      (t == ScheduleEventType.wakeUp ? l10n.scheduleEventWakeUp : l10n.scheduleEventCustom);
 
   String _formatMinutes(int minutes) =>
       '${(minutes ~/ 60).toString().padLeft(2, '0')}:${(minutes % 60).toString().padLeft(2, '0')}';
