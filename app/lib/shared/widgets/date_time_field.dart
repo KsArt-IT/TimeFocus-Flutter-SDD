@@ -71,7 +71,7 @@ class DateTimeField extends StatelessWidget {
               child: InkWell(
                 onTap: () => _pickTime(context),
                 child: Text(
-                  value.displayHM(),
+                  value.formatHM(),
                   style: textTheme.headlineSmall,
                   textAlign: .end,
                 ),

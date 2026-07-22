@@ -24,6 +24,11 @@ class HudQueueRepositoryImpl with SafeCallMixin implements HudQueueRepository {
   );
 
   @override
+  Future<Result<void>> raiseIfNew(SystemAction action, DateTime day) => voidSafeCall(
+    () => _db.hudQueueDao.insertIfAbsent(action.name, day, DateTime.now()),
+  );
+
+  @override
   Future<Result<void>> dismiss(int id) => voidSafeCall(() => _db.hudQueueDao.dismiss(id));
 
   @override

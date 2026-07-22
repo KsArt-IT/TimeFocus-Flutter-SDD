@@ -51,6 +51,34 @@ void main() {
     expect(active.single.dismissed, isFalse);
   });
 
+  test('insertIfAbsent inserts a new action', () async {
+    await db.hudQueueDao.insertIfAbsent(SystemAction.meal.name, today, now);
+
+    final active = await db.hudQueueDao.watchActive(today).first;
+    expect(active.length, 1);
+    expect(active.single.systemAction, SystemAction.meal.name);
+  });
+
+  test('insertIfAbsent never revives an action the user already dismissed', () async {
+    await db.hudQueueDao.upsert(SystemAction.meal.name, today, now);
+    final id = (await db.hudQueueDao.watchActive(today).first).single.id;
+    await db.hudQueueDao.dismiss(id);
+
+    // Simulates a repeated level-triggered check (ticker tick, app restart).
+    await db.hudQueueDao.insertIfAbsent(
+      SystemAction.meal.name,
+      today,
+      now.add(const Duration(minutes: 1)),
+    );
+    await db.hudQueueDao.insertIfAbsent(
+      SystemAction.meal.name,
+      today,
+      now.add(const Duration(minutes: 2)),
+    );
+
+    expect(await db.hudQueueDao.watchActive(today).first, isEmpty);
+  });
+
   test('watchActive is scoped to the given day', () async {
     await db.hudQueueDao.upsert(SystemAction.toilet.name, yesterday, now);
 

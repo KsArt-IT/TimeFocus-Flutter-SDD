@@ -62,12 +62,6 @@ class HudCubit extends Cubit<HudState> {
   bool _pomodoroActive = false;
   DayScheduleTimesEntity _scheduleTimes = const DayScheduleTimesEntity();
 
-  /// Schedule-triggered actions already raised today — guards
-  /// [_checkScheduledTriggers] (re-run every minute) from reviving an item
-  /// the user just dismissed or started.
-  final Set<SystemAction> _raisedScheduleActions = {};
-  DateTime? _raisedScheduleDay;
-
   List<WaterQuickButtonEntity> get quickButtons => _quickButtons;
 
   DateTime get _today {
@@ -113,20 +107,17 @@ class HudCubit extends Cubit<HudState> {
     _recompute();
   }
 
-  /// Raises each scheduled action once its time has passed today — guarded
-  /// by [_raisedScheduleActions] so the once-a-minute [_ticker] doesn't keep
-  /// reviving an item the user already dismissed or started.
+  /// Raises each scheduled action once its time has passed today — re-run on
+  /// every [_ticker] tick and again on every app restart, so it uses
+  /// [HudQueueRepository.raiseIfNew] (DB-backed, not just in-memory) to never
+  /// revive an item the user already dismissed or started.
   void _checkScheduledTriggers() {
     final today = _today;
-    if (_raisedScheduleDay != today) {
-      _raisedScheduleDay = today;
-      _raisedScheduleActions.clear();
-    }
     final now = DateTime.now();
     final nowMinutes = now.hour * 60 + now.minute;
     for (final (action, timeMinutes) in _scheduleTimes.systemActionTimes) {
-      if (nowMinutes >= timeMinutes && _raisedScheduleActions.add(action)) {
-        unawaited(_hudQueue.raise(action, today));
+      if (nowMinutes >= timeMinutes) {
+        unawaited(_hudQueue.raiseIfNew(action, today));
       }
     }
   }

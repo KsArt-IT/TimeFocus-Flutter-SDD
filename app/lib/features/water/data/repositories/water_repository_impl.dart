@@ -74,8 +74,22 @@ class WaterRepositoryImpl with SafeCallMixin implements WaterRepository {
       _db.waterDao.watchQuickButtons().map((rows) => rows.map((r) => r.toEntity()).toList());
 
   @override
+  Stream<List<WaterQuickButtonEntity>> watchAllQuickButtons() =>
+      _db.waterDao.watchAllQuickButtons().map((rows) => rows.map((r) => r.toEntity()).toList());
+
+  @override
   Future<Result<void>> saveQuickButton(WaterQuickButtonEntity button) => voidSafeCall(
     () => _db.waterDao.saveQuickButton(button.toCompanion()),
+  );
+
+  @override
+  Future<Result<void>> deleteQuickButton(int id) => voidSafeCall(
+    () => _db.waterDao.deleteQuickButton(id),
+  );
+
+  @override
+  Future<Result<void>> reorderQuickButtons(List<int> orderedIds) => voidSafeCall(
+    () => _db.waterDao.reorderQuickButtons(orderedIds),
   );
 
   @override

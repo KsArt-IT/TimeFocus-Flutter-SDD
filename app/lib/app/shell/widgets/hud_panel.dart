@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -8,6 +9,7 @@ import 'package:timefocus/app/shell/widgets/hud_context_icon.dart';
 import 'package:timefocus/core/constants/app_constants.dart';
 import 'package:timefocus/core/constants/app_dimens.dart';
 import 'package:timefocus/core/router/app_router.dart';
+import 'package:timefocus/core/utils/motion_utils.dart';
 import 'package:timefocus/features/water/domain/entities/water_quick_button_entity.dart';
 import 'package:timefocus/features/water/presentation/cubit/hud_cubit.dart';
 import 'package:timefocus/gen/app_localizations.dart';
@@ -187,15 +189,30 @@ class _WaterBar extends StatelessWidget {
   }
 }
 
-class _GlassButton extends StatelessWidget {
+class _GlassButton extends StatefulWidget {
   const _GlassButton({required this.pulsing});
 
   final bool pulsing;
 
   @override
+  State<_GlassButton> createState() => _GlassButtonState();
+}
+
+class _GlassButtonState extends State<_GlassButton> {
+  /// The quick button a tap should log — last one picked from the long-press
+  /// list, or the first available one. Not persisted: always resets to the
+  /// first quick button on app restart.
+  int? _selectedButtonId;
+
+  @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    final colorScheme = Theme.of(context).colorScheme;
     final cubit = context.read<HudCubit>();
+    final quickButtons = cubit.quickButtons.where((b) => b.isActive).toList();
+    final selected =
+        quickButtons.firstWhereOrNull((b) => b.id == _selectedButtonId) ?? quickButtons.firstOrNull;
+
     return SizedBox(
       width: AppConstants.minTapTargetDp,
       height: AppConstants.minTapTargetDp,
@@ -203,14 +220,29 @@ class _GlassButton extends StatelessWidget {
         message: l10n.holdForMore,
         child: InkWell(
           borderRadius: BorderRadius.circular(AppConstants.minTapTargetDp / 2),
-          onTap: () => unawaited(cubit.logWater(AppConstants.defaultWaterPortionMl)),
+          onTap: () => unawaited(
+            selected != null
+                ? cubit.logDrink(selected.id)
+                : cubit.logWater(AppConstants.defaultWaterPortionMl),
+          ),
           onLongPress: () => _showQuickButtons(context, cubit),
-          child: Semantics(
-            button: true,
-            label: l10n.addDrink,
-            child: Icon(
-              pulsing ? Icons.local_drink : Icons.local_drink_outlined,
-              color: Theme.of(context).colorScheme.primary,
+          child: Center(
+            child: Semantics(
+              button: true,
+              label: l10n.addDrink,
+              child: AnimatedScale(
+                duration: const Duration(milliseconds: 600),
+                scale: widget.pulsing && shouldAnimate(context) ? 1.15 : 1.0,
+                child: selected != null
+                    ? FaIcon(
+                        faIconFromCode(selected.icon),
+                        color: colorScheme.primary,
+                      )
+                    : Icon(
+                        Icons.local_drink_outlined,
+                        color: colorScheme.primary,
+                      ),
+              ),
             ),
           ),
         ),
@@ -223,11 +255,24 @@ class _GlassButton extends StatelessWidget {
       showModalBottomSheet<void>(
         context: context,
         builder: (sheetContext) => SafeArea(
+          bottom: false,
           child: ListView(
+            padding: const .fromLTRB(
+              AppDimens.inset4x,
+              AppDimens.inset4x,
+              AppDimens.inset4x,
+              AppDimens.bottomPaddingSmaller,
+            ),
             shrinkWrap: true,
             children: cubit.quickButtons
                 .where((b) => b.isActive)
-                .map((b) => _QuickButtonTile(button: b, cubit: cubit))
+                .map(
+                  (b) => _QuickButtonTile(
+                    button: b,
+                    cubit: cubit,
+                    onSelected: () => setState(() => _selectedButtonId = b.id),
+                  ),
+                )
                 .toList(),
           ),
         ),
@@ -237,20 +282,22 @@ class _GlassButton extends StatelessWidget {
 }
 
 class _QuickButtonTile extends StatelessWidget {
-  const _QuickButtonTile({required this.button, required this.cubit});
+  const _QuickButtonTile({required this.button, required this.cubit, required this.onSelected});
 
   final WaterQuickButtonEntity button;
   final HudCubit cubit;
+  final VoidCallback onSelected;
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     return ListTile(
       leading: FaIcon(faIconFromCode(button.icon)),
-      title: Text(button.label.localizedLabel(l10n)),
+      title: Text(localizedDrinkLabel(l10n, button.label)),
       trailing: Text(l10n.drinkVolumeMl(button.volume)),
       onTap: () {
         context.pop();
+        onSelected();
         unawaited(cubit.logDrink(button.id));
       },
     );

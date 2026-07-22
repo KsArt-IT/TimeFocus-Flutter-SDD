@@ -37,9 +37,19 @@ abstract interface class WaterRepository {
   /// Replaces the whole set of scheduled-mode reminder times.
   Future<Result<void>> saveReminderTimes(List<int> timesMinutes);
 
+  /// Active quick buttons only (HUD picker).
   Stream<List<WaterQuickButtonEntity>> watchQuickButtons();
 
+  /// All quick buttons, active or not (settings screen — an inactive one
+  /// stays visible, shown disabled).
+  Stream<List<WaterQuickButtonEntity>> watchAllQuickButtons();
+
   Future<Result<void>> saveQuickButton(WaterQuickButtonEntity button);
+
+  Future<Result<void>> deleteQuickButton(int id);
+
+  /// Drag reorder — rewrites sortOrder for [orderedIds] to their list index.
+  Future<Result<void>> reorderQuickButtons(List<int> orderedIds);
 
   /// Fixes today's goal on first call of the day (data-model.md —
   /// DailyWaterGoals); returns the fixed value. Idempotent.

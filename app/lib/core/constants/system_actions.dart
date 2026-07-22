@@ -44,9 +44,9 @@ enum SystemAction {
   };
 
   FaIconData get icon => switch (this) {
-    work => FontAwesomeIcons.briefcase,
+    work => FontAwesomeIcons.businessTime,
     breakFor => FontAwesomeIcons.couch,
-    rest => FontAwesomeIcons.userSecret,
+    rest => FontAwesomeIcons.umbrellaBeach,
     sleep => FontAwesomeIcons.bed,
     toilet => FontAwesomeIcons.toilet,
     meal => FontAwesomeIcons.utensils,

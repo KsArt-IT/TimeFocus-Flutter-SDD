@@ -10,3 +10,13 @@ extension DrinkTypeL10n on DrinkType {
     DrinkType.bottle => l10n.drinkTypeBottle,
   };
 }
+
+/// Quick-button names are stored as free text (WaterQuickButtons.label): a
+/// preset matching a [DrinkType] name is translated, a user-entered custom
+/// name is shown verbatim — same rule as `localizedActionName` (see
+/// shared/widgets/action_localization.dart) for renamed system activities
+/// (FR-042).
+String localizedDrinkLabel(AppLocalizations l10n, String label) {
+  final preset = DrinkType.values.asNameMap()[label];
+  return preset?.localizedLabel(l10n) ?? label;
+}

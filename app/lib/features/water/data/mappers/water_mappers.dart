@@ -4,7 +4,6 @@ import 'package:timefocus/features/water/domain/entities/water_log_entity.dart';
 import 'package:timefocus/features/water/domain/entities/water_quick_button_entity.dart';
 import 'package:timefocus/features/water/domain/entities/water_settings_entity.dart';
 import 'package:timefocus/shared/database/app_database.dart';
-import 'package:timefocus/shared/enums/drink_type.dart';
 import 'package:timefocus/shared/enums/water_reminder_mode.dart';
 
 extension WaterSettingModelMapper on WaterSettingModel {
@@ -45,10 +44,7 @@ extension WaterQuickButtonModelMapper on WaterQuickButtonModel {
   WaterQuickButtonEntity toEntity() => WaterQuickButtonEntity(
     id: id,
     volume: volume,
-    label: DrinkType.values.firstWhere(
-      (d) => d.name == label,
-      orElse: () => DrinkType.water,
-    ),
+    label: label,
     icon: icon,
     sortOrder: sortOrder,
     isActive: isActive,
@@ -59,7 +55,7 @@ extension WaterQuickButtonEntityMapper on WaterQuickButtonEntity {
   WaterQuickButtonsCompanion toCompanion() => WaterQuickButtonsCompanion(
     id: id == 0 ? const Value.absent() : Value(id),
     volume: Value(volume),
-    label: Value(label.name),
+    label: Value(label),
     icon: Value(icon),
     sortOrder: Value(sortOrder),
     isActive: Value(isActive),

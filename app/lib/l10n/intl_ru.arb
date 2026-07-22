@@ -334,6 +334,9 @@
   "waterExtraLoad": "Доп. нагрузка (мл)",
   "waterExtraLoadHint": "Добавляется к базовой цели при занятиях спортом",
   "waterQuickButtons": "Кнопки быстрого добавления",
+  "waterAddQuickButton": "Добавить кнопку",
+  "waterQuickButtonName": "Название",
+  "waterQuickButtonIcon": "Иконка",
   "showToiletOnWater": "Напоминать туалет после воды",
   "@showToiletOnWater": {
     "description": "Настройка виджета туалета"

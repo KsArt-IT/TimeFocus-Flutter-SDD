@@ -831,6 +831,24 @@ abstract final class FaIconsData {
       keywords: ['chat', 'discussion', 'talk', 'conversation'],
     ),
     FaIconName(
+      name: 'commentDollar',
+      faIcon: FontAwesomeIcons.commentDollar,
+      category: IconCategory.communication,
+      keywords: ['chat', 'discussion', 'talk'],
+    ),
+    FaIconName(
+      name: 'commentDots',
+      faIcon: FontAwesomeIcons.commentDots,
+      category: IconCategory.communication,
+      keywords: ['chat', 'discussion', 'talk'],
+    ),
+    FaIconName(
+      name: 'commentMedical',
+      faIcon: FontAwesomeIcons.commentMedical,
+      category: IconCategory.communication,
+      keywords: ['chat', 'discussion', 'talk'],
+    ),
+    FaIconName(
       name: 'video',
       faIcon: FontAwesomeIcons.video,
       category: IconCategory.communication,

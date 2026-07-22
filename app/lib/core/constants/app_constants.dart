@@ -1,8 +1,5 @@
 /// Application-wide business constants (single source of magic numbers).
 abstract final class AppConstants {
-  /// Default water portion for a single glass tap, ml.
-  static const int defaultWaterPortionMl = 200;
-
   /// Water reminders are skipped within this window around meals, minutes.
   static const int mealWindowMinutes = 15;
 
@@ -22,6 +19,11 @@ abstract final class AppConstants {
 
   /// Daily water goal per body weight, ml per kg.
   static const int waterMlPerKg = 30;
+
+  /// Default water portion for a single glass tap, ml.
+  static const int defaultWaterPortionMl = 200;
+  static const int waterDrinkMinMl = 50;
+  static const int waterDrinkMaxMl = 5000;
 
   /// Default manual daily water goal, ml.
   static const int defaultDailyWaterGoalMl = 2000;

@@ -1,5 +1,4 @@
 import 'package:drift/drift.dart';
-
 import 'package:timefocus/shared/database/app_database.dart';
 import 'package:timefocus/shared/database/tables/water_tables.dart';
 
@@ -61,11 +60,27 @@ class WaterDao extends DatabaseAccessor<AppDatabase> with _$WaterDaoMixin {
   Future<void> saveSettings(WaterSettingsCompanion companion) =>
       (update(waterSettings)..where((t) => t.id.equals(_singletonId))).write(companion);
 
+  /// Active quick buttons only — for pickers where an inactive one shouldn't
+  /// be offered (the HUD long-press list).
   Stream<List<WaterQuickButtonModel>> watchQuickButtons() =>
       (select(waterQuickButtons)
             ..where((t) => t.isActive.equals(true))
             ..orderBy([(t) => OrderingTerm.asc(t.sortOrder)]))
           .watch();
+
+  /// All quick buttons, active or not — for the settings screen, where an
+  /// inactive one must stay visible (shown disabled) to be re-enabled.
+  Stream<List<WaterQuickButtonModel>> watchAllQuickButtons() =>
+      (select(waterQuickButtons)..orderBy([(t) => OrderingTerm.asc(t.sortOrder)])).watch();
+
+  /// Drag reorder — rewrites sortOrder for [orderedIds] to their list index.
+  Future<void> reorderQuickButtons(List<int> orderedIds) => transaction(() async {
+    for (final (index, id) in orderedIds.indexed) {
+      await (update(
+        waterQuickButtons,
+      )..where((t) => t.id.equals(id))).write(WaterQuickButtonsCompanion(sortOrder: Value(index)));
+    }
+  });
 
   Future<void> saveQuickButton(WaterQuickButtonsCompanion companion) async {
     if (companion.id.present) {
@@ -76,6 +91,9 @@ class WaterDao extends DatabaseAccessor<AppDatabase> with _$WaterDaoMixin {
       await into(waterQuickButtons).insert(companion);
     }
   }
+
+  Future<void> deleteQuickButton(int id) =>
+      (delete(waterQuickButtons)..where((t) => t.id.equals(id))).go();
 
   Future<List<int>> reminderTimes() async {
     final rows = await (select(

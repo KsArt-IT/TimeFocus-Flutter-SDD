@@ -18,6 +18,8 @@ class HudQueueDao extends DatabaseAccessor<AppDatabase> with _$HudQueueDaoMixin 
   /// Raises [systemAction] for [day]: inserts it, or refreshes (un-dismisses)
   /// it if it's already the queue's row for that action. Conflicts are
   /// detected on `systemAction` (its unique constraint), not the primary key.
+  /// For genuinely new occasions (e.g. drank water again) — a dismissed
+  /// suggestion is legitimately relevant again.
   Future<void> upsert(String systemAction, DateTime day, DateTime now) {
     final entry = HudQueueItemsCompanion.insert(
       systemAction: systemAction,
@@ -30,6 +32,16 @@ class HudQueueDao extends DatabaseAccessor<AppDatabase> with _$HudQueueDaoMixin 
       onConflict: DoUpdate((_) => entry, target: [hudQueueItems.systemAction]),
     );
   }
+
+  /// Inserts [systemAction] for [day] only if it isn't already queued —
+  /// never revives a row the user already dismissed or started. For
+  /// level-triggered checks (e.g. "has this schedule time passed?") that
+  /// re-run on every tick/app restart and aren't a new occasion each time.
+  Future<void> insertIfAbsent(String systemAction, DateTime day, DateTime now) =>
+      into(hudQueueItems).insert(
+        HudQueueItemsCompanion.insert(systemAction: systemAction, day: day, createdAt: now),
+        mode: InsertMode.insertOrIgnore,
+      );
 
   Future<void> dismiss(int id) => (update(hudQueueItems)..where((t) => t.id.equals(id))).write(
     const HudQueueItemsCompanion(dismissed: Value(true)),
