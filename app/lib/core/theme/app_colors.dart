@@ -10,4 +10,9 @@ abstract final class AppColors {
 
   static const Color navBar = Color(0xFFEDF1EE);
   static const Color navBarDark = Color(0xFF1A1E1B);
+
+  /// Matches flutter_native_splash.yaml — bridges the native splash and the
+  /// real themed UI while AppSettingsCubit is still loading, so the swap to
+  /// light/dark theme never flashes on top of already-rendered content.
+  static const Color splashBackground = Color(0xFF8FBAFC);
 }

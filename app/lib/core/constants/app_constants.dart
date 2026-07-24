@@ -28,6 +28,10 @@ abstract final class AppConstants {
   /// Default manual daily water goal, ml.
   static const int defaultDailyWaterGoalMl = 2000;
 
+  /// Native splash is force-removed after this delay if settings still
+  /// haven't loaded, so a broken DB read can't leave the splash stuck forever.
+  static const Duration splashFallbackTimeout = Duration(seconds: 3);
+
   /// Default water reminder interval, minutes.
   static const int defaultWaterReminderIntervalMin = 90;
 

@@ -57,9 +57,12 @@ flutter_native_splash:
   
   #! ANDROID 12+ configuration:
   android_12:
-    # background color
-    color: "#ffffff"
-    color_dark: "#000000"
+    # Same brand color regardless of OS dark/light mode: the system splash is chosen
+    # by the OS BEFORE Flutter runs, so it can't know the user's in-app theme choice.
+    # A neutral color here avoids a jarring light/dark flip when it differs from the
+    # app's saved theme.
+    color: "#8FBAFC"
+    color_dark: "#8FBAFC"
 
     # center-logo
     # If this parameter is not specified, the app's launcher icon will be used instead. 
