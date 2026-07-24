@@ -58,7 +58,18 @@ class LocalNotificationsDataSource {
       priority: Priority.high,
       actions: actions,
     ),
-    iOS: DarwinNotificationDetails(categoryIdentifier: darwinCategoryId),
+    // Explicit per-notification presentation flags (rather than relying on
+    // DarwinInitializationSettings.defaultPresent*) so the banner also shows
+    // while the app is foregrounded, not only when backgrounded.
+    iOS: DarwinNotificationDetails(
+      categoryIdentifier: darwinCategoryId,
+      presentAlert: true,
+      presentBanner: true,
+      presentList: true,
+      presentSound: true,
+      presentBadge: true,
+      interruptionLevel: InterruptionLevel.active,
+    ),
   );
 
   /// Payload that launched the app from terminated state, if any.
